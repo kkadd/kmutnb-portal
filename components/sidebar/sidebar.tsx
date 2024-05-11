@@ -32,7 +32,7 @@ export const SidebarWrapper = () => {
                   base: "bg-gradient-to-br from-[#EFBBB0] to-[#EFBBB0]",
                 }}
                 name="Siriwan"
-                src="https://lh3.googleusercontent.com/proxy/NhIBBFCYzsbouMb_7IwQt1v5qAQvjJ2DB1j8bVPt7NdciRpqObog2TY-nUdNDcDof4Ls00DNvCypnL4mE5GT9mfx8Lr7TK-8K2_iIqWvOGVAuuiW-Uy58hyMZ-MTf_-Y66sZMA6wVTyzVQOHx9Xx3XAb14QqdYy_cA"
+                src="https://i.pinimg.com/736x/f9/69/e7/f969e7040a7f4be872819285b61d8335.jpg"
                 size="md"
                 radius="lg"
               />
