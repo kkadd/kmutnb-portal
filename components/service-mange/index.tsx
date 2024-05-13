@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Button,
   Card,
@@ -83,6 +84,7 @@ export const ServiceManage = () => {
     },
   ];
 
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
@@ -95,7 +97,7 @@ export const ServiceManage = () => {
 
         <div className="flex justify-end gap-2">
           <Input
-            className="w-[226px]"
+            className="w-[210px]"
             classNames={{
               inputWrapper: "bg-white",
             }}
@@ -118,13 +120,13 @@ export const ServiceManage = () => {
             className="text-white bg-[#FF644B] font-semibold w-fit p-3"
             startContent={<AddIcon />}
             variant="flat"
+            onClick={() => router.push("/service-management/add")}
           >
             Add Service
           </Button>
         </div>
       </div>
 
-      {/* <div className="grid p-4 bg-white rounded-2xl"> */}
       <div className="grid grid-cols-3 grid-flow-row gap-4">
         {serviceMock
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
@@ -181,7 +183,6 @@ export const ServiceManage = () => {
           onChange={(page) => setCurrentPage(page)}
         />
       </div>
-      {/* </div> */}
     </div>
   );
 };

@@ -209,3 +209,37 @@ export const SortIcon = () => {
     </svg>
   );
 };
+
+export const UploadIcon = () => {
+  return (
+    <svg
+      width="25"
+      height="18"
+      viewBox="0 0 27 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M22.9713 13.75V17.5H3.83198V13.75H0.64209V17.5C0.64209 18.875 2.07754 20 3.83198 20H22.9713C24.7258 20 26.1612 18.875 26.1612 17.5V13.75H22.9713ZM5.42693 6.25L7.6758 8.0125L11.8067 4.7875V15H14.9966V4.7875L19.1275 8.0125L21.3764 6.25L13.4017 0L5.42693 6.25Z"
+        fill="#71717A"
+      />
+    </svg>
+  );
+};
+
+export const DeleteIcon = () => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M14.12 10.47L12 12.59L9.87 10.47L8.46 11.88L10.59 14L8.47 16.12L9.88 17.53L12 15.41L14.12 17.53L15.53 16.12L13.41 14L15.53 11.88L14.12 10.47ZM15.5 4L14.5 3H9.5L8.5 4H5V6H19V4H15.5ZM6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM8 9H16V19H8V9Z"
+        fill="#71717A"
+      />
+    </svg>
+  );
+};

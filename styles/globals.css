@@ -12,3 +12,18 @@ body {
 * {
   box-sizing: border-box;
 }
+
+
+/* select custom */
+.group[data-selected=true] .group-data-\[selected\=true\]\:after\:opacity-100::after {
+  background-color: #FF644B !important;
+}
+
+/* image uploader */
+.delete-icon-container {
+  position: absolute; 
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
