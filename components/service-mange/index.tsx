@@ -52,7 +52,7 @@ export const ServiceManage = () => {
       serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
       serviceImg:
         "https://miro.medium.com/v2/resize:fit:720/0*I32LiwMMYY16sPAB.jpg",
-      role: ["Admin", "Staff", "Student", "Exchange Student", "Alumni"],
+      role: ["Admin", "Staff", "Student", "Exchange Student"],
       enable: true,
     },
     {
@@ -156,13 +156,16 @@ export const ServiceManage = () => {
               </CardBody>
               <Divider />
               <CardFooter className="flex justify-between items-center">
-                <div className="flex text-[#afafaf] w-[167px]">
-                  <span className="mx-auto">Edit</span>
-                </div>
+                <Button
+                  className="mx-auto bg-transparent text-[#afafaf] w-full"
+                  onClick={() => router.push("/service-management/edit")}
+                >
+                  Edit
+                </Button>
                 <Divider orientation="vertical" />
-                <div className="flex text-[#afafaf] w-[167px]">
-                  <span className="mx-auto">Delete</span>
-                </div>
+                <Button className="mx-auto bg-transparent text-[#afafaf] w-full">
+                  Delete
+                </Button>
               </CardFooter>
             </Card>
           ))}
