@@ -1,11 +1,11 @@
-import { Fira_Code as FontMono, Inter as FontSans } from "next/font/google"
+import { Noto_Sans as FontSans, Noto_Sans_Thai as FontSansThai } from "next/font/google"
 
 export const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 })
 
-export const fontMono = FontMono({
-  subsets: ["latin"],
-  variable: "--font-mono",
+export const fontSansThai = FontSansThai({
+  subsets: ["thai"],
+  variable: "--font-sans-thai",
 })

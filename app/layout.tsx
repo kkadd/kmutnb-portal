@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Providers } from "./providers";
 import clsx from "clsx";
 
-import { fontSans } from "@/config/fonts";
+import { fontSans, fontSansThai } from "@/config/fonts";
 
 import "@/styles/globals.css";
 
@@ -18,7 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${fontSans.variable} ${fontSansThai.variable}`}
+      suppressHydrationWarning
+    >
       <head />
       <body
         className={clsx(
