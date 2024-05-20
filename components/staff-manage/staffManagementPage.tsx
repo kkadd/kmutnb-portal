@@ -307,6 +307,7 @@ export const StaffManage = () => {
               className="w-[210px]"
               classNames={{
                 inputWrapper: "bg-white",
+                input: "font-sansThai",
               }}
               placeholder="Search user"
               isClearable
