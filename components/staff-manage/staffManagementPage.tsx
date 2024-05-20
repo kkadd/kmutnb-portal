@@ -113,6 +113,30 @@ const users = [
     role: "staff",
     manageRole: ["Staff"],
   },
+  {
+    id: 9,
+    username: "s6303051620094",
+    email: "s6303051620094@gmail.com",
+    name: "ธารมิกา ขจรศักดิ์โกศล",
+    role: "admin",
+    manageRole: ["Admin"],
+  },
+  {
+    id: 10,
+    username: "s6303051622349",
+    email: "s6303051622349@gmail.com",
+    name: "ณภัค ทรัพย์มา",
+    role: "staff",
+    manageRole: ["Staff"],
+  },
+  {
+    id: 11,
+    username: "s6303051622987",
+    email: "s6303051622987@gmail.com",
+    name: "เจิมจันทร์ แสงทอง ",
+    role: "staff",
+    manageRole: ["Staff"],
+  },
 ];
 
 export function capitalize(str: any) {
@@ -161,7 +185,7 @@ export const StaffManage = () => {
     }
 
     return filteredUsers;
-  }, [users, filterValue, roleFilter]);
+  }, [filterValue, roleFilter, hasSearchFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -185,6 +209,20 @@ export const StaffManage = () => {
     });
   }, [sortDescriptor, items]);
 
+  const onSearchChange = React.useCallback((value?: string) => {
+    if (value) {
+      setFilterValue(value);
+      setPage(1);
+    } else {
+      setFilterValue("");
+    }
+  }, []);
+
+  const onClear = React.useCallback(() => {
+    setFilterValue("");
+    setPage(1);
+  }, []);
+
   const renderCell = (user: User, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof User];
 
@@ -203,9 +241,9 @@ export const StaffManage = () => {
         return (
           <div className="flex items-center align-middle gap-3">
             <Avatar
-              className="bg-[#FF644B] bg-opacity-10 text-[#FF644B] font-sansThai"
+              className="bg-[#FF644B] bg-opacity-10 text-sm text-[#FF644B] font-sansThai "
               radius="lg"
-              name={user.name}
+              name={user.name && user.name.charAt(0).toUpperCase()}
             />
             <div className="font-sansThai">{user.name}</div>
           </div>
@@ -274,6 +312,9 @@ export const StaffManage = () => {
               isClearable
               startContent={<SearchIcon />}
               endContent={<CloseIcon />}
+              value={filterValue}
+              onClear={() => onClear()}
+              onValueChange={onSearchChange}
             />
 
             <Dropdown>
