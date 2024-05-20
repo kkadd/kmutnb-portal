@@ -20,6 +20,14 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  Modal,
+  useDisclosure,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 
 import {
@@ -44,6 +52,7 @@ const users = [
   {
     id: 1,
     username: "s6303051623179",
+    email: "s6303051623179@gmail.com",
     name: "ศิริวรรณ ทุหา",
     role: "admin",
     manageRole: ["Admin"],
@@ -51,6 +60,7 @@ const users = [
   {
     id: 2,
     username: "s6303051623111",
+    email: "s6303051623111@gmail.com",
     name: "เมษา สันติสุข",
     role: "staff",
     manageRole: ["Staff"],
@@ -58,6 +68,7 @@ const users = [
   {
     id: 3,
     username: "s6303051623127",
+    email: "s6303051623127@gmail.com",
     name: "จิรภัทร ศรีสมพันธุ์",
     role: "admin",
     manageRole: ["Admin"],
@@ -65,36 +76,41 @@ const users = [
   {
     id: 4,
     username: "s6303051623367",
+    email: "s6303051623367@gmail.com",
     name: "กรภัทร ป้องภัย",
-    role: "student",
+    role: "staff",
     manageRole: ["Staff"],
   },
   {
     id: 5,
     username: "s630305164567",
+    email: "s630305164567@gmail.com",
     name: "ไกรสร พาใจขวัญ",
-    role: "student",
+    role: "admin",
     manageRole: ["Admin"],
   },
   {
     id: 6,
     username: "s6303051629876",
+    email: "s6303051629876@gmail.com",
     name: "ธิศา คมปราชญ์",
-    role: "student",
+    role: "staff",
     manageRole: ["Staff"],
   },
   {
     id: 7,
     username: "s6303051620097",
+    email: "s63030516200979@gmail.com",
     name: "นีรา ศรีสว่างจันทร์",
-    role: "student",
+    role: "admin",
     manageRole: ["Admin"],
   },
   {
     id: 8,
     username: "s6303051622345",
+    email: "s6303051622345@gmail.com",
     name: "ปองเดช วรารักษ์",
-    role: "student",
+    role: "staff",
     manageRole: ["Staff"],
   },
 ];
@@ -120,6 +136,10 @@ export const StaffManage = () => {
   const rowsPerPage = 10;
 
   const pages = Math.ceil(users.length / rowsPerPage);
+
+  const addUserModal = useDisclosure();
+  const editUserModal = useDisclosure();
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -209,10 +229,16 @@ export const StaffManage = () => {
                 className="bg-[#FF644B] bg-opacity-10"
                 isIconOnly
                 size="sm"
+                onPress={() => {
+                  setCurrentUser(user);
+                  editUserModal.onOpen();
+                }}
+                key={"edit"}
               >
                 <EditIcon />
               </Button>
             </Tooltip>
+
             <Tooltip color="danger" content="Delete user">
               <Button
                 className="bg-[#FF644B] bg-opacity-10"
@@ -280,14 +306,69 @@ export const StaffManage = () => {
               className="text-white bg-[#FF644B] font-semibold w-fit p-3"
               startContent={<AddStaffIcon />}
               variant="flat"
+              onPress={addUserModal.onOpen}
             >
               Add User
             </Button>
+            <Modal
+              isOpen={addUserModal.isOpen}
+              onOpenChange={addUserModal.onOpenChange}
+              classNames={{ base: "w-[360px]" }}
+            >
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1">
+                      Add Staff
+                    </ModalHeader>
+                    <ModalBody>
+                      <Input
+                        autoFocus
+                        label="Email"
+                        placeholder="Enter your email"
+                        variant="bordered"
+                        isClearable
+                      />
+                      <Select
+                        label="Role"
+                        placeholder="Please select Role"
+                        className="max-w-xs"
+                        variant="bordered"
+                      >
+                        <SelectItem key={"admin"}>Admin</SelectItem>
+                        <SelectItem key={"staff"}>Staff</SelectItem>
+                      </Select>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        className="text-[#FF644B] font-medium"
+                        color="default"
+                        variant="light"
+                        onPress={onClose}
+                      >
+                        Close
+                      </Button>
+                      <Button
+                        className="bg-[#FF644B] text-white font-medium"
+                        onPress={onClose}
+                      >
+                        Add Staff
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
           </div>
         </div>
 
         <Table
           aria-label="user list table."
+          // topContent={
+          //   <span className="flex justify-end text-default-400 text-small">
+          //     Total {users.length} users
+          //   </span>
+          // }
           bottomContent={
             <div className="flex justify-center w-full">
               <Pagination
@@ -342,6 +423,61 @@ export const StaffManage = () => {
           </TableBody>
         </Table>
       </div>
+
+      {currentUser && (
+        <Modal
+          isOpen={editUserModal.isOpen}
+          onOpenChange={editUserModal.onOpenChange}
+          classNames={{ base: "w-[360px]" }}
+        >
+          <ModalContent key={"edit"}>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Edit Staff
+                </ModalHeader>
+                <ModalBody>
+                  <Input
+                    autoFocus
+                    label="Email"
+                    value={currentUser.email}
+                    variant="bordered"
+                    disabled
+                  />
+
+                  <Select
+                    label="Role"
+                    placeholder="Please select Role"
+                    className="max-w-xs"
+                    variant="bordered"
+                  >
+                    <SelectItem key={"admin"}>Admin</SelectItem>
+                    <SelectItem key={"staff"}>Staff</SelectItem>
+                  </Select>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    className="text-[#FF644B] font-medium"
+                    color="default"
+                    variant="light"
+                    onPress={onClose}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    className="bg-[#FF644B] text-white font-medium"
+                    onPress={() => {
+                      onClose();
+                    }}
+                  >
+                    Save Edit
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      )}
     </div>
   );
 };
