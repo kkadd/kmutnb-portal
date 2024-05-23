@@ -48,17 +48,17 @@ export const SidebarWrapper = () => {
             <SidebarMenu title="Menu">
               <SidebarItem
                 isActive={
-                  pathname === "/service-management" ||
-                  pathname === "/service-management/add" ||
-                  pathname === "/service-management/edit"
+                  pathname === "/management/services" ||
+                  pathname === "/management/services/add" ||
+                  pathname === "/management/services/edit"
                 }
-                href="/service-management"
+                href="/management/services/"
                 title="Service Management"
                 icon={<ServiceIcon />}
               />
               <SidebarItem
-                isActive={pathname === "/staff-management"}
-                href="/staff-management"
+                isActive={pathname === "/management/staff"}
+                href="/management/staff"
                 title="Staff Management"
                 icon={<StaffIcon />}
               />

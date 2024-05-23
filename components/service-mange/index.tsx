@@ -196,7 +196,7 @@ export const ServiceManage = () => {
               className="text-white bg-[#FF644B] font-semibold w-fit p-3"
               startContent={<AddIcon />}
               variant="flat"
-              onClick={() => router.push("/service-management/add")}
+              onClick={() => router.push("/management/services/add")}
             >
               Add Service
             </Button>
@@ -236,7 +236,7 @@ export const ServiceManage = () => {
                 <CardFooter className="flex justify-between items-center">
                   <Button
                     className="mx-auto bg-transparent text-[#afafaf] w-full"
-                    onClick={() => router.push("/service-management/edit")}
+                    onClick={() => router.push("/management/services/edit")}
                   >
                     Edit
                   </Button>
