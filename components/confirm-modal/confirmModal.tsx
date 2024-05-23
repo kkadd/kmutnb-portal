@@ -50,7 +50,7 @@ confirmModalProps) => {
                 <div>{title}</div>
               </ModalHeader>
               <ModalBody className="justify-center items-center pt-0">
-                <p>{description}</p>
+                <span>{description}</span>
               </ModalBody>
               <ModalFooter className="flex justify-center">
                 <Button
