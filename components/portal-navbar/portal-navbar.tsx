@@ -1,11 +1,12 @@
+"use client";
 import {
   Avatar,
   Button,
+  Divider,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -18,7 +19,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const PortalNav = ({ children }: Props) => {
+export const PortalNav = () => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -90,17 +91,20 @@ export const PortalNav = ({ children }: Props) => {
           <DropdownTrigger>
             <Avatar
               as="button"
-              className="bg-[#FF644B] bg-opacity-10 text-sm text-[#FF644B] font-sansThai "
-              radius="full"
-              name="Jason Hughes"
-              // size="sm"
+              className="bg-[#FF644B] bg-opacity-20 text-md text-[#FF644B] font-sansThai"
+              radius="lg"
+              name="S"
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+              <p className="font-semibold">Siriwan Tuha</p>
+              <p className="font-medium text-[#afafaf]">
+                S6303051623179@kmutnb.ac.th
+              </p>
+              <Divider className="mt-3" />
             </DropdownItem>
+
             <DropdownItem key="logout" color="danger">
               Log Out
             </DropdownItem>

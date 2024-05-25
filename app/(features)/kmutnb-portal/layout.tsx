@@ -5,6 +5,7 @@ import { fontSans, fontSansThai } from "@/config/fonts";
 
 import "@/styles/globals.css";
 import { Providers } from "./providers";
+import { PortalNav } from "@/components/portal-navbar/portal-navbar";
 
 export const metadata: Metadata = {
   title: "kmutnb portal",
@@ -30,7 +31,10 @@ export default function RootLayout({
           fontSans.className
         )}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <PortalNav />
+          <div className="content-wrapper">{children}</div>
+        </Providers>
       </body>
     </html>
   );

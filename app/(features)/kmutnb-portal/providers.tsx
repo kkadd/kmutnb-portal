@@ -4,7 +4,6 @@ import * as React from "react";
 import { NextUIProvider } from "@nextui-org/system";
 import { useRouter } from "next/navigation";
 import { ThemeProviderProps } from "next-themes/dist/types";
-import { PortalNav } from "@/components/portal-navbar/portal-navbar";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -14,9 +13,5 @@ export interface ProvidersProps {
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
 
-  return (
-    <NextUIProvider navigate={router.push}>
-      <PortalNav>{children}</PortalNav>
-    </NextUIProvider>
-  );
+  return <NextUIProvider navigate={router.push}>{children}</NextUIProvider>;
 }
