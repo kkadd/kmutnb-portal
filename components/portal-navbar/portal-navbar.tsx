@@ -60,10 +60,10 @@ export const PortalNav = () => {
             Personalized Portal
           </span>
         </NavbarItem>
-        <NavbarItem isActive={pathname === "/kmutnb-portal/all-service"}>
+        <NavbarItem isActive={pathname === "/kmutnb-portal/all-services"}>
           <span
             className="cursor-pointer"
-            onClick={() => router.push("/kmutnb-portal/all-service")}
+            onClick={() => router.push("/kmutnb-portal/all-services")}
           >
             All Services
           </span>
