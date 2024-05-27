@@ -49,7 +49,7 @@ export async function GET() {
  *   post:
  *     summary: Save the data to the database.
  *     tags:
- *       - drag and drop
+ *       - drag and drop 1 line
  *     description: Save the data to the database.
  *     requestBody:
  *       required: true
@@ -106,7 +106,7 @@ export async function GET() {
  *   get:
  *     summary: Get the data from the database.
  *     tags:
- *       - drag and drop
+ *       - drag and drop 1 line
  *     description: Get the data from the database.
  *     responses:
  *       200:
