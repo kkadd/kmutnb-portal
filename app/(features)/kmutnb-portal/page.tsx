@@ -1,7 +1,7 @@
-import type { NextPage } from "next";
+import { PortalPage } from "@/components/portal/portalPage";
 
-const Home: NextPage = () => {
-  return <span>test Home</span>;
+const portalPage = () => {
+  return <PortalPage />;
 };
 
-export default Home;
+export default portalPage;

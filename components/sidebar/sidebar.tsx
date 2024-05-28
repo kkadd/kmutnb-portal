@@ -1,11 +1,13 @@
 import React from "react";
 import { usePathname } from "next/navigation";
-import { SidebarContext, useSidebarContext } from "../layout/layoutContext";
+import Image from "next/image";
+import { Avatar } from "@nextui-org/react";
+
+import { useSidebarContext } from "../layout/layoutContext";
 import { Sidebar } from "./sidebar.styles";
 import { SidebarItem } from "./sidebarItem";
 import { LogoutIcon, ServiceIcon, StaffIcon } from "../icons";
 import { SidebarMenu } from "./sidebarMenu";
-import { Avatar } from "@nextui-org/react";
 
 export const SidebarWrapper = () => {
   const pathname = usePathname();
@@ -22,22 +24,21 @@ export const SidebarWrapper = () => {
         })}
       >
         <div className={Sidebar.Header()}>
-          <h1 className="text-black">Logo</h1>
+          <Image src="/logo.png" alt="logo image" width={100} height={25} />
         </div>
         <div className="flex flex-col justify-between h-full">
           <div className={Sidebar.Body()}>
             <div className="flex gap-4 justify-center">
               <Avatar
                 classNames={{
-                  base: "bg-gradient-to-br from-[#EFBBB0] to-[#EFBBB0]",
+                  base: "bg-[#FF644B] bg-opacity-10 text-sm text-[#FF644B] font-sansThai",
                 }}
-                name="Siriwan"
-                src="https://i.pinimg.com/736x/f9/69/e7/f969e7040a7f4be872819285b61d8335.jpg"
+                name="S"
                 size="md"
                 radius="lg"
               />
               <div>
-                <p className="text-base font-medium text-[#E16449]">
+                <p className="text-base font-medium text-[#FF644B]">
                   Siriwan Tuha
                 </p>
                 <p className="text-[10px] text-[#afafaf]">
@@ -45,7 +46,7 @@ export const SidebarWrapper = () => {
                 </p>
               </div>
             </div>
-            <SidebarMenu title="Menu">
+            <SidebarMenu title="Main Menu">
               <SidebarItem
                 isActive={
                   pathname === "/management/services" ||
@@ -64,8 +65,30 @@ export const SidebarWrapper = () => {
               />
             </SidebarMenu>
           </div>
+          {pathname === "/management/services" ||
+          pathname === "/management/services/add" ||
+          pathname === "/management/services/edit" ? (
+            <Image
+              src="/folder.svg"
+              alt="service management"
+              width={300}
+              height={300}
+              className="mt-[140px]"
+            />
+          ) : null}
+          {pathname === "/management/staff" ? (
+            <Image
+              src="/profiling.svg"
+              alt="staff management"
+              width={300}
+              height={300}
+              className="mt-[140px]"
+            />
+          ) : null}
           <div className={Sidebar.Footer()}>
-            <SidebarItem title="Log out" icon={<LogoutIcon />} />
+            <div className="grid">
+              <SidebarItem title="Log out" icon={<LogoutIcon />} />
+            </div>
           </div>
         </div>
       </div>
