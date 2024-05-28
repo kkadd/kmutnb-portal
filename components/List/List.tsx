@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React, { forwardRef } from 'react';
 import classNames from 'classnames';
 
 import styles from './List.module.css';
@@ -11,7 +11,7 @@ export interface Props {
 }
 
 export const List = forwardRef<HTMLUListElement, Props>(
-  ({children, columns = 1, horizontal, style}: Props, ref) => {
+  ({ children, columns = 1, horizontal, style }: Props, ref) => {
     return (
       <ul
         ref={ref}
@@ -28,3 +28,5 @@ export const List = forwardRef<HTMLUListElement, Props>(
     );
   }
 );
+
+List.displayName = 'List';

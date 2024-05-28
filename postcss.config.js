@@ -4,5 +4,6 @@ module.exports = {
     autoprefixer: {},
     'postcss-nested': {},
     'postcss-simple-vars': {},
+    'postcss-url': {},
   },
 }

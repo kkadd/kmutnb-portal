@@ -3,10 +3,10 @@ import clientPromise from '@lib/mongodb';
 import { ObjectId } from 'mongodb';
 
 export async function GET(req: NextRequest) {
+    const username = req.nextUrl.searchParams.get("username");
     try {
         const client = await clientPromise;
         const db = client.db("project");
-        const username = req.nextUrl.searchParams.get("username");
 
         const user = await db.collection("user").findOne({
             username: username
