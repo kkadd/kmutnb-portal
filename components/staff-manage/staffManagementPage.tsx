@@ -241,7 +241,7 @@ export const StaffManage = () => {
         return (
           <div className="flex items-center align-middle gap-3">
             <Avatar
-              className="bg-[#FF644B] bg-opacity-10 text-sm text-[#FF644B] font-sansThai "
+              className="bg-[#FF644B] bg-opacity-10 text-sm text-[#FF644B] font-sansThai"
               radius="lg"
               name={user.name && user.name.charAt(0).toUpperCase()}
             />
