@@ -11,18 +11,18 @@ interface RoleChipsProps {
 }
 
 export const roleColor: Role[] = [
-  { name: "Student", color: "bg-orange-300" },
+  { name: "student", color: "bg-orange-300" },
   {
-    name: "Exchange Student",
+    name: "exchange_student",
     color: "bg-amber-300",
   },
-  { name: "Alumni", color: "bg-red-300" },
+  { name: "alumni", color: "bg-red-300" },
   {
-    name: "Special Teacher",
+    name: "templecturer",
     color: "bg-indigo-300",
   },
-  { name: "Personnel", color: "bg-sky-300" },
-  { name: "Retiree", color: "bg-violet-300" },
+  { name: "personel", color: "bg-sky-300" },
+  { name: "retirement", color: "bg-violet-300" },
   { name: "Admin", color: "bg-blue-300" },
   { name: "Staff", color: "bg-green-300" },
 ];

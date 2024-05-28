@@ -26,13 +26,14 @@ import RoleChips from "./roleChips";
 import ConfirmModal from "../confirm-modal/confirmModal";
 
 type Service = {
-  id: string;
+  _id: string;
   serviceName: string;
   serviceLink: string;
   serviceImg: string;
   role: string[];
   enable: boolean;
 };
+
 
 export const ServiceManage = () => {
   const router = useRouter();
@@ -43,7 +44,7 @@ export const ServiceManage = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [serviceMock, setServiceMock] = useState<Service[]>([
-    {
+    /* {
       id: "s1",
       serviceName: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
       serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
@@ -123,7 +124,7 @@ export const ServiceManage = () => {
         "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
       role: ["Exchange Student", "Student", "Alumni"],
       enable: true,
-    },
+    }, */
   ]);
 
   const itemsPerPage = 6;
@@ -148,6 +149,8 @@ export const ServiceManage = () => {
     );
   }, [filterValue, serviceMock]);
 
+  const [isLoading, setLoading] = useState(true)
+
   useEffect(() => {
     const sorted = [...filteredServices].sort((a, b) => {
       if (sortOrder === "asc") {
@@ -157,7 +160,20 @@ export const ServiceManage = () => {
       }
     });
     setSortedServices(sorted);
-  }, [filteredServices, sortOrder]);
+    if (isLoading) {
+      fetch("/api/management/service/getServices")
+        .then((res) => res.json())
+        .then((data) => {
+          setServiceMock(data)
+          console.log(data);
+          setLoading(false)
+        })
+    }
+  }, [filteredServices, sortOrder, isLoading]);
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div>
@@ -207,7 +223,7 @@ export const ServiceManage = () => {
           {sortedServices
             .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
             .map((service) => (
-              <Card key={service.id} className="max-w-[400px]" shadow="sm">
+              <Card key={service._id} className="max-w-[400px]" shadow="sm">
                 <CardHeader className="flex gap-3">
                   <Image
                     alt="service img"
@@ -216,7 +232,6 @@ export const ServiceManage = () => {
                     radius="sm"
                     src={service.serviceImg}
                   />
-
                   <div className="flex flex-col">
                     <span className="text-md font-sansThai">
                       {service.serviceName}
