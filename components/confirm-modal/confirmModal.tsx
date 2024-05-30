@@ -19,7 +19,7 @@ interface confirmModalProps {
   //   onOpen: string;
   onOpenChange: () => void;
   //   onClose: () => void;
-  //   onConfirm: () => void;
+  onConfirm: () => void;
 }
 
 const ConfirmModal = ({
@@ -31,9 +31,10 @@ const ConfirmModal = ({
   isOpen,
   //   onOpen,
   onOpenChange,
+  onConfirm,
 }: //   onClose,
-//   onConfirm,
-confirmModalProps) => {
+
+  confirmModalProps) => {
   return (
     <>
       <Modal
@@ -63,7 +64,7 @@ confirmModalProps) => {
                 </Button>
                 <Button
                   className="bg-[#FF644B] text-white font-medium"
-                  onPress={onClose}
+                  onPress={onConfirm}
                 >
                   {textConfirm}
                 </Button>

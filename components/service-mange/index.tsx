@@ -14,6 +14,7 @@ import {
   Link,
   Pagination,
   useDisclosure,
+  Spinner
 } from "@nextui-org/react";
 import {
   AddIcon,
@@ -41,9 +42,9 @@ export const ServiceManage = () => {
   const [filterValue, setFilterValue] = React.useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortedServices, setSortedServices] = useState<Service[]>([]);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const [serviceMock, setServiceMock] = useState<Service[]>([
+  const [service, setService] = useState<Service[]>([
     /* {
       id: "s1",
       serviceName: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
@@ -144,12 +145,36 @@ export const ServiceManage = () => {
   }, []);
 
   const filteredServices = useMemo(() => {
-    return serviceMock.filter((service) =>
+    return service.filter((service) =>
       service.serviceName.toLowerCase().includes(filterValue.toLowerCase())
     );
-  }, [filterValue, serviceMock]);
+  }, [filterValue, service]);
 
   const [isLoading, setLoading] = useState(true)
+
+  const [targetId, setTargetId] = useState("")
+
+  function delClick(_id: string) {
+    setTargetId(_id)
+    onOpen()
+  }
+
+  function delService() {
+    fetch(`/api/management/service/delete?id=${targetId}`, {
+      method: "DELETE",
+    }).then((res) => {
+      if (res.status == 200) {
+        setLoading(true)
+        fetch("/api/management/service/getServices")
+          .then((res) => res.json())
+          .then((data) => {
+            setService(data)
+          }
+          )
+      }
+    })
+    onClose()
+  }
 
   useEffect(() => {
     const sorted = [...filteredServices].sort((a, b) => {
@@ -164,7 +189,7 @@ export const ServiceManage = () => {
       fetch("/api/management/service/getServices")
         .then((res) => res.json())
         .then((data) => {
-          setServiceMock(data)
+          setService(data)
           console.log(data);
           setLoading(false)
         })
@@ -172,7 +197,13 @@ export const ServiceManage = () => {
   }, [filteredServices, sortOrder, isLoading]);
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="grid justify-center items-center h-full w-full">
+        <Spinner classNames={{
+          circle1: "border-b-[#FF644B]",
+          circle2: "border-b-[#FF644B]",
+        }} />
+      </div>)
   }
 
   return (
@@ -258,7 +289,7 @@ export const ServiceManage = () => {
                   <Divider orientation="vertical" />
                   <Button
                     className="mx-auto bg-transparent text-[#afafaf] w-full"
-                    onPress={onOpen}
+                    onPress={(e) => delClick(service._id)}
                   >
                     Delete
                   </Button>
@@ -277,7 +308,7 @@ export const ServiceManage = () => {
             size="sm"
             variant="flat"
             showControls
-            total={Math.ceil(serviceMock.length / itemsPerPage)}
+            total={Math.ceil(service.length / itemsPerPage)}
             initialPage={currentPage}
             onChange={(page) => setCurrentPage(page)}
           />
@@ -292,6 +323,7 @@ export const ServiceManage = () => {
         textConfirm="Yes, Delete !"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
+        onConfirm={delService}
       />
     </div>
   );

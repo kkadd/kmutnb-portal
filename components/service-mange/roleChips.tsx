@@ -10,19 +10,40 @@ interface RoleChipsProps {
   roles: string[];
 }
 
+enum displayRole {
+  student = "student",
+  exchange_student = "exchange_student",
+  alumni = "alumni",
+  templecturer = "templecturer",
+  personel = "personel",
+  retirement = "retirement"
+}
+
+const renderRole = (renderRole: displayRole) => {
+  const name = {
+    [displayRole.student]: "Student",
+    [displayRole.exchange_student]: "Exchange Student",
+    [displayRole.alumni]: "Alumni",
+    [displayRole.templecturer]: "Templecturer",
+    [displayRole.personel]: "Personel",
+    [displayRole.retirement]: "Retirement"
+  }
+  return name[renderRole]
+}
+
 export const roleColor: Role[] = [
-  { name: "student", color: "bg-orange-300" },
+  { name: "Student", color: "bg-orange-300" },
   {
-    name: "exchange_student",
+    name: "Exchange Student",
     color: "bg-amber-300",
   },
-  { name: "alumni", color: "bg-red-300" },
+  { name: "Alumni", color: "bg-red-300" },
   {
-    name: "templecturer",
+    name: "Templecturer",
     color: "bg-indigo-300",
   },
-  { name: "personel", color: "bg-sky-300" },
-  { name: "retirement", color: "bg-violet-300" },
+  { name: "Personel", color: "bg-sky-300" },
+  { name: "Retirement", color: "bg-violet-300" },
   { name: "Admin", color: "bg-blue-300" },
   { name: "Staff", color: "bg-green-300" },
 ];
@@ -49,7 +70,7 @@ const RoleChips: React.FC<RoleChipsProps> = ({ roles }) => {
 };
 
 function findColor(roleName: any) {
-  const foundRole = roleColor.find((role) => role.name === roleName);
+  const foundRole = roleColor.find((role) => role.name === renderRole(roleName));
   return foundRole ? foundRole.color : "bg-gray-300";
 }
 
