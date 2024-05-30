@@ -7,6 +7,7 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Image,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -46,9 +47,10 @@ export const PortalNav = () => {
           "data-[active=true]:text-[#FF644B]",
         ],
       }}
+      isBlurred={false}
     >
       <NavbarBrand>
-        <span className="font-bold text-inherit">KMUTNB Portal</span>
+        <Image src="/logo.png" alt="logo" width={100} height={30} />
       </NavbarBrand>
 
       <NavbarContent className="hidden sm:flex gap-6" justify="center">
