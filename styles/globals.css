@@ -27,3 +27,7 @@ body {
   padding: 10px;
   cursor: pointer;
 }
+
+.grid-container {
+  max-width: calc(7 * 130px + 6 * 8px);
+}
