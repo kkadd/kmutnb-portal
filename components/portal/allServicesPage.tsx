@@ -106,8 +106,75 @@ const serviceMock = [
   },
 ];
 
+const newServiceMock = [
+  {
+    id: "ns1",
+    serviceName: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
+    serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
+    serviceImg:
+      "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
+    description:
+      "ใช้สำหรับลงทะเบียนเรียน, ดูผลการเรียน, แจ้งจบ และบริการงานทะเบียนต่าง ๆ",
+  },
+  {
+    id: "ns2",
+    serviceName: "ICIT Account",
+    serviceLink: "https://account.kmutnb.ac.th/web/",
+    serviceImg: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
+    description:
+      "เปิดใช้งานบัญชีนักศึกษา, ระบบกู้รหัสผ่าน, ปลดล็อกบัญชีด้วยแอปพลิเคชัน ThaID.",
+  },
+  {
+    id: "ns3",
+    serviceName: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
+    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
+    serviceImg: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
+    description: "",
+  },
+  {
+    id: "ns4",
+    serviceName: "บริการซอฟต์แวร์ลิขสิทธ์",
+    serviceLink: "https://software.kmutnb.ac.th/",
+    serviceImg:
+      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
+    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
+  },
+  {
+    id: "ns5",
+    serviceName: "กองบริการการศึกษา",
+    serviceLink: "https://acdserv.kmutnb.ac.th/home",
+    serviceImg:
+      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
+    description: "",
+  },
+  {
+    id: "ns6",
+    serviceName: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
+    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
+    serviceImg: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
+    description: "",
+  },
+  {
+    id: "ns7",
+    serviceName: "บริการซอฟต์แวร์ลิขสิทธ์",
+    serviceLink: "https://software.kmutnb.ac.th/",
+    serviceImg:
+      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
+    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
+  },
+  {
+    id: "ns8",
+    serviceName: "กองบริการการศึกษา",
+    serviceLink: "https://acdserv.kmutnb.ac.th/home",
+    serviceImg:
+      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
+    description: "",
+  },
+];
+
 export const AllServicesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentNewPage, setCurrentNewPage] = useState(1);
   const [filterValue, setFilterValue] = React.useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
@@ -115,6 +182,11 @@ export const AllServicesPage = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = serviceMock.slice(startIndex, endIndex);
+
+  const newItemsPerpage = 5;
+  const newStartIndex = (currentNewPage - 1) * newItemsPerpage;
+  const newEndIndex = newStartIndex + newItemsPerpage;
+  const currentNewItems = newServiceMock.slice(newStartIndex, newEndIndex);
 
   const onSearchChange = useCallback((value: any) => {
     setFilterValue(value || "");
@@ -131,7 +203,7 @@ export const AllServicesPage = () => {
   }, []);
 
   return (
-    <div className="flex justify-center p-10 gap-6">
+    <div className="flex justify-center p-9 gap-6">
       <div className="h-[600px] w-2/5">
         <Card className="h-full w-full">
           <CardBody className="p-4">
@@ -145,8 +217,8 @@ export const AllServicesPage = () => {
                 </div>
               </Chip>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              {currentItems.map((service) => (
+            <div className="grid grid-cols-2 gap-4 z-50 relative">
+              {currentNewItems.map((service) => (
                 <Tooltip
                   key={service.id}
                   content={
@@ -202,15 +274,31 @@ export const AllServicesPage = () => {
                 </Tooltip>
               ))}
             </div>
+            <div className="absolute inset-0 z-10 flex justify-end items-end p-3">
+              <Image
+                src="/campaign.svg"
+                alt="new service image"
+                width={300}
+                height={300}
+              />
+            </div>
+            <div className="z-50 flex justify-center items-center h-[300px] w-2/5">
+              <Pagination
+                classNames={{
+                  cursor: "bg-[#FF644B]",
+                  item: "bg-white",
+                  next: "bg-white",
+                  prev: "bg-white",
+                }}
+                size="sm"
+                variant="flat"
+                showControls
+                total={Math.ceil(newServiceMock.length / newItemsPerpage)}
+                initialPage={currentNewPage}
+                onChange={(page) => setCurrentNewPage(page)}
+              />
+            </div>
           </CardBody>
-          <div className="flex justify-end p-3">
-            <Image
-              src="/campaign.svg"
-              alt="new service image"
-              width={300}
-              height={300}
-            />
-          </div>
         </Card>
       </div>
 
