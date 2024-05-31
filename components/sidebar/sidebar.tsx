@@ -73,7 +73,6 @@ export const SidebarWrapper = () => {
               alt="service management"
               width={300}
               height={300}
-              className="mt-[140px]"
             />
           ) : null}
           {pathname === "/management/staff" ? (
@@ -82,7 +81,6 @@ export const SidebarWrapper = () => {
               alt="staff management"
               width={300}
               height={300}
-              className="mt-[140px]"
             />
           ) : null}
           <div className={Sidebar.Footer()}>
