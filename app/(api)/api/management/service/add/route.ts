@@ -4,7 +4,7 @@ import clientPromise from "@/lib/mongodb";
 type service = {
     serviceName: string;
     serviceDescription?: string;
-    serviceImage?: string;
+    serviceImg?: string;
     serviceLink: string;
     date: string;
     username: string;
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
         let addedService = await db.collection("service").insertOne({
             serviceName: data.serviceName,
             serviceDescription: data.serviceDescription,
-            serviceImage: data.serviceImage,
+            serviceImg: data.serviceImg,
             role: data.role,
             serviceLink: data.serviceLink,
             date: data.date,
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
  *                 type: string
  *               serviceDescription:
  *                 type: string
- *               serviceImage:
+ *               serviceImg:
  *                 type: string
  *               role:
  *                 type: array
