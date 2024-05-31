@@ -149,7 +149,7 @@ export const AddServicePage = () => {
         textConfirm="Yes, Add Service."
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        // onConfirm={handleDeleteService}
+      /* onConfirm={handleDeleteService} */
       />
     </div>
   );
