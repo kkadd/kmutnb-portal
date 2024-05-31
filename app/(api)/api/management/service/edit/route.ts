@@ -10,7 +10,7 @@ export async function PUT(request: NextRequest) {
         if (!id) {
             return NextResponse.json({ error: "Missing id" });
         }
-        let { serviceName, serviceDescription, serviceImage, serviceLink, date, username, enable, role } = await request.json();
+        let { serviceName, serviceDescription, serviceImg, serviceLink, date, username, enable, role } = await request.json();
         let post = await db.collection("service").updateOne(
             {
                 _id: new ObjectId(id),
@@ -19,7 +19,7 @@ export async function PUT(request: NextRequest) {
                 $set: {
                     serviceName: serviceName,
                     serviceDescription: serviceDescription,
-                    serviceImage: serviceImage,
+                    serviceImg: serviceImg,
                     serviceLink: serviceLink,
                     date: date,
                     username: username,
@@ -60,7 +60,7 @@ export async function PUT(request: NextRequest) {
  *                 type: string
  *               serviceDescription:
  *                 type: string
- *               serviceImage:
+ *               serviceImg:
  *                 type: string
  *               role:
  *                 type: array

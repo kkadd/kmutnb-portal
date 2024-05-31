@@ -14,6 +14,7 @@ import {
   Link,
   Pagination,
   useDisclosure,
+  Spinner
 } from "@nextui-org/react";
 import {
   AddIcon,
@@ -26,7 +27,7 @@ import RoleChips from "./roleChips";
 import ConfirmModal from "../confirm-modal/confirmModal";
 
 type Service = {
-  id: string;
+  _id: string;
   serviceName: string;
   serviceLink: string;
   serviceImg: string;
@@ -34,16 +35,17 @@ type Service = {
   enable: boolean;
 };
 
+
 export const ServiceManage = () => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [filterValue, setFilterValue] = React.useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortedServices, setSortedServices] = useState<Service[]>([]);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const [serviceMock, setServiceMock] = useState<Service[]>([
-    {
+  const [service, setService] = useState<Service[]>([
+    /* {
       id: "s1",
       serviceName: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
       serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
@@ -123,7 +125,7 @@ export const ServiceManage = () => {
         "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
       role: ["Exchange Student", "Student", "Alumni"],
       enable: true,
-    },
+    }, */
   ]);
 
   const itemsPerPage = 6;
@@ -143,10 +145,36 @@ export const ServiceManage = () => {
   }, []);
 
   const filteredServices = useMemo(() => {
-    return serviceMock.filter((service) =>
+    return service.filter((service) =>
       service.serviceName.toLowerCase().includes(filterValue.toLowerCase())
     );
-  }, [filterValue, serviceMock]);
+  }, [filterValue, service]);
+
+  const [isLoading, setLoading] = useState(true)
+
+  const [targetId, setTargetId] = useState("")
+
+  function delClick(_id: string) {
+    setTargetId(_id)
+    onOpen()
+  }
+
+  function delService() {
+    fetch(`/api/management/service/delete?id=${targetId}`, {
+      method: "DELETE",
+    }).then((res) => {
+      if (res.status == 200) {
+        setLoading(true)
+        fetch("/api/management/service/getServices")
+          .then((res) => res.json())
+          .then((data) => {
+            setService(data)
+          }
+          )
+      }
+    })
+    onClose()
+  }
 
   useEffect(() => {
     const sorted = [...filteredServices].sort((a, b) => {
@@ -157,7 +185,26 @@ export const ServiceManage = () => {
       }
     });
     setSortedServices(sorted);
-  }, [filteredServices, sortOrder]);
+    if (isLoading) {
+      fetch("/api/management/service/getServices")
+        .then((res) => res.json())
+        .then((data) => {
+          setService(data)
+          console.log(data);
+          setLoading(false)
+        })
+    }
+  }, [filteredServices, sortOrder, isLoading]);
+
+  if (isLoading) {
+    return (
+      <div className="grid justify-center items-center h-full w-full">
+        <Spinner classNames={{
+          circle1: "border-b-[#FF644B]",
+          circle2: "border-b-[#FF644B]",
+        }} />
+      </div>)
+  }
 
   return (
     <div>
@@ -207,7 +254,7 @@ export const ServiceManage = () => {
           {sortedServices
             .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
             .map((service) => (
-              <Card key={service.id} className="max-w-[400px]" shadow="sm">
+              <Card key={service._id} className="max-w-[400px]" shadow="sm">
                 <CardHeader className="flex gap-3">
                   <Image
                     alt="service img"
@@ -216,7 +263,6 @@ export const ServiceManage = () => {
                     radius="sm"
                     src={service.serviceImg}
                   />
-
                   <div className="flex flex-col">
                     <span className="text-md font-sansThai">
                       {service.serviceName}
@@ -243,7 +289,7 @@ export const ServiceManage = () => {
                   <Divider orientation="vertical" />
                   <Button
                     className="mx-auto bg-transparent text-[#afafaf] w-full"
-                    onPress={onOpen}
+                    onPress={(e) => delClick(service._id)}
                   >
                     Delete
                   </Button>
@@ -262,7 +308,7 @@ export const ServiceManage = () => {
             size="sm"
             variant="flat"
             showControls
-            total={Math.ceil(serviceMock.length / itemsPerPage)}
+            total={Math.ceil(service.length / itemsPerPage)}
             initialPage={currentPage}
             onChange={(page) => setCurrentPage(page)}
           />
@@ -277,6 +323,7 @@ export const ServiceManage = () => {
         textConfirm="Yes, Delete !"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
+        onConfirm={delService}
       />
     </div>
   );

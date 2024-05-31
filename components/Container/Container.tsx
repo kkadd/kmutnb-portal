@@ -1,7 +1,7 @@
-import React, {forwardRef} from 'react';
+import React, { forwardRef } from 'react';
 import classNames from 'classnames';
 
-import {Handle, Remove} from '../Item';
+import { Handle, Remove } from '../Item';
 
 import styles from './Container.module.css';
 
@@ -39,14 +39,13 @@ export const Container = forwardRef<HTMLDivElement, Props>(
       unstyled,
       ...props
     }: Props,
-    ref
+    ref = React.createRef<HTMLDivElement>()
   ) => {
     const Component = onClick ? 'button' : 'div';
-
     return (
       <Component
         {...props}
-        ref={ref}
+        ref={ref as any}
         style={
           {
             ...style,
@@ -79,3 +78,5 @@ export const Container = forwardRef<HTMLDivElement, Props>(
     );
   }
 );
+
+Container.displayName = 'Container';
