@@ -19,7 +19,7 @@ interface confirmModalProps {
   //   onOpen: string;
   onOpenChange: () => void;
   //   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm?: () => void;
 }
 
 const ConfirmModal = ({
