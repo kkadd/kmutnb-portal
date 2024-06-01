@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Button,
@@ -18,8 +18,32 @@ import { WarningIcon } from "../icons";
 
 export const AddServicePage = () => {
   const router = useRouter();
-  const [isSelected, setIsSelected] = React.useState(false);
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const [isSelected, setIsSelected] = React.useState(false); //enable service
+  const [serviceName, setServiceName] = useState("");
+  const [serviceLink, setServiceLink] = useState("");
+  const [username, setUsername] = useState("");
+  const [description, setDescription] = useState("");
+  const [roles, setRoles] = useState([""]);
+  const [image, setImage] = useState<File | null>(null);
+
+  /* React.useEffect(() => {
+    console.log("Enable :", isSelected);
+    console.log("Roles: ", roles);
+  }, [isSelected, roles]);
+   */
+
+  function handleAddService() {
+    console.log("Service Name: ", serviceName);
+    console.log("Service Link: ", serviceLink);
+    console.log("Description: ", description);
+    console.log("Roles: ", roles);
+    console.log("Image: ", image);
+    console.log("Enable: ", isSelected);
+    /* onOpenChange(); */
+  }
 
   return (
     <div>
@@ -57,6 +81,9 @@ export const AddServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                onValueChange={(value) => {
+                  setServiceName(value);
+                }}
               />
 
               <Input
@@ -65,17 +92,25 @@ export const AddServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                onValueChange={(value) => {
+                  setServiceLink(value);
+                }}
               />
 
               <Input
                 type="text"
                 label="Username"
-                placeholder="Please enter..."
+                placeholder="Show who add this service"
                 labelPlacement="outside"
                 disabled
+                value={username}
               />
 
-              <ImageUpload />
+              <ImageUpload
+                onValueChange={(value) => {
+                  setImage(value);
+                }}
+              />
 
               <Textarea
                 type="text"
@@ -84,6 +119,9 @@ export const AddServicePage = () => {
                 labelPlacement="outside"
                 minRows={6}
                 maxLength={240}
+                onValueChange={(value) => {
+                  setDescription(value);
+                }}
               />
 
               <div>
@@ -93,30 +131,34 @@ export const AddServicePage = () => {
                   }}
                   label="Select Roles"
                   orientation="horizontal"
+                  onChange={(values) => {
+                    setRoles(values);
+                    console.log(values);
+                  }}
                 >
                   <div className="grid grid-cols-2 gap-3 w-[357px] h-[76px]">
-                    <Checkbox value="Student" className="p-0 m-0">
+                    <Checkbox value="student" className="p-0 m-0">
                       Student
                     </Checkbox>
 
-                    <Checkbox value="Special Teacher" className="p-0 m-0">
-                      Special Teacher
+                    <Checkbox value="templecturer" className="p-0 m-0">
+                      Templecturer
                     </Checkbox>
 
-                    <Checkbox value="Exchange Student" className="p-0 m-0">
+                    <Checkbox value="exchange_student" className="p-0 m-0">
                       Exchange Student
                     </Checkbox>
 
-                    <Checkbox value="Personnel" className="p-0 m-0">
+                    <Checkbox value="personel" className="p-0 m-0">
                       Personnel
                     </Checkbox>
 
-                    <Checkbox value="Alumni" className="p-0 m-0">
+                    <Checkbox value="alumni" className="p-0 m-0">
                       Alumni
                     </Checkbox>
 
-                    <Checkbox value="Retiree" className="p-0 m-0">
-                      Retiree
+                    <Checkbox value="retirement" className="p-0 m-0">
+                      Retirement
                     </Checkbox>
                   </div>
                 </CheckboxGroup>
@@ -149,7 +191,7 @@ export const AddServicePage = () => {
         textConfirm="Yes, Add Service."
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-      /* onConfirm={handleDeleteService} */
+        onConfirm={handleAddService}
       />
     </div>
   );

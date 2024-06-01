@@ -1,13 +1,21 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { DeleteIcon, UploadIcon } from "../icons";
 import { Image } from "@nextui-org/react";
 
-const ImageUpload = () => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [originalFile, setOriginalFile] = useState<File | null>(null);
+type ImageUploadProps = {
+  onValueChange?: (file: File | null) => void;
+  defaultValue?: File | null;
+};
+
+const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
+  const [selectedImage, setSelectedImage] = useState<File | null>(
+    defaultValue ? defaultValue : null
+  );
+  const [originalFile, setOriginalFile] = useState<File | null>(
+    defaultValue ? defaultValue : null
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // note to fix : เลือก A แล้วลบ พอกลับมาเลือก A จะไม่แสดงผล แต่ถ้าเลือก B แล้วกลับมาเลือก A จะแสดงผลปกติ
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
@@ -21,8 +29,18 @@ const ImageUpload = () => {
     }
   };
 
+  useEffect(() => {
+    if (onValueChange) {
+      onValueChange(selectedImage);
+    }
+  }, [selectedImage, onValueChange]);
+
   const handleDeleteImage = () => {
     setSelectedImage(null);
+    setOriginalFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
