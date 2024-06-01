@@ -82,13 +82,17 @@ export const PortalNav = () => {
       </NavbarContent>
 
       <NavbarContent as="div" justify="end">
-        <Button
-          variant="bordered"
-          startContent={<EditIcon />}
-          className="border-[#FF644B] text-[#FF644B] font-semibold"
-        >
-          Edit
-        </Button>
+        {(pathname === "/kmutnb-portal" ||
+          pathname === "/kmutnb-portal/edit") && (
+          <Button
+            variant="bordered"
+            startContent={<EditIcon />}
+            className="border-[#FF644B] text-[#FF644B] font-semibold"
+            onClick={() => router.push("/kmutnb-portal/edit")}
+          >
+            Edit
+          </Button>
+        )}
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
