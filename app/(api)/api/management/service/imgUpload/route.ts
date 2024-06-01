@@ -27,7 +27,7 @@ export const POST = async (req: any, res: any) => {
     );
     return NextResponse.json(
       {
-        Message: "Success",
+        message: "Success",
         status: 201,
         filePath: "/uploads/" + filename,
       },
@@ -36,7 +36,7 @@ export const POST = async (req: any, res: any) => {
   } catch (error) {
     console.log("Error occurred ", error);
     return NextResponse.json(
-      { Message: "Failed", status: 500 },
+      { message: "Failed", status: 500 },
       { status: 500 }
     );
   }
