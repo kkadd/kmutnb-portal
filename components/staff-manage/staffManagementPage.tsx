@@ -41,8 +41,6 @@ import {
   SearchIcon,
 } from "../icons";
 
-import RoleChips from "../service-mange/roleChips";
-
 const rolesOptions = [
   { name: "Admin", uid: "admin" },
   { name: "Staff", uid: "staff" },
@@ -60,97 +58,12 @@ export const StaffManage = () => {
     role: string;
   };
 
-  const [users, setUsers] = useState<User[]>([
-    /* 
-    {
-      id: 1,
-      username: "s6303051623179",
-      email: "s6303051623179@gmail.com",
-      displayname: "ศิริวรรณ ทุหา",
-      role: "admin",
-      manageRole: ["Admin"],
-    },
-    {
-      id: 2,
-      username: "s6303051623111",
-      email: "s6303051623111@gmail.com",
-      displayname: "เมษา สันติสุข",
-      role: "staff",
-      manageRole: ["Staff"],
-    },
-    {
-      id: 3,
-      username: "s6303051623127",
-      email: "s6303051623127@gmail.com",
-      displayname: "จิรภัทร ศรีสมพันธุ์",
-      role: "admin",
-      manageRole: ["Admin"],
-    },
-    {
-      id: 4,
-      username: "s6303051623367",
-      email: "s6303051623367@gmail.com",
-      displayname: "กรภัทร ป้องภัย",
-      role: "staff",
-      manageRole: ["Staff"],
-    },
-    {
-      id: 5,
-      username: "s630305164567",
-      email: "s630305164567@gmail.com",
-      displayname: "ไกรสร พาใจขวัญ",
-      role: "admin",
-      manageRole: ["Admin"],
-    },
-    {
-      id: 6,
-      username: "s6303051629876",
-      email: "s6303051629876@gmail.com",
-      displayname: "ธิศา คมปราชญ์",
-      role: "staff",
-      manageRole: ["Staff"],
-    },
-    {
-      id: 7,
-      username: "s6303051620097",
-      email: "s63030516200979@gmail.com",
-      displayname: "นีรา ศรีสว่างจันทร์",
-      role: "admin",
-      manageRole: ["Admin"],
-    },
-    {
-      id: 8,
-      username: "s6303051622345",
-      email: "s6303051622345@gmail.com",
-      displayname: "ปองเดช วรารักษ์",
-      role: "staff",
-      manageRole: ["Staff"],
-    },
-    {
-      id: 9,
-      username: "s6303051620094",
-      email: "s6303051620094@gmail.com",
-      displayname: "ธารมิกา ขจรศักดิ์โกศล",
-      role: "admin",
-      manageRole: ["Admin"],
-    },
-    {
-      id: 10,
-      username: "s6303051622349",
-      email: "s6303051622349@gmail.com",
-      displayname: "ณภัค ทรัพย์มา",
-      role: "staff",
-      manageRole: ["Staff"],
-    },
-    {
-      id: 11,
-      username: "s6303051622987",
-      email: "s6303051622987@gmail.com",
-      displayname: "เจิมจันทร์ แสงทอง ",
-      role: "staff",
-      manageRole: ["Staff"],
-    }, */
-  ]);
+  const [users, setUsers] = useState<User[]>([]);
+
+  const [addUsername, setAddUsername] = useState("");
+  const [addRole, setAddRole] = useState("");
+  const [editUsername, setEditUsername] = useState("");
+  const [editUserRole, setEditUserRole] = useState("");
 
   const [filterValue, setFilterValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
@@ -230,6 +143,14 @@ export const StaffManage = () => {
     setFilterValue("");
     setPage(1);
   }, []);
+
+  const handleAddRoleChange = (value: any) => {
+    setAddRole(value.target.value);
+  };
+
+  const handleEditRoleChange = (value: any) => {
+    setEditUserRole(value.target.value);
+  };
 
   function roleColor(role: string) {
     switch (role) {
@@ -344,6 +265,7 @@ export const StaffManage = () => {
       </div>
     );
   }
+
   return (
     <div>
       <div className="my-6 lg:px-6 max-w-[95rem] mx-auto w-full flex flex-col gap-4">
@@ -420,12 +342,18 @@ export const StaffManage = () => {
                         placeholder="Enter your Username"
                         variant="bordered"
                         isClearable
+                        endContent={<CloseIcon />}
+                        onValueChange={(value) => {
+                          setAddUsername(value);
+                        }}
                       />
                       <Select
                         label="Role"
                         placeholder="Please select Role"
                         className="max-w-xs"
                         variant="bordered"
+                        value={addRole}
+                        onChange={handleAddRoleChange}
                       >
                         <SelectItem key={"admin"}>Admin</SelectItem>
                         <SelectItem key={"staff"}>Staff</SelectItem>
@@ -532,7 +460,7 @@ export const StaffManage = () => {
                   <Input
                     autoFocus
                     label="Username"
-                    value={currentUser.username}
+                    value={editUsername}
                     variant="bordered"
                     disabled
                   />
@@ -542,6 +470,8 @@ export const StaffManage = () => {
                     placeholder="Please select Role"
                     className="max-w-xs"
                     variant="bordered"
+                    value={editUserRole}
+                    onChange={handleEditRoleChange}
                   >
                     <SelectItem key={"admin"}>Admin</SelectItem>
                     <SelectItem key={"staff"}>Staff</SelectItem>
