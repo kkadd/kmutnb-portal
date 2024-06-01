@@ -1,6 +1,9 @@
 "use client";
 
 import React, { FC, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@nextui-org/react";
+
 import {
   DndContext,
   closestCenter,
@@ -73,6 +76,8 @@ const testServiceDnd = [
 ];
 
 export const EditPortalPage: FC = () => {
+  const router = useRouter();
+
   const [items, setItems] = useState<TItem[]>(testServiceDnd);
   const [activeItem, setActiveItem] = useState<TItem>();
 
@@ -129,6 +134,22 @@ export const EditPortalPage: FC = () => {
             <SortableItem key={item.id} item={item} />
           ))}
         </Grid>
+
+        <div className="flex justify-center gap-4 mt-11">
+          <Button
+            className="w-[120px] bg-[#f4f4f5] font-medium"
+            onClick={() => router.back()}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="w-[120px] bg-[#FF644B] text-white font-medium"
+            // type="submit"
+            // onPress={onOpen}
+          >
+            Save Edit
+          </Button>
+        </div>
       </SortableContext>
       <DragOverlay adjustScale style={{ transformOrigin: "0 0 " }}>
         {activeItem ? <Item item={activeItem} isDragging /> : null}
