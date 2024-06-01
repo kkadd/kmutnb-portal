@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
   Tooltip,
-  User,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -29,7 +28,6 @@ import {
   Select,
   SelectItem,
   Chip,
-  Spinner,
 } from "@nextui-org/react";
 
 import {
@@ -40,6 +38,7 @@ import {
   EditIcon,
   SearchIcon,
 } from "../icons";
+import { LoadingCustom } from "../Loading/loadingCustom";
 
 const rolesOptions = [
   { name: "Admin", uid: "admin" },
@@ -254,16 +253,7 @@ export const StaffManage = () => {
   }, [isLoading, users]);
 
   if (isLoading) {
-    return (
-      <div className="grid justify-center items-center h-full w-full">
-        <Spinner
-          classNames={{
-            circle1: "border-b-[#FF644B]",
-            circle2: "border-b-[#FF644B]",
-          }}
-        />
-      </div>
-    );
+    return <LoadingCustom />;
   }
 
   return (
