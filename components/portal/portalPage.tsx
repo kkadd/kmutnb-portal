@@ -1,12 +1,17 @@
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
   Divider,
   Image,
   Link,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Tooltip,
 } from "@nextui-org/react";
+import { AddIcon, ArrowRightIcon, BookIcon, HelpIcon } from "../icons";
 
 const serviceMock = [
   {
@@ -212,7 +217,43 @@ const frequencyServiceMock = [
 export const PortalPage = () => {
   return (
     <div className="grid p-10 gap-4">
-      <div className="grid justify-center items-center h-[370px]">
+      <div className="relative z-50 flex justify-end ">
+        <Popover placement="left" showArrow={true} backdrop="opaque">
+          <PopoverTrigger>
+            <Button isIconOnly className="bg-transparent">
+              <HelpIcon />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className="px-1 py-2 font-sansThai w-[300px]">
+              <div className="flex justify-center items-center text-base font-bold">
+                <BookIcon />
+                &nbsp;คู่มือการใช้งาน
+              </div>
+              <div className="text-sm mt-2">
+                หากต้องการเพิ่มบริการออนไลน์มาไว้ที่หน้า personal portal
+                สามารถทำได้โดย
+                <ul>
+                  <li className="flex items-center">
+                    1. ไปที่หน้า <ArrowRightIcon /> All Services
+                  </li>
+                  <li className="flex items-center">
+                    2. ค้นหาบริการที่ต้องการ คลิ๊กที่ <AddIcon />
+                    เพื่อเพิ่มบริการ
+                  </li>
+                  <li className="ml-4">มาที่หน้า Personal Portal</li>
+                  <li>
+                    3. หากต้องการแก้ไขลำดับ สามารถคลิ๊กที่ปุ่ม Edit
+                    เพื่อเข้าสู่หน้าการแก้ไข
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <div className="grid justify-center items-center mt-[-32px] h-[370px]">
         <div
           className="grid-container grid justify-center items-center gap-8"
           style={{
@@ -236,7 +277,7 @@ export const PortalPage = () => {
               }
             >
               <Link href={service.serviceLink}>
-                <div className="grid justify-center items-center gap-2 h-[132px]">
+                <div className="grid justify-center items-center gap-2 h-[132px] z-10">
                   <Card
                     className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
                     key={service.id}

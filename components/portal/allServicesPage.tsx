@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
   Chip,
   Divider,
   Image,
@@ -15,7 +14,6 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import {
-  AddCircleIcon,
   AddIcon,
   CampaignIcon,
   CloseIcon,
