@@ -29,7 +29,7 @@ import {
   Select,
   SelectItem,
   Chip,
-  Spinner
+  Spinner,
 } from "@nextui-org/react";
 
 import {
@@ -48,16 +48,20 @@ const rolesOptions = [
   { name: "Staff", uid: "staff" },
 ];
 
-
-
 export function capitalize(str: any) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export const StaffManage = () => {
-  type User = { _id: string, username: string, displayname: string, role: string }
+  type User = {
+    _id: string;
+    username: string;
+    displayname: string;
+    role: string;
+  };
 
-  const [users, setUsers] = useState<User[]>([/* 
+  const [users, setUsers] = useState<User[]>([
+    /* 
     {
       id: 1,
       username: "s6303051623179",
@@ -258,7 +262,9 @@ export const StaffManage = () => {
             <Avatar
               className="bg-[#FF644B] bg-opacity-10 text-sm text-[#FF644B] font-sansThai"
               radius="lg"
-              name={user.displayname && user.displayname.charAt(0).toUpperCase()}
+              name={
+                user.displayname && user.displayname.charAt(0).toUpperCase()
+              }
             />
             <div className="font-sansThai">{user.displayname}</div>
           </div>
@@ -270,7 +276,9 @@ export const StaffManage = () => {
       case "role":
         return (
           <div className="flex justify-center items-center">
-            <Chip classNames={{ base: `${roleColor(user.role)}` }}>{user.role}</Chip>
+            <Chip classNames={{ base: `${roleColor(user.role)}` }}>
+              {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+            </Chip>
           </div>
         );
 
@@ -322,16 +330,19 @@ export const StaffManage = () => {
           console.error(err);
         });
     }
-  }
-    , [isLoading, users]);
+  }, [isLoading, users]);
 
   if (isLoading) {
-    return <div className="grid justify-center items-center h-full w-full">
-      <Spinner classNames={{
-        circle1: "border-b-[#FF644B]",
-        circle2: "border-b-[#FF644B]",
-      }} />
-    </div>;
+    return (
+      <div className="grid justify-center items-center h-full w-full">
+        <Spinner
+          classNames={{
+            circle1: "border-b-[#FF644B]",
+            circle2: "border-b-[#FF644B]",
+          }}
+        />
+      </div>
+    );
   }
   return (
     <div>
