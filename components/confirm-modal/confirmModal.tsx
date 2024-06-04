@@ -16,9 +16,9 @@ interface confirmModalProps {
   textClose: string;
   textConfirm: string;
   isOpen: boolean;
-  //   onOpen: string;
+  onOpen?: () => string;
   onOpenChange: () => void;
-  //   onClose: () => void;
+  onClose: () => void;
   onConfirm?: () => void;
 }
 
@@ -29,12 +29,11 @@ const ConfirmModal = ({
   textClose,
   textConfirm,
   isOpen,
-  //   onOpen,
+  onOpen,
   onOpenChange,
   onConfirm,
-}: //   onClose,
-
-  confirmModalProps) => {
+  onClose,
+}: confirmModalProps) => {
   return (
     <>
       <Modal
@@ -47,11 +46,11 @@ const ConfirmModal = ({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col justify-center items-center gap-3">
-                <div>{icon}</div>
+                <div className="text-[#FF644B]">{icon}</div>
                 <div>{title}</div>
               </ModalHeader>
               <ModalBody className="justify-center items-center pt-0">
-                <span>{description}</span>
+                <span className="font-sansThai">{description}</span>
               </ModalBody>
               <ModalFooter className="flex justify-center">
                 <Button

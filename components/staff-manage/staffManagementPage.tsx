@@ -39,6 +39,8 @@ import {
   SearchIcon,
 } from "../icons";
 import { LoadingCustom } from "../Loading/loadingCustom";
+import ConfirmModal from "@/components/confirm-modal/confirmModal";
+import { add } from "@dnd-kit/utilities";
 
 const rolesOptions = [
   { name: "Admin", uid: "admin" },
@@ -61,6 +63,8 @@ export const StaffManage = () => {
 
   const [addUsername, setAddUsername] = useState("");
   const [addRole, setAddRole] = useState("");
+  const [addDisplayname, setAddDisplayname] = useState("");
+  /*   const [addConfirmModal, setAddConfirmModal] = useState(false); */
   const [editUsername, setEditUsername] = useState("");
   const [editUserRole, setEditUserRole] = useState("");
 
@@ -82,6 +86,7 @@ export const StaffManage = () => {
   const pages = Math.ceil(users.length / rowsPerPage);
 
   const addUserModal = useDisclosure();
+  const addUserConfirmModal = useDisclosure();
   const editUserModal = useDisclosure();
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
 
@@ -237,6 +242,48 @@ export const StaffManage = () => {
     }
   };
 
+  function handleAddStaff() {
+    fetch("/api/management/userInfo", {
+      method: "POST",
+      body: JSON.stringify({ username: addUsername }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setAddDisplayname(data.userInfo.displayname);
+        addUserConfirmModal.onOpen();
+        addUserModal.onClose();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+  const message = (displayname: string, role: string) => {
+    return (
+      "Are you sure you want to add " + displayname + " as a " + role + "?"
+    );
+  };
+
+  async function handleAddConfirm() {
+    await fetch("/api/management/staff/add", {
+      method: "POST",
+      body: JSON.stringify({
+        username: addUsername,
+        displayname: addDisplayname,
+        role: addRole,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    addUserConfirmModal.onClose();
+    setIsLoading(true);
+  }
+
   useEffect(() => {
     if (isLoading) {
       fetch("/api/management/staff/get")
@@ -360,7 +407,7 @@ export const StaffManage = () => {
                       </Button>
                       <Button
                         className="bg-[#FF644B] text-white font-medium"
-                        onPress={onClose}
+                        onPress={handleAddStaff}
                       >
                         Add Staff
                       </Button>
@@ -490,6 +537,17 @@ export const StaffManage = () => {
           </ModalContent>
         </Modal>
       )}
+      <ConfirmModal
+        title="Add Staff"
+        description={message(addDisplayname, addRole)}
+        icon={<AddStaffIcon />}
+        textClose="Cancel"
+        textConfirm="Add"
+        isOpen={addUserConfirmModal.isOpen}
+        onOpenChange={addUserConfirmModal.onOpenChange}
+        onClose={addUserConfirmModal.onClose}
+        onConfirm={handleAddConfirm}
+      ></ConfirmModal>
     </div>
   );
 };
