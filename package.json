@@ -7,7 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"dev-debug": "NODE_OPTIONS='--inspect' next dev"
+		"dev-debug": "next dev NODE_OPTIONS='--inspect' "
 	},
 	"dependencies": {
 		"@dnd-kit/core": "^6.1.0",

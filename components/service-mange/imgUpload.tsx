@@ -1,6 +1,7 @@
 import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { DeleteIcon, UploadIcon } from "../icons";
 import { Image } from "@nextui-org/react";
+import { LoadingCustom } from "../Loading/loadingCustom";
 
 type ImageUploadProps = {
   onValueChange?: (file: File | null) => void;
@@ -11,21 +12,21 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(
     defaultValue ? defaultValue : null
   );
-  const [originalFile, setOriginalFile] = useState<File | null>(
-    defaultValue ? defaultValue : null
-  );
+  const [fileEnter, setFileEnter] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [defaultFileEnter, setDefaultFileEnter] = useState(false);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
-      if (file !== originalFile) {
+      if (file !== selectedImage) {
         setSelectedImage(file);
-        setOriginalFile(file);
+        setFileEnter(true);
       }
     } else {
       setSelectedImage(null);
-      setOriginalFile(null);
+      setFileEnter(false);
     }
   };
 
@@ -33,11 +34,17 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
     if (onValueChange) {
       onValueChange(selectedImage);
     }
-  }, [selectedImage, onValueChange]);
+
+    if (defaultValue != null && defaultFileEnter == false) {
+      setSelectedImage(defaultValue);
+      setFileEnter(true);
+      setDefaultFileEnter(true);
+    }
+  }, [selectedImage, onValueChange, defaultValue, fileEnter, defaultFileEnter]);
 
   const handleDeleteImage = () => {
     setSelectedImage(null);
-    setOriginalFile(null);
+    setFileEnter(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -48,6 +55,7 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
     const file = event.dataTransfer.files[0];
     if (file) {
       setSelectedImage(file);
+      setFileEnter(true);
     }
   };
 
@@ -67,7 +75,7 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
       onDragOver={handleDragOver}
       style={{ width: "100%", height: "100%", position: "relative" }}
     >
-      {selectedImage ? (
+      {fileEnter ? (
         <div className="h-[162px]">
           <div className="text-sm pr-2 pb-[6px]">Service Image</div>
           <div className="grid justify-center items-center bg-[#F4F4F5] h-[136px] rounded-xl">
@@ -75,9 +83,12 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
               <DeleteIcon />
             </div>
             <Image
-              src={URL.createObjectURL(selectedImage)}
+              src={selectedImage ? URL.createObjectURL(selectedImage) : ""}
               alt="Uploaded Image"
               style={{ maxWidth: "357.33px", maxHeight: "136px" }}
+              defaultValue={
+                defaultValue ? URL.createObjectURL(defaultValue as Blob) : ""
+              }
             />
           </div>
         </div>

@@ -269,8 +269,14 @@ export const ServiceManage = () => {
                       {service.serviceName}
                     </span>
                     <Link
+                      isExternal
                       className="text-sm text-default-500"
-                      href={service.serviceLink}
+                      href={
+                        service.serviceLink.startsWith("http://") ||
+                        service.serviceLink.startsWith("https://")
+                          ? service.serviceLink
+                          : `https://${service.serviceLink}`
+                      }
                     >
                       {service.serviceLink}
                     </Link>

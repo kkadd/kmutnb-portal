@@ -22,7 +22,7 @@ export const EditServicePage = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [isSelected, setIsSelected] = React.useState(false); //enable service
+  const [isSelected, setIsSelected] = React.useState(true); //enable service
   const [serviceName, setServiceName] = useState("");
   const [serviceLink, setServiceLink] = useState("");
   const [username, setUsername] = useState("");
@@ -31,6 +31,8 @@ export const EditServicePage = () => {
   const [image, setImage] = useState<File | null>(null);
 
   const params = useParams<{ id: string }>();
+
+  const [isLoading, setIsLoading] = useState(true);
   interface UploadResponse {
     message?: string;
     status: number;
@@ -75,7 +77,6 @@ export const EditServicePage = () => {
       });
   }
 
-  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (isLoading) {
       fetch("/api/management/service/getService" + "?id=" + params.id, {
@@ -95,19 +96,30 @@ export const EditServicePage = () => {
           setDescription(data.serviceDescription);
           setRoles(data.role);
           setIsSelected(data.enable);
-          setImage(data.serviceImg);
+          fetch(data.serviceImg)
+            .then((response) => response.blob())
+            .then((blob) => {
+              const file = new File([blob], "filename", { type: blob.type });
+              setImage(file);
+            })
+            .catch((error) => {
+              console.error(error);
+              setIsLoading(false);
+            });
           console.log(data);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error("Error:", error);
+          setIsLoading(false);
         });
-      setIsLoading(false);
     }
   }, [params, isLoading]);
 
   if (isLoading) {
     return <LoadingCustom />;
   }
+
   return (
     <div>
       <div className="flex flex-col my-6 lg:px-6 max-w-[95rem] mx-auto w-full gap-4">
@@ -151,7 +163,7 @@ export const EditServicePage = () => {
               />
 
               <Input
-                type="link"
+                type="url"
                 label="Service Link (url)"
                 placeholder="Please enter..."
                 labelPlacement="outside"

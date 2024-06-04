@@ -21,7 +21,7 @@ export const AddServicePage = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [isSelected, setIsSelected] = React.useState(false); //enable service
+  const [isSelected, setIsSelected] = React.useState(true); //enable service
   const [serviceName, setServiceName] = useState("");
   const [serviceLink, setServiceLink] = useState("");
   const [username, setUsername] = useState("");
@@ -115,7 +115,7 @@ export const AddServicePage = () => {
               />
 
               <Input
-                type="link"
+                type="url"
                 label="Service Link (url)"
                 placeholder="Please enter..."
                 labelPlacement="outside"
