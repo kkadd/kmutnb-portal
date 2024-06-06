@@ -89,6 +89,7 @@ export const StaffManage = () => {
   const addUserConfirmModal = useDisclosure();
   const editUserModal = useDisclosure();
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+  const deleteUserModal = useDisclosure();
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -230,6 +231,7 @@ export const StaffManage = () => {
                 className="bg-[#FF644B] bg-opacity-10"
                 isIconOnly
                 size="sm"
+                onPress={() => handleDeleteClick(user)}
               >
                 <DeleteIcon />
               </Button>
@@ -281,6 +283,29 @@ export const StaffManage = () => {
         console.error(err);
       });
     addUserConfirmModal.onClose();
+    setIsLoading(true);
+  }
+
+  function handleDeleteClick(user: User | null) {
+    deleteUserModal.onOpen();
+    setCurrentUser(user);
+  }
+  async function handleDeleteConfirm() {
+    await fetch("/api/management/staff/delete", {
+      method: "DELETE",
+      body: JSON.stringify({
+        username: currentUser?.username,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    await deleteUserModal.onClose();
+    setCurrentUser(null);
     setIsLoading(true);
   }
 
@@ -537,6 +562,8 @@ export const StaffManage = () => {
           </ModalContent>
         </Modal>
       )}
+
+      {/* Add confirm modal */}
       <ConfirmModal
         title="Add Staff"
         description={message(addDisplayname, addRole)}
@@ -547,6 +574,18 @@ export const StaffManage = () => {
         onOpenChange={addUserConfirmModal.onOpenChange}
         onClose={addUserConfirmModal.onClose}
         onConfirm={handleAddConfirm}
+      ></ConfirmModal>
+      {/* Delete confirm modal */}
+      <ConfirmModal
+        title="Delete Staff"
+        description="Are you sure you want to delete this staff?"
+        icon={<DeleteIcon />}
+        textClose="Cancel"
+        textConfirm="Delete"
+        isOpen={deleteUserModal.isOpen}
+        onOpenChange={deleteUserModal.onOpenChange}
+        onClose={deleteUserModal.onClose}
+        onConfirm={handleDeleteConfirm}
       ></ConfirmModal>
     </div>
   );
