@@ -67,6 +67,7 @@ export const StaffManage = () => {
   /*   const [addConfirmModal, setAddConfirmModal] = useState(false); */
   const [editUsername, setEditUsername] = useState("");
   const [editUserRole, setEditUserRole] = useState("");
+  const [editDisplayname, setEditDisplayname] = useState("");
 
   const [filterValue, setFilterValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
@@ -88,6 +89,7 @@ export const StaffManage = () => {
   const addUserModal = useDisclosure();
   const addUserConfirmModal = useDisclosure();
   const editUserModal = useDisclosure();
+  const editUserConfirmModal = useDisclosure();
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
   const deleteUserModal = useDisclosure();
 
@@ -217,8 +219,7 @@ export const StaffManage = () => {
                 isIconOnly
                 size="sm"
                 onPress={() => {
-                  setCurrentUser(user);
-                  editUserModal.onOpen();
+                  handleEditClick(user);
                 }}
                 key={"edit"}
               >
@@ -260,7 +261,7 @@ export const StaffManage = () => {
         console.error(err);
       });
   }
-  const message = (displayname: string, role: string) => {
+  const addMessage = (displayname: string, role: string) => {
     return (
       "Are you sure you want to add " + displayname + " as a " + role + "?"
     );
@@ -308,6 +309,69 @@ export const StaffManage = () => {
     setCurrentUser(null);
     setIsLoading(true);
   }
+
+  async function handleEditClick(user: User) {
+    await setCurrentUser(user);
+    await setEditUsername(user.username);
+    await setEditUserRole(user.role);
+
+    console.log(editUsername, editUserRole);
+    editUserModal.onOpen();
+  }
+  const defaultRole = (role: string) => {
+    switch (role) {
+      case "admin":
+        return ["admin"];
+      case "staff":
+        return ["staff"];
+      default:
+        return ["admin"];
+    }
+  };
+  async function handleEditStaff() {
+    await fetch("/api/management/userInfo", {
+      method: "POST",
+      body: JSON.stringify({ username: editUsername }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setEditDisplayname(data.userInfo.displayname);
+        editUserConfirmModal.onOpen();
+        editUserModal.onClose();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+  function handleCancleEdit() {
+    editUserConfirmModal.onClose();
+    editUserModal.onOpen();
+  }
+  async function handleEditConfirm() {
+    await fetch("/api/management/staff/edit", {
+      method: "PUT",
+      body: JSON.stringify({
+        username: editUsername,
+        role: editUserRole,
+        displayname: editDisplayname,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    await editUserConfirmModal.onClose();
+    setIsLoading(true);
+  }
+  const editMessage = (displayname: string, role: string) => {
+    return (
+      "Are you sure you want to edit " + displayname + " as a " + role + "?"
+    );
+  };
 
   useEffect(() => {
     if (isLoading) {
@@ -522,7 +586,7 @@ export const StaffManage = () => {
                   <Input
                     autoFocus
                     label="Username"
-                    value={editUsername}
+                    defaultValue={editUsername}
                     variant="bordered"
                     disabled
                   />
@@ -532,8 +596,8 @@ export const StaffManage = () => {
                     placeholder="Please select Role"
                     className="max-w-xs"
                     variant="bordered"
-                    value={editUserRole}
                     onChange={handleEditRoleChange}
+                    defaultSelectedKeys={defaultRole(editUserRole)}
                   >
                     <SelectItem key={"admin"}>Admin</SelectItem>
                     <SelectItem key={"staff"}>Staff</SelectItem>
@@ -551,7 +615,7 @@ export const StaffManage = () => {
                   <Button
                     className="bg-[#FF644B] text-white font-medium"
                     onPress={() => {
-                      onClose();
+                      handleEditStaff();
                     }}
                   >
                     Save Edit
@@ -566,7 +630,7 @@ export const StaffManage = () => {
       {/* Add confirm modal */}
       <ConfirmModal
         title="Add Staff"
-        description={message(addDisplayname, addRole)}
+        description={addMessage(addDisplayname, addRole)}
         icon={<AddStaffIcon />}
         textClose="Cancel"
         textConfirm="Add"
@@ -586,6 +650,18 @@ export const StaffManage = () => {
         onOpenChange={deleteUserModal.onOpenChange}
         onClose={deleteUserModal.onClose}
         onConfirm={handleDeleteConfirm}
+      ></ConfirmModal>
+      {/* Edit confirm modal */}
+      <ConfirmModal
+        title="Edit Staff"
+        description={editMessage(editDisplayname, editUserRole)}
+        icon={<EditIcon />}
+        textClose="Cancel"
+        textConfirm="Edit"
+        isOpen={editUserConfirmModal.isOpen}
+        onOpenChange={editUserConfirmModal.onOpenChange}
+        onClose={handleCancleEdit}
+        onConfirm={handleEditConfirm}
       ></ConfirmModal>
     </div>
   );
