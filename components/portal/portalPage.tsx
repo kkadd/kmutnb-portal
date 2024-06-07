@@ -7,6 +7,7 @@ import { BookIcon, ClockIcon, MenuIcon } from "../icons";
 
 import { PersonalPortalPage } from "./portalContent/personalPortalPage";
 import { LastAccessPage } from "./portalContent/lastAccessPage";
+import { UserGuidePage } from "./portalContent/userGuidePage";
 
 export const PortalPage = () => {
   const [isVertical, setIsVertical] = useState(true);
@@ -50,11 +51,11 @@ export const PortalPage = () => {
             title={
               <div className="flex items-center space-x-2">
                 <BookIcon />
-                <span>Guide</span>
+                <span>User Guide</span>
               </div>
             }
           >
-            <div>hi hi</div>
+            <UserGuidePage />
           </Tab>
         </Tabs>
       </div>
