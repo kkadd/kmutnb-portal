@@ -21,7 +21,7 @@ export const AddServicePage = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [isSelected, setIsSelected] = React.useState(false); //enable service
+  const [isSelected, setIsSelected] = React.useState(true); //enable service
   const [serviceName, setServiceName] = useState("");
   const [serviceLink, setServiceLink] = useState("");
   const [username, setUsername] = useState("");
@@ -29,20 +29,48 @@ export const AddServicePage = () => {
   const [roles, setRoles] = useState([""]);
   const [image, setImage] = useState<File | null>(null);
 
-  /* React.useEffect(() => {
-    console.log("Enable :", isSelected);
-    console.log("Roles: ", roles);
-  }, [isSelected, roles]);
-   */
+  interface UploadResponse {
+    message?: string;
+    status: number;
+    filePath?: string;
+  }
 
-  function handleAddService() {
-    console.log("Service Name: ", serviceName);
-    console.log("Service Link: ", serviceLink);
-    console.log("Description: ", description);
-    console.log("Roles: ", roles);
-    console.log("Image: ", image);
-    console.log("Enable: ", isSelected);
-    /* onOpenChange(); */
+  async function handleAddService() {
+    let formData = new FormData();
+    formData.append("file", image as Blob);
+    let imgUpload = await fetch("/api/management/service/imgUpload", {
+      method: "POST",
+      body: formData,
+    });
+    imgUpload = await imgUpload.json();
+
+    fetch("/api/management/service/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        serviceName: serviceName,
+        serviceDescription: description,
+        serviceImg: (imgUpload as UploadResponse).filePath,
+        role: roles,
+        serviceLink: serviceLink,
+        date: new Date().toISOString(),
+        username: username,
+        enable: isSelected,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Service added successfully");
+          router.push("/management/services");
+        } else {
+          console.log("Service add failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }
 
   return (
@@ -87,7 +115,7 @@ export const AddServicePage = () => {
               />
 
               <Input
-                type="link"
+                type="url"
                 label="Service Link (url)"
                 placeholder="Please enter..."
                 labelPlacement="outside"
@@ -142,7 +170,7 @@ export const AddServicePage = () => {
                     </Checkbox>
 
                     <Checkbox value="templecturer" className="p-0 m-0">
-                      Templecturer
+                      Temporary Lecturer
                     </Checkbox>
 
                     <Checkbox value="exchange_student" className="p-0 m-0">

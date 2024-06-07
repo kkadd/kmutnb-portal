@@ -14,7 +14,7 @@ import {
   Link,
   Pagination,
   useDisclosure,
-  Spinner
+  Spinner,
 } from "@nextui-org/react";
 import {
   AddIcon,
@@ -34,7 +34,6 @@ type Service = {
   role: string[];
   enable: boolean;
 };
-
 
 export const ServiceManage = () => {
   const router = useRouter();
@@ -150,13 +149,13 @@ export const ServiceManage = () => {
     );
   }, [filterValue, service]);
 
-  const [isLoading, setLoading] = useState(true)
+  const [isLoading, setLoading] = useState(true);
 
-  const [targetId, setTargetId] = useState("")
+  const [targetId, setTargetId] = useState("");
 
   function delClick(_id: string) {
-    setTargetId(_id)
-    onOpen()
+    setTargetId(_id);
+    onOpen();
   }
 
   function delService() {
@@ -164,16 +163,15 @@ export const ServiceManage = () => {
       method: "DELETE",
     }).then((res) => {
       if (res.status == 200) {
-        setLoading(true)
+        setLoading(true);
         fetch("/api/management/service/getServices")
           .then((res) => res.json())
           .then((data) => {
-            setService(data)
-          }
-          )
+            setService(data);
+          });
       }
-    })
-    onClose()
+    });
+    onClose();
   }
 
   useEffect(() => {
@@ -189,21 +187,24 @@ export const ServiceManage = () => {
       fetch("/api/management/service/getServices")
         .then((res) => res.json())
         .then((data) => {
-          setService(data)
+          setService(data);
           console.log(data);
-          setLoading(false)
-        })
+          setLoading(false);
+        });
     }
   }, [filteredServices, sortOrder, isLoading]);
 
   if (isLoading) {
     return (
       <div className="grid justify-center items-center h-full w-full">
-        <Spinner classNames={{
-          circle1: "border-b-[#FF644B]",
-          circle2: "border-b-[#FF644B]",
-        }} />
-      </div>)
+        <Spinner
+          classNames={{
+            circle1: "border-b-[#FF644B]",
+            circle2: "border-b-[#FF644B]",
+          }}
+        />
+      </div>
+    );
   }
 
   return (
@@ -268,8 +269,14 @@ export const ServiceManage = () => {
                       {service.serviceName}
                     </span>
                     <Link
+                      isExternal
                       className="text-sm text-default-500"
-                      href={service.serviceLink}
+                      href={
+                        service.serviceLink.startsWith("http://") ||
+                        service.serviceLink.startsWith("https://")
+                          ? service.serviceLink
+                          : `https://${service.serviceLink}`
+                      }
                     >
                       {service.serviceLink}
                     </Link>
@@ -282,7 +289,9 @@ export const ServiceManage = () => {
                 <CardFooter className="flex justify-between items-center">
                   <Button
                     className="mx-auto bg-transparent text-[#afafaf] w-full"
-                    onClick={() => router.push("/management/services/edit")}
+                    onClick={() =>
+                      router.push("/management/services/edit/" + service._id)
+                    }
                   >
                     Edit
                   </Button>
