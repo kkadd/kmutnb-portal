@@ -1,9 +1,12 @@
 "use client";
 
-import { Tab, Tabs } from "@nextui-org/react";
 import { useState } from "react";
-import { PersonalPortalPage } from "./portalContent/personalPortalPage";
+
+import { Tab, Tabs } from "@nextui-org/react";
 import { BookIcon, ClockIcon, MenuIcon } from "../icons";
+
+import { PersonalPortalPage } from "./portalContent/personalPortalPage";
+import { LastAccessPage } from "./portalContent/lastAccessPage";
 
 export const PortalPage = () => {
   const [isVertical, setIsVertical] = useState(true);
@@ -40,7 +43,7 @@ export const PortalPage = () => {
               </div>
             }
           >
-            <div>hi</div>
+            <LastAccessPage />
           </Tab>
           <Tab
             key="Guide"
