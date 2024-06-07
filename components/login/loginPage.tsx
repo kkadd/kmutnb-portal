@@ -1,8 +1,25 @@
+"use client";
 import { Button, Input, Link } from "@nextui-org/react";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
-import { CloseIcon } from "../icons";
+import { CloseIcon, VisibilityIcon, VisibilityOffIcon } from "../icons";
+import React, { useState } from "react";
 
 export const LoginPage = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    signIn("credentials", {
+      username,
+      password,
+      callbackUrl: "/kmutnb-portal", // Redirect to the homepage
+    });
+  }
   return (
     <div className="flex p-10 gap-4 h-screen">
       <div className="bg-[#FF644B] bg-opacity-10 w-1/2 rounded-3xl">
@@ -39,12 +56,27 @@ export const LoginPage = () => {
                   isClearable
                   radius="full"
                   endContent={<CloseIcon />}
+                  onValueChange={(value) => {
+                    setUsername(value);
+                  }}
                 />
                 <Input
                   variant="bordered"
                   placeholder="Password"
-                  type="password"
+                  type={isVisible ? "text" : "password"}
                   radius="full"
+                  onValueChange={(value) => {
+                    setPassword(value);
+                  }}
+                  endContent={
+                    <button
+                      className="focus:outline-none"
+                      type="button"
+                      onClick={toggleVisibility}
+                    >
+                      {isVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </button>
+                  }
                 />
                 <div className="flex justify-end mt-1">
                   <Link
@@ -59,6 +91,7 @@ export const LoginPage = () => {
                 className="text-white bg-[#FF644B] font-semibold"
                 radius="full"
                 type="submit"
+                onClick={handleLogin}
               >
                 Login
               </Button>

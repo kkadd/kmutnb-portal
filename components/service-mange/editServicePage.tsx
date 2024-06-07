@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import {
   Button,
   Checkbox,
@@ -15,17 +15,116 @@ import {
 import ImageUpload from "./imgUpload";
 import ConfirmModal from "../confirm-modal/confirmModal";
 import { WarningIcon } from "../icons";
+import { LoadingCustom } from "../Loading/loadingCustom";
 
 export const EditServicePage = () => {
   const router = useRouter();
-  const [isSelected, setIsSelected] = React.useState(false);
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const [isSelected, setIsSelected] = React.useState(true); //enable service
+  const [serviceName, setServiceName] = useState("");
+  const [serviceLink, setServiceLink] = useState("");
+  const [username, setUsername] = useState("");
+  const [description, setDescription] = useState("");
+  const [roles, setRoles] = useState([""]);
+  const [image, setImage] = useState<File | null>(null);
+
+  const params = useParams<{ id: string }>();
+
+  const [isLoading, setIsLoading] = useState(true);
+  interface UploadResponse {
+    message?: string;
+    status: number;
+    filePath?: string;
+  }
+
+  async function handleEditService() {
+    let formData = new FormData();
+    formData.append("file", image as Blob);
+    let imgUpload = await fetch("/api/management/service/imgUpload", {
+      method: "POST",
+      body: formData,
+    });
+    imgUpload = await imgUpload.json();
+
+    fetch("/api/management/service/edit" + "?id=" + params.id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        serviceName: serviceName,
+        serviceDescription: description,
+        serviceImg: (imgUpload as UploadResponse).filePath,
+        role: roles,
+        serviceLink: serviceLink,
+        date: new Date().toISOString(),
+        username: username,
+        enable: isSelected,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Service added successfully");
+          router.push("/management/services");
+        } else {
+          console.log("Service add failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
+  useEffect(() => {
+    if (isLoading) {
+      fetch("/api/management/service/getService" + "?id=" + params.id, {
+        method: "GET",
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            console.log("Service get failed");
+          }
+        })
+        .then((data) => {
+          setServiceName(data.serviceName);
+          setServiceLink(data.serviceLink);
+          setUsername(data.username);
+          setDescription(data.serviceDescription);
+          setRoles(data.role);
+          setIsSelected(data.enable);
+          fetch(data.serviceImg)
+            .then((response) => response.blob())
+            .then((blob) => {
+              const file = new File([blob], "filename", { type: blob.type });
+              setImage(file);
+            })
+            .catch((error) => {
+              console.error(error);
+              setIsLoading(false);
+            });
+          console.log(data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          setIsLoading(false);
+        });
+    }
+  }, [params, isLoading]);
+
+  if (isLoading) {
+    return <LoadingCustom />;
+  }
 
   return (
     <div>
       <div className="flex flex-col my-6 lg:px-6 max-w-[95rem] mx-auto w-full gap-4">
         <div className="flex justify-start">
-          <p className="text-[24px] font-medium">Edit Service</p>
+          <p className="text-[24px] font-medium">Add Service</p>
         </div>
 
         <div className="grid p-6 bg-white rounded-lg">
@@ -57,25 +156,39 @@ export const EditServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                onValueChange={(value) => {
+                  setServiceName(value);
+                }}
+                value={serviceName}
               />
 
               <Input
-                type="link"
+                type="url"
                 label="Service Link (url)"
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                onValueChange={(value) => {
+                  setServiceLink(value);
+                }}
+                value={serviceLink}
               />
 
               <Input
                 type="text"
                 label="Username"
-                placeholder="Please enter..."
+                placeholder="Show who add this service"
                 labelPlacement="outside"
                 disabled
+                value={username}
               />
 
-              <ImageUpload />
+              <ImageUpload
+                onValueChange={(value) => {
+                  setImage(value);
+                }}
+                defaultValue={image}
+              />
 
               <Textarea
                 type="text"
@@ -84,6 +197,10 @@ export const EditServicePage = () => {
                 labelPlacement="outside"
                 minRows={6}
                 maxLength={240}
+                onValueChange={(value) => {
+                  setDescription(value);
+                }}
+                value={description}
               />
 
               <div>
@@ -93,30 +210,35 @@ export const EditServicePage = () => {
                   }}
                   label="Select Roles"
                   orientation="horizontal"
+                  onChange={(values) => {
+                    setRoles(values);
+                    console.log(values);
+                  }}
+                  value={roles}
                 >
                   <div className="grid grid-cols-2 gap-3 w-[357px] h-[76px]">
-                    <Checkbox value="Student" className="p-0 m-0">
+                    <Checkbox value="student" className="p-0 m-0">
                       Student
                     </Checkbox>
 
-                    <Checkbox value="Special Teacher" className="p-0 m-0">
-                      Special Teacher
+                    <Checkbox value="templecturer" className="p-0 m-0">
+                      Temporary Lecturer
                     </Checkbox>
 
-                    <Checkbox value="Exchange Student" className="p-0 m-0">
+                    <Checkbox value="exchange_student" className="p-0 m-0">
                       Exchange Student
                     </Checkbox>
 
-                    <Checkbox value="Personnel" className="p-0 m-0">
+                    <Checkbox value="personel" className="p-0 m-0">
                       Personnel
                     </Checkbox>
 
-                    <Checkbox value="Alumni" className="p-0 m-0">
+                    <Checkbox value="alumni" className="p-0 m-0">
                       Alumni
                     </Checkbox>
 
-                    <Checkbox value="Retiree" className="p-0 m-0">
-                      Retiree
+                    <Checkbox value="retirement" className="p-0 m-0">
+                      Retirement
                     </Checkbox>
                   </div>
                 </CheckboxGroup>
@@ -143,13 +265,13 @@ export const EditServicePage = () => {
 
       <ConfirmModal
         icon={<WarningIcon />}
-        title="Save Changes"
-        description="You're going to save this service changes. Are you sure?"
+        title="Add Service"
+        description="You're going to add this service to service list. Are you sure?"
         textClose="No, Cancel."
-        textConfirm="Yes, Save Changes."
+        textConfirm="Yes, Add Service."
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        // onConfirm={handleDeleteService}
+        onConfirm={handleEditService}
       />
     </div>
   );
