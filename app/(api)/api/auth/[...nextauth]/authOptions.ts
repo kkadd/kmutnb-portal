@@ -37,7 +37,8 @@ export const authOptions: NextAuthOptions = {
             body: JSON.stringify({
               username: credentials?.username,
               password: credentials?.password,
-              scopes: "personel,student,templecturer",
+              scopes:
+                "personel,student,templecturer,retirement,exchange_student,alumni",
             }),
           }
         );
