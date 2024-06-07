@@ -18,7 +18,7 @@ interface confirmModalProps {
   isOpen: boolean;
   onOpen?: () => string;
   onOpenChange: () => void;
-  onClose: () => void;
+  onClose?: () => void;
   onConfirm?: () => void;
 }
 
