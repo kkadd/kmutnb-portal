@@ -3,13 +3,23 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { TItem } from "./editPortalPage";
 import Item from "./Item";
-// import Item, { ItemProps } from "./Item";
 
 type Props = {
   item: TItem;
+  editMode?: boolean;
+  setEditMode: (isEditing: boolean) => void;
+  onEditClick?: () => void;
+  onDeleteClick?: () => void;
 } & HTMLAttributes<HTMLDivElement>;
 
-const SortableItem = ({ item, ...props }: Props) => {
+const SortableItem = ({
+  item,
+  editMode,
+  setEditMode,
+  onEditClick,
+  onDeleteClick,
+  ...props
+}: Props) => {
   const {
     isDragging,
     attributes,
@@ -17,7 +27,7 @@ const SortableItem = ({ item, ...props }: Props) => {
     setNodeRef,
     transform,
     transition,
-  } = useSortable({ id: item.id });
+  } = useSortable({ id: item.id, disabled: editMode });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -30,6 +40,10 @@ const SortableItem = ({ item, ...props }: Props) => {
       ref={setNodeRef}
       style={style}
       withOpacity={isDragging}
+      editMode={editMode}
+      setEditMode={setEditMode}
+      onEditClick={onEditClick}
+      onDeleteClick={onDeleteClick}
       {...props}
       {...attributes}
       {...listeners}
