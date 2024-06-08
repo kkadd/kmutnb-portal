@@ -82,6 +82,7 @@ export const LoginPage = () => {
                   <Link
                     href="https://account.kmutnb.ac.th/web/recovery/index"
                     className="text-xs text-black"
+                    isExternal
                   >
                     Forgot Password?
                   </Link>
@@ -100,6 +101,7 @@ export const LoginPage = () => {
                 <Link
                   href="https://account.kmutnb.ac.th/web/student/activation"
                   className="text-[#FF644B]"
+                  isExternal
                 >
                   &nbsp;Register now
                 </Link>

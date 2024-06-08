@@ -114,6 +114,20 @@ const serviceMock: any[] = [
       "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
     description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
   },
+  // {
+  //   id: "10",
+  //   name: "Folder test2",
+  //   type: "folder",
+  //   contain: [
+  //     {
+  //       id: "101",
+  //       name: "test contain2",
+  //       imageUrl:
+  //         "https://miro.medium.com/v2/resize:fit:720/0*I32LiwMMYY16sPAB.jpg",
+  //       type: "file",
+  //     },
+  //   ],
+  // },
 ];
 
 export const PersonalPortalPage = () => {
@@ -145,7 +159,7 @@ export const PersonalPortalPage = () => {
                   </div>
                 }
               >
-                <Link href={service.serviceLink}>
+                <Link href={service.serviceLink} isExternal>
                   <div className="grid justify-center items-center gap-2 h-[132px]">
                     <Card
                       className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
@@ -179,6 +193,7 @@ export const PersonalPortalPage = () => {
             <Link
               className="text-[#FF644B] cursor-pointer"
               onClick={() => router.push("/kmutnb-portal/all-services")}
+              isExternal
             >
               All service
             </Link>

@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/react";
 import ImageUpload from "./imgUpload";
 import ConfirmModal from "../confirm-modal/confirmModal";
-import { WarningIcon } from "../icons";
+import { CloseIcon, WarningIcon } from "../icons";
 import { LoadingCustom } from "../Loading/loadingCustom";
 
 export const EditServicePage = () => {
@@ -156,6 +156,8 @@ export const EditServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                endContent={<CloseIcon />}
+                maxLength={100}
                 onValueChange={(value) => {
                   setServiceName(value);
                 }}
@@ -168,6 +170,7 @@ export const EditServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                endContent={<CloseIcon />}
                 onValueChange={(value) => {
                   setServiceLink(value);
                 }}
@@ -196,7 +199,7 @@ export const EditServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 minRows={6}
-                maxLength={240}
+                maxLength={200}
                 onValueChange={(value) => {
                   setDescription(value);
                 }}

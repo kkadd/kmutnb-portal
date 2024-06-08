@@ -275,7 +275,7 @@ export const AllServicesPage = () => {
                     <CardBody className="justify-center p-4">
                       <div className="flex justify-between items-center gap-4">
                         <div className="flex items-center gap-4">
-                          <Link href={service.serviceLink}>
+                          <Link href={service.serviceLink} isExternal>
                             <Image
                               src={service.serviceImg}
                               alt="service image"
@@ -288,12 +288,14 @@ export const AllServicesPage = () => {
                             <Link
                               className="text-md text-black font-sansThai font-medium"
                               href={service.serviceLink}
+                              isExternal
                             >
                               {service.serviceName.substring(0, 11)}
                             </Link>
                             <Link
                               className="text-sm text-default-500 font-sansThai"
                               href={service.serviceLink}
+                              isExternal
                             >
                               {service.description.substring(0, 11)}
                             </Link>
@@ -393,7 +395,7 @@ export const AllServicesPage = () => {
                 <CardBody className="justify-center p-4">
                   <div className="flex justify-between items-center gap-4">
                     <div className="flex items-center gap-4">
-                      <Link href={service.serviceLink}>
+                      <Link href={service.serviceLink} isExternal>
                         <Image
                           src={service.serviceImg}
                           alt="service image"
@@ -406,12 +408,14 @@ export const AllServicesPage = () => {
                         <Link
                           className="text-md text-black font-sansThai font-medium"
                           href={service.serviceLink}
+                          isExternal
                         >
                           {service.serviceName.substring(0, 35)}
                         </Link>
                         <Link
                           className="text-sm text-default-500 font-sansThai"
                           href={service.serviceLink}
+                          isExternal
                         >
                           {service.description.substring(0, 43)}
                         </Link>
