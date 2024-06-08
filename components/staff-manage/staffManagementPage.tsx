@@ -204,7 +204,7 @@ export const StaffManage = () => {
       case "role":
         return (
           <div className="flex justify-center items-center">
-            <Chip classNames={{ base: `${roleColor(user.role)}` }}>
+            <Chip classNames={{ base: `${roleColor(user.role)} text-white` }}>
               {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
             </Chip>
           </div>
@@ -215,7 +215,7 @@ export const StaffManage = () => {
           <div className="flex justify-center items-center gap-3">
             <Tooltip content="Edit user">
               <Button
-                className="bg-[#FF644B] bg-opacity-10"
+                className="bg-[#FF644B] bg-opacity-10 text-[#FF644B]"
                 isIconOnly
                 size="sm"
                 onPress={() => {
@@ -229,7 +229,7 @@ export const StaffManage = () => {
 
             <Tooltip color="danger" content="Delete user">
               <Button
-                className="bg-[#FF644B] bg-opacity-10"
+                className="bg-[#FF644B] bg-opacity-10 text-[#FF644B]"
                 isIconOnly
                 size="sm"
                 onPress={() => handleDeleteClick(user)}
@@ -510,11 +510,6 @@ export const StaffManage = () => {
 
         <Table
           aria-label="user list table."
-          // topContent={
-          //   <span className="flex justify-end text-default-400 text-small">
-          //     Total {users.length} users
-          //   </span>
-          // }
           bottomContent={
             <div className="flex justify-center w-full">
               <Pagination

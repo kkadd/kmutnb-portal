@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -173,32 +173,72 @@ const newServiceMock = [
 export const AllServicesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentNewPage, setCurrentNewPage] = useState(1);
-  const [filterValue, setFilterValue] = React.useState("");
+  const [filterValue, setFilterValue] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  const itemsPerPage = 8;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = serviceMock.slice(startIndex, endIndex);
+  const [hydrated, setHydrated] = useState(false);
 
+  const itemsPerPage = 8;
   const newItemsPerpage = 5;
-  const newStartIndex = (currentNewPage - 1) * newItemsPerpage;
-  const newEndIndex = newStartIndex + newItemsPerpage;
-  const currentNewItems = newServiceMock.slice(newStartIndex, newEndIndex);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  const filteredServices = useMemo(() => {
+    return serviceMock.filter((service) =>
+      service.serviceName.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }, [filterValue]);
+
+  const filteredNewServices = useMemo(() => {
+    return newServiceMock.filter((service) =>
+      service.serviceName.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }, [filterValue]);
+
+  const sortedServices = useMemo(() => {
+    return [...filteredServices].sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.serviceName.localeCompare(b.serviceName);
+      } else {
+        return b.serviceName.localeCompare(a.serviceName);
+      }
+    });
+  }, [filteredServices, sortOrder]);
+
+  const currentItems = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return sortedServices.slice(startIndex, startIndex + itemsPerPage);
+  }, [sortedServices, currentPage]);
+
+  const currentNewItems = useMemo(() => {
+    const newStartIndex = (currentNewPage - 1) * newItemsPerpage;
+    return filteredNewServices.slice(
+      newStartIndex,
+      newStartIndex + newItemsPerpage
+    );
+  }, [filteredNewServices, currentNewPage]);
 
   const onSearchChange = useCallback((value: any) => {
     setFilterValue(value || "");
     setCurrentPage(1);
+    setCurrentNewPage(1);
   }, []);
 
   const onClear = useCallback(() => {
     setFilterValue("");
     setCurrentPage(1);
+    setCurrentNewPage(1);
   }, []);
 
   const handleSort = useCallback(() => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
   }, []);
+
+  if (!hydrated) {
+    return null;
+  }
 
   return (
     <div className="flex justify-center p-9 gap-6">
