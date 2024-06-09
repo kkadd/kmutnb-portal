@@ -54,7 +54,7 @@ const Item = forwardRef<HTMLDivElement, ItemProps>(
             className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
             key={item.id}
           >
-            {item.type === "file" && (
+            {item.type === "service" && (
               <Image
                 src={item.imageUrl}
                 alt={`${item.id}`}
