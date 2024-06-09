@@ -40,7 +40,6 @@ import {
 } from "../icons";
 import { LoadingCustom } from "../Loading/loadingCustom";
 import ConfirmModal from "@/components/confirm-modal/confirmModal";
-import { add } from "@dnd-kit/utilities";
 
 const rolesOptions = [
   { name: "Admin", uid: "admin" },
