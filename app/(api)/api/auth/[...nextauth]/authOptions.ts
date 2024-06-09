@@ -59,6 +59,10 @@ export const authOptions: NextAuthOptions = {
             };
             return user;
           } else {
+            user = {
+              ...user,
+              management_role: "none",
+            };
             return user;
           }
         } else {
