@@ -61,7 +61,7 @@ export const LastAccessPage = () => {
                 </div>
               }
             >
-              <Link href={service.serviceLink}>
+              <Link href={service.serviceLink} isExternal>
                 <div className="grid justify-center items-center gap-2 h-[132px]">
                   <Card
                     className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
