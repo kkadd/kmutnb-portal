@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
 export async function POST(req: NextRequest) {
   try {
@@ -7,7 +8,7 @@ export async function POST(req: NextRequest) {
     let db = client.db("project");
     let { serviceId, username } = await req.json();
     let addedHistory = await db.collection("history").insertOne({
-      serviceId: serviceId,
+      serviceId: new ObjectId(serviceId),
       username: username,
       timestamp: new Date().toISOString(),
     });
