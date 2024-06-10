@@ -81,6 +81,7 @@ export const authOptions: NextAuthOptions = {
           name: (user as User).userInfo.username,
           account_type: (user as User).userInfo.account_type,
           management_role: (user as User).management_role || "",
+          displayname: (user as User).userInfo.displayname,
         };
       }
       return token;
@@ -93,6 +94,7 @@ export const authOptions: NextAuthOptions = {
           ...session.user,
           account_type: token?.account_type,
           menagement_role: token?.management_role,
+          displayname: token?.displayname,
         },
       };
     },
