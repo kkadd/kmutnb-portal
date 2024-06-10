@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -20,89 +20,17 @@ import {
   SearchIcon,
   SortIcon,
 } from "../icons";
+import { LoadingCustom } from "../Loading/loadingCustom";
 
-const serviceMock = [
-  {
-    id: "s1",
-    serviceName: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
-    serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
-    serviceImg:
-      "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
-    description:
-      "ใช้สำหรับลงทะเบียนเรียน, ดูผลการเรียน, แจ้งจบ และบริการงานทะเบียนต่าง ๆ",
-  },
-  {
-    id: "s2",
-    serviceName: "ICIT Account",
-    serviceLink: "https://account.kmutnb.ac.th/web/",
-    serviceImg: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
-    description:
-      "เปิดใช้งานบัญชีนักศึกษา, ระบบกู้รหัสผ่าน, ปลดล็อกบัญชีด้วยแอปพลิเคชัน ThaID.",
-  },
-  {
-    id: "s3",
-    serviceName: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
-    serviceImg: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    description: "",
-  },
-  {
-    id: "s4",
-    serviceName: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "https://software.kmutnb.ac.th/",
-    serviceImg:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
-  },
-  {
-    id: "s5",
-    serviceName: "กองบริการการศึกษา",
-    serviceLink: "https://acdserv.kmutnb.ac.th/home",
-    serviceImg:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "",
-  },
-  {
-    id: "s6",
-    serviceName: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
-    serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
-    serviceImg:
-      "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
-    description:
-      "ใช้สำหรับลงทะเบียนเรียน, ดูผลการเรียน, แจ้งจบ และบริการงานทะเบียนต่าง ๆ",
-  },
-  {
-    id: "s7",
-    serviceName: "ICIT Account",
-    serviceLink: "https://account.kmutnb.ac.th/web/",
-    serviceImg: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
-    description:
-      "เปิดใช้งานบัญชีนักศึกษา, ระบบกู้รหัสผ่าน, ปลดล็อกบัญชีด้วยแอปพลิเคชัน ThaID.",
-  },
-  {
-    id: "s8",
-    serviceName: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
-    serviceImg: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    description: "",
-  },
-  {
-    id: "s9",
-    serviceName: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "https://software.kmutnb.ac.th/",
-    serviceImg:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
-  },
-  {
-    id: "s10",
-    serviceName: "กองบริการการศึกษา",
-    serviceLink: "https://acdserv.kmutnb.ac.th/home",
-    serviceImg:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "",
-  },
-];
+type Service = {
+  _id: string;
+  serviceName: string;
+  serviceLink: string;
+  serviceImg: string;
+  serviceDescription: string;
+  role: string[];
+  enable: boolean;
+};
 
 const newServiceMock = [
   {
@@ -173,32 +101,102 @@ const newServiceMock = [
 export const AllServicesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentNewPage, setCurrentNewPage] = useState(1);
-  const [filterValue, setFilterValue] = React.useState("");
+  const [filterValue, setFilterValue] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  const itemsPerPage = 8;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = serviceMock.slice(startIndex, endIndex);
+  const [hydrated, setHydrated] = useState(false);
+  const [service, setService] = useState<Service[]>([]);
+  const [isLoading, setLoading] = useState(true);
 
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
+
+  const itemsPerPage = 8;
   const newItemsPerpage = 5;
-  const newStartIndex = (currentNewPage - 1) * newItemsPerpage;
-  const newEndIndex = newStartIndex + newItemsPerpage;
-  const currentNewItems = newServiceMock.slice(newStartIndex, newEndIndex);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (isLoading) {
+      fetch("/api/portal/allServices/getAllServices", {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+          role: role,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setService(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching services:", error);
+          setLoading(false);
+        });
+    }
+  }, [isLoading]);
+
+  const filteredServices = useMemo(() => {
+    return service.filter((service) =>
+      service.serviceName.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }, [service, filterValue]);
+
+  const filteredNewServices = useMemo(() => {
+    return newServiceMock.filter((service) =>
+      service.serviceName.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }, [filterValue]);
+
+  const sortedServices = useMemo(() => {
+    return [...filteredServices].sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.serviceName.localeCompare(b.serviceName);
+      } else {
+        return b.serviceName.localeCompare(a.serviceName);
+      }
+    });
+  }, [filteredServices, sortOrder]);
+
+  const currentItems = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return sortedServices.slice(startIndex, startIndex + itemsPerPage);
+  }, [sortedServices, currentPage]);
+
+  const currentNewItems = useMemo(() => {
+    const newStartIndex = (currentNewPage - 1) * newItemsPerpage;
+    return filteredNewServices.slice(
+      newStartIndex,
+      newStartIndex + newItemsPerpage
+    );
+  }, [filteredNewServices, currentNewPage]);
 
   const onSearchChange = useCallback((value: any) => {
     setFilterValue(value || "");
     setCurrentPage(1);
+    setCurrentNewPage(1);
   }, []);
 
   const onClear = useCallback(() => {
     setFilterValue("");
     setCurrentPage(1);
+    setCurrentNewPage(1);
   }, []);
 
   const handleSort = useCallback(() => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
   }, []);
+
+  if (!hydrated) {
+    return null;
+  }
+
+  if (isLoading) {
+    return <LoadingCustom />;
+  }
 
   return (
     <div className="flex justify-center p-9 gap-6">
@@ -235,7 +233,7 @@ export const AllServicesPage = () => {
                     <CardBody className="justify-center p-4">
                       <div className="flex justify-between items-center gap-4">
                         <div className="flex items-center gap-4">
-                          <Link href={service.serviceLink}>
+                          <Link href={service.serviceLink} isExternal>
                             <Image
                               src={service.serviceImg}
                               alt="service image"
@@ -248,12 +246,14 @@ export const AllServicesPage = () => {
                             <Link
                               className="text-md text-black font-sansThai font-medium"
                               href={service.serviceLink}
+                              isExternal
                             >
                               {service.serviceName.substring(0, 11)}
                             </Link>
                             <Link
                               className="text-sm text-default-500 font-sansThai"
                               href={service.serviceLink}
+                              isExternal
                             >
                               {service.description.substring(0, 11)}
                             </Link>
@@ -336,7 +336,7 @@ export const AllServicesPage = () => {
         <div className="grid grid-cols-2 gap-6">
           {currentItems.map((service) => (
             <Tooltip
-              key={service.id}
+              key={service._id}
               content={
                 <div className="grid gap-4 p-4">
                   <div className="font-sansThai font-medium">
@@ -344,16 +344,16 @@ export const AllServicesPage = () => {
                   </div>
                   <Divider />
                   <div className="text-default-500 font-sansThai">
-                    {service.description}
+                    {service.serviceDescription}
                   </div>
                 </div>
               }
             >
-              <Card className="h-[90px]" key={service.id}>
+              <Card className="h-[90px]" key={service._id}>
                 <CardBody className="justify-center p-4">
                   <div className="flex justify-between items-center gap-4">
                     <div className="flex items-center gap-4">
-                      <Link href={service.serviceLink}>
+                      <Link href={service.serviceLink} isExternal>
                         <Image
                           src={service.serviceImg}
                           alt="service image"
@@ -366,14 +366,16 @@ export const AllServicesPage = () => {
                         <Link
                           className="text-md text-black font-sansThai font-medium"
                           href={service.serviceLink}
+                          isExternal
                         >
                           {service.serviceName.substring(0, 35)}
                         </Link>
                         <Link
                           className="text-sm text-default-500 font-sansThai"
                           href={service.serviceLink}
+                          isExternal
                         >
-                          {service.description.substring(0, 43)}
+                          {service.serviceDescription.substring(0, 43)}
                         </Link>
                       </div>
                     </div>
@@ -401,7 +403,7 @@ export const AllServicesPage = () => {
             size="sm"
             variant="flat"
             showControls
-            total={Math.ceil(serviceMock.length / itemsPerPage)}
+            total={Math.ceil(service.length / itemsPerPage)}
             initialPage={currentPage}
             onChange={(page) => setCurrentPage(page)}
           />
