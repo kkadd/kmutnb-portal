@@ -9,9 +9,15 @@ import { SidebarItem } from "./sidebarItem";
 import { LogoutIcon, ServiceIcon, StaffIcon } from "../icons";
 import { SidebarMenu } from "./sidebarMenu";
 
+import { signOut } from "next-auth/react";
+
 export const SidebarWrapper = () => {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useSidebarContext();
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/log-in" }); // Add the signOut method with a callback URL
+  };
 
   return (
     <aside className="h-screen z-[20] sticky top-0">
@@ -85,7 +91,11 @@ export const SidebarWrapper = () => {
           ) : null}
           <div className={Sidebar.Footer()}>
             <div className="grid">
-              <SidebarItem title="Log out" icon={<LogoutIcon />} />
+              <SidebarItem
+                title="Log out"
+                icon={<LogoutIcon />}
+                onClick={handleLogout}
+              />
             </div>
           </div>
         </div>

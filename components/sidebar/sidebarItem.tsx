@@ -8,14 +8,24 @@ interface Props {
   icon: React.ReactNode;
   isActive?: boolean;
   href?: string;
+  onClick?: () => void;
 }
 
-export const SidebarItem = ({ icon, title, isActive, href = "" }: Props) => {
+export const SidebarItem = ({
+  icon,
+  title,
+  isActive,
+  href = "",
+  onClick,
+}: Props) => {
   const { collapsed, setCollapsed } = useSidebarContext();
 
   const handleClick = () => {
     if (window.innerWidth < 768) {
       setCollapsed();
+    }
+    if (onClick) {
+      onClick();
     }
   };
   return (
