@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
 
 /**
  *  @swagger
- * /api/portal/allServices/getNewsServices:
+ * /api/portal/allServices/getNewServices:
  *   post:
  *     summary: Fetch services within the last 14 days
  *     tags:
