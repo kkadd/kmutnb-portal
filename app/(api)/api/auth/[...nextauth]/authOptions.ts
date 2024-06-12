@@ -1,11 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export interface User {
-  userInfo: any;
-  management_role?: string;
-}
-
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
@@ -78,10 +73,10 @@ export const authOptions: NextAuthOptions = {
       if (user && "userInfo" in user) {
         return {
           ...token,
-          name: (user as User).userInfo.username,
-          account_type: (user as User).userInfo.account_type,
-          management_role: (user as User).management_role || "",
-          displayname: (user as User).userInfo.displayname,
+          name: user.userInfo.username,
+          account_type: user.userInfo.account_type,
+          management_role: user.management_role,
+          displayname: user.userInfo.displayname,
         };
       }
       return token;
