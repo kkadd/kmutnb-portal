@@ -16,6 +16,10 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { EditIcon } from "../icons";
 
+import { signOut } from "next-auth/react";
+
+import { useSession } from "next-auth/react";
+
 interface Props {
   children: React.ReactNode;
 }
@@ -23,6 +27,12 @@ interface Props {
 export const PortalNav = () => {
   const router = useRouter();
   const pathname = usePathname();
+
+  const { data: session } = useSession();
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/log-in" }); // Add the signOut method with a callback URL
+  };
 
   if (!pathname) {
     return null;
@@ -99,19 +109,21 @@ export const PortalNav = () => {
               as="button"
               className="bg-[#FF644B] bg-opacity-20 text-md text-[#FF644B] font-sansThai"
               radius="lg"
-              name="S"
+              name={
+                session?.user.displayname ? session?.user.displayname[0] : ""
+              }
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Siriwan Tuha</p>
-              <p className="font-medium text-[#afafaf]">
-                S6303051623179@kmutnb.ac.th
+            <DropdownItem key="profile" className="h-14 gap-4" showDivider>
+              <p className="font-semibold font-sansThai">
+                {session?.user.displayname}
               </p>
-              <Divider className="mt-3" />
+              <p className="font-medium text-[#afafaf]">
+                {session?.user.name + "@kmutnb.ac.th"}
+              </p>
             </DropdownItem>
-
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem key="logout" color="danger" onClick={handleLogout}>
               Log Out
             </DropdownItem>
           </DropdownMenu>

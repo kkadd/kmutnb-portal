@@ -11,9 +11,13 @@ import { SidebarMenu } from "./sidebarMenu";
 
 import { signOut } from "next-auth/react";
 
+import { useSession } from "next-auth/react";
+
 export const SidebarWrapper = () => {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useSidebarContext();
+
+  const { data: session } = useSession();
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/log-in" }); // Add the signOut method with a callback URL
@@ -39,16 +43,18 @@ export const SidebarWrapper = () => {
                 classNames={{
                   base: "bg-[#FF644B] bg-opacity-10 text-sm text-[#FF644B] font-sansThai",
                 }}
-                name="S"
+                name={
+                  session?.user.displayname ? session?.user.displayname[0] : ""
+                }
                 size="md"
                 radius="lg"
               />
               <div>
-                <p className="text-base font-medium text-[#FF644B]">
-                  Siriwan Tuha
+                <p className="text-base font-medium text-[#FF644B] font-sansThai">
+                  {session?.user.displayname}
                 </p>
                 <p className="text-[10px] text-[#afafaf]">
-                  s6303051623179@kmutnb.ac.th
+                  {session?.user.name + "@kmutnb.ac.th"}
                 </p>
               </div>
             </div>
