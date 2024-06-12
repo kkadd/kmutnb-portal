@@ -20,13 +20,13 @@ export async function POST(req: NextRequest) {
 
     // Flatten all service IDs in portal data and contain array
     let portalServiceIds = portalData?.data.map((service: any) =>
-      service._id?.toString()
+      service.id?.toString()
     );
     portalData?.data
       .filter((service: any) => service.type === "folder")
       .forEach((folder: any) => {
         let containServiceIds = folder.contain.map((service: any) =>
-          service._id?.toString()
+          service.id?.toString()
         );
         portalServiceIds = [...portalServiceIds, ...containServiceIds];
       });

@@ -12,6 +12,7 @@ import {
   Link,
   Pagination,
   Tooltip,
+  User,
 } from "@nextui-org/react";
 import {
   AddIcon,
@@ -21,6 +22,7 @@ import {
   SortIcon,
 } from "../icons";
 import { LoadingCustom } from "../Loading/loadingCustom";
+import { useSession } from "next-auth/react";
 
 type Service = {
   _id: string;
@@ -106,10 +108,15 @@ export const AllServicesPage = () => {
 
   const [hydrated, setHydrated] = useState(false);
   const [service, setService] = useState<Service[]>([]);
-  const [isLoading, setLoading] = useState(true);
+  const [newService, setNewService] = useState<Service[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionLoading, setSessionLoading] = useState(true);
+  const [serviceLoading, setServiceLoading] = useState(true);
+  const [newServiceLoading, setNewServiceLoading] = useState(true);
 
-  const [username, setUsername] = useState("");
-  const [role, setRole] = useState("");
+  const { data: session } = useSession();
+  const [username, setUsername] = useState(session?.user.name);
+  const [role, setRole] = useState(session?.user.account_type);
 
   const itemsPerPage = 8;
   const newItemsPerpage = 5;
@@ -120,6 +127,11 @@ export const AllServicesPage = () => {
 
   useEffect(() => {
     if (isLoading) {
+      setUsername(session?.user.name);
+      setRole(session?.user.account_type);
+      setSessionLoading(false);
+    }
+    if (isLoading && !sessionLoading) {
       fetch("/api/portal/allServices/getAllServices", {
         method: "POST",
         body: JSON.stringify({
@@ -130,14 +142,41 @@ export const AllServicesPage = () => {
         .then((res) => res.json())
         .then((data) => {
           setService(data);
-          setLoading(false);
+          setServiceLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching services:", error);
-          setLoading(false);
+        });
+      fetch("/api/portal/allServices/getNewServices", {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+          role: role,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setNewService(data);
+          setNewServiceLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching new services:", error);
+          setNewServiceLoading(false);
         });
     }
-  }, [isLoading]);
+    if (!serviceLoading && !newServiceLoading && !sessionLoading) {
+      setIsLoading(false);
+    }
+  }, [
+    isLoading,
+    newServiceLoading,
+    role,
+    serviceLoading,
+    session?.user.account_type,
+    session?.user.name,
+    sessionLoading,
+    username,
+  ]);
 
   const filteredServices = useMemo(() => {
     return service.filter((service) =>
@@ -146,10 +185,10 @@ export const AllServicesPage = () => {
   }, [service, filterValue]);
 
   const filteredNewServices = useMemo(() => {
-    return newServiceMock.filter((service) =>
+    return newService.filter((service) =>
       service.serviceName.toLowerCase().includes(filterValue.toLowerCase())
     );
-  }, [filterValue]);
+  }, [filterValue, newService]);
 
   const sortedServices = useMemo(() => {
     return [...filteredServices].sort((a, b) => {
@@ -216,7 +255,7 @@ export const AllServicesPage = () => {
             <div className="grid grid-cols-2 gap-4 z-50 relative">
               {currentNewItems.map((service) => (
                 <Tooltip
-                  key={service.id}
+                  key={service._id}
                   content={
                     <div className="grid gap-4 p-4">
                       <div className="font-sansThai font-medium">
@@ -224,12 +263,12 @@ export const AllServicesPage = () => {
                       </div>
                       <Divider />
                       <div className="text-default-500 font-sansThai">
-                        {service.description}
+                        {service.serviceDescription}
                       </div>
                     </div>
                   }
                 >
-                  <Card className="h-[90px] w-[250px]" key={service.id}>
+                  <Card className="h-[90px] w-[250px]" key={service._id}>
                     <CardBody className="justify-center p-4">
                       <div className="flex justify-between items-center gap-4">
                         <div className="flex items-center gap-4">
@@ -255,7 +294,7 @@ export const AllServicesPage = () => {
                               href={service.serviceLink}
                               isExternal
                             >
-                              {service.description.substring(0, 11)}
+                              {service.serviceDescription.substring(0, 11)}
                             </Link>
                           </div>
                         </div>
@@ -291,7 +330,7 @@ export const AllServicesPage = () => {
                 size="sm"
                 variant="flat"
                 showControls
-                total={Math.ceil(newServiceMock.length / newItemsPerpage)}
+                total={Math.ceil(newService.length / newItemsPerpage)}
                 initialPage={currentNewPage}
                 onChange={(page) => setCurrentNewPage(page)}
               />

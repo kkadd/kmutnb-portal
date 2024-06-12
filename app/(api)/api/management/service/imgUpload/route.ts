@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import path from "path";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
 
 /**
  * Handles the POST request for uploading an image file.
@@ -19,12 +19,17 @@ export const POST = async (req: any, res: any) => {
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const filename = Date.now() + file.name.replaceAll(" ", "_");
-  console.log(filename);
+  const uploadPath = path.join(process.cwd(), "public/uploads");
+
   try {
+    // Ensure the uploads directory exists
+    await mkdir(uploadPath, { recursive: true });
+
     await writeFile(
       path.join(process.cwd(), "public/uploads/" + filename),
       buffer
     );
+
     return NextResponse.json(
       {
         message: "Success",

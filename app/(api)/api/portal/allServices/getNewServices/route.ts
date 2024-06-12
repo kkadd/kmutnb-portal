@@ -32,13 +32,13 @@ export async function POST(req: NextRequest) {
 
     // Flatten all service IDs in portal data and contain array
     let portalServiceIds = portalData?.data.map((service: any) =>
-      service._id?.toString()
+      service.id?.toString()
     );
     portalData?.data
       .filter((service: any) => service.type === "folder")
       .forEach((folder: any) => {
         let containServiceIds = folder.contain.map((service: any) =>
-          service._id?.toString()
+          service.id?.toString()
         );
         portalServiceIds = [...portalServiceIds, ...containServiceIds];
       });
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
 
 /**
  *  @swagger
- * /api/portal/allServices/getNewsServices:
+ * /api/portal/allServices/getNewServices:
  *   post:
  *     summary: Fetch services within the last 14 days
  *     tags:
