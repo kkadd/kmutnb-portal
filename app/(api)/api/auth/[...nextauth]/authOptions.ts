@@ -74,6 +74,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           name: user.userInfo.username,
+          email: user.userInfo.email,
           account_type: user.userInfo.account_type,
           management_role: user.management_role,
           displayname: user.userInfo.displayname,
