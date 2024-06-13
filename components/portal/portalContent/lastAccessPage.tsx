@@ -1,41 +1,56 @@
 import { Card, Divider, Link, Tooltip, Image } from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
-const serviceMock = [
-  {
-    id: "s1",
-    serviceName: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
-    serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
-    serviceImg:
-      "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
-    description:
-      "ใช้สำหรับลงทะเบียนเรียน, ดูผลการเรียน, แจ้งจบ และบริการงานทะเบียนต่าง ๆ",
-  },
-  {
-    id: "s2",
-    serviceName: "ICIT Account",
-    serviceLink: "https://account.kmutnb.ac.th/web/",
-    serviceImg: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
-    description:
-      "เปิดใช้งานบัญชีนักศึกษา, ระบบกู้รหัสผ่าน, ปลดล็อกบัญชีด้วยแอปพลิเคชัน ThaID.",
-  },
-  {
-    id: "s3",
-    serviceName: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
-    serviceImg: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    description: "",
-  },
-  {
-    id: "s4",
-    serviceName: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "https://software.kmutnb.ac.th/",
-    serviceImg:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
-  },
-];
+import { LoadingCustom } from "@/components/Loading/loadingCustom";
+
+import { Service } from "@/components/portal/allServicesPage";
 
 export const LastAccessPage = () => {
+  const [service, setService] = useState<Service[]>([]);
+  const { data: session } = useSession();
+  const [username, setUsername] = useState(session?.user?.name);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionLoading, setSessionLoading] = useState(true);
+  const [serviceLoading, setServiceLoading] = useState(true);
+
+  useEffect(() => {
+    if (isLoading) {
+      setUsername(session?.user?.name);
+      setSessionLoading(false);
+    }
+    if (isLoading && !sessionLoading) {
+      fetch("/api/portal/history/lastAccess", {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setService(data);
+          setServiceLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching services:", error);
+          setServiceLoading(false);
+        });
+    }
+    if (!serviceLoading && !sessionLoading) {
+      setIsLoading(false);
+    }
+  }, [
+    isLoading,
+    serviceLoading,
+    session?.user.account_type,
+    session?.user.name,
+    sessionLoading,
+    username,
+  ]);
+
+  if (isLoading) return <LoadingCustom />;
+
   return (
     <div className="grid p-10 gap-4">
       <div className="grid justify-center items-center h-[370px]">
@@ -46,9 +61,9 @@ export const LastAccessPage = () => {
             gridAutoRows: "auto",
           }}
         >
-          {serviceMock.map((service) => (
+          {service.map((service) => (
             <Tooltip
-              key={service.id}
+              key={service._id}
               content={
                 <div className="grid gap-4 p-4">
                   <div className="font-sansThai font-medium">
@@ -56,7 +71,7 @@ export const LastAccessPage = () => {
                   </div>
                   <Divider />
                   <div className="text-default-500 font-sansThai">
-                    {service.description}
+                    {service.serviceDescription}
                   </div>
                 </div>
               }
@@ -65,7 +80,7 @@ export const LastAccessPage = () => {
                 <div className="grid justify-center items-center gap-2 h-[132px]">
                   <Card
                     className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
-                    key={service.id}
+                    key={service._id}
                   >
                     <Image
                       src={service.serviceImg}

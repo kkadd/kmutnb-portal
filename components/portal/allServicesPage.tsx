@@ -24,7 +24,7 @@ import {
 import { LoadingCustom } from "../Loading/loadingCustom";
 import { useSession } from "next-auth/react";
 
-type Service = {
+export type Service = {
   _id: string;
   serviceName: string;
   serviceLink: string;
