@@ -12,10 +12,13 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TItem } from "../edit/editPortalPage";
+import { useSession } from "next-auth/react";
 
-const serviceMock: TItem[] = [
+import { LoadingCustom } from "@/components/Loading/loadingCustom";
+
+/* const serviceMock: TItem[] = [
   {
     id: "s1",
     name: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
@@ -156,21 +159,62 @@ const serviceMock: TItem[] = [
       },
     ],
   },
-];
+]; */
 
 export const PersonalPortalPage = () => {
   const router = useRouter();
   const [currentFolder, setCurrentFolder] = useState<TItem | null>(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const [service, setService] = useState<TItem[]>([]);
+  const { data: session } = useSession();
+  const [username, setUsername] = useState(session?.user?.name);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionLoading, setSessionLoading] = useState(true);
+  const [portalLoading, setPortalLoading] = useState(true);
+
   const handleFolderClick = (folder: TItem) => {
     setCurrentFolder(folder);
     onOpen();
   };
 
+  useEffect(() => {
+    if (isLoading) {
+      setUsername(session?.user?.name);
+      setSessionLoading(false);
+    }
+    if (isLoading && !sessionLoading) {
+      fetch("/api/portal/personal/getPortal?username=" + username, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setService(data);
+          setPortalLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching services:", error);
+          setPortalLoading(false);
+        });
+    }
+    if (!portalLoading && !sessionLoading) {
+      setIsLoading(false);
+    }
+  }, [
+    isLoading,
+    portalLoading,
+    session?.user.account_type,
+    session?.user?.name,
+    sessionLoading,
+    username,
+  ]);
+
+  if (isLoading) return <LoadingCustom />;
+
   return (
     <div className="grid p-10 gap-4">
-      {serviceMock.length > 0 ? (
+      {service.length > 0 ? (
         <div className="grid justify-center items-center h-[370px]">
           <div
             className="grid-container grid justify-center items-center gap-8"
@@ -179,7 +223,7 @@ export const PersonalPortalPage = () => {
               gridAutoRows: "auto",
             }}
           >
-            {serviceMock.map((service) =>
+            {service.map((service) =>
               service.type === "service" ? (
                 <Tooltip
                   key={service.id}
