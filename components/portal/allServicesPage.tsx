@@ -32,73 +32,8 @@ export type Service = {
   serviceDescription: string;
   role: string[];
   enable: boolean;
+  toggle: boolean;
 };
-
-const newServiceMock = [
-  {
-    id: "ns1",
-    serviceName: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
-    serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
-    serviceImg:
-      "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
-    description:
-      "ใช้สำหรับลงทะเบียนเรียน, ดูผลการเรียน, แจ้งจบ และบริการงานทะเบียนต่าง ๆ",
-  },
-  {
-    id: "ns2",
-    serviceName: "ICIT Account",
-    serviceLink: "https://account.kmutnb.ac.th/web/",
-    serviceImg: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
-    description:
-      "เปิดใช้งานบัญชีนักศึกษา, ระบบกู้รหัสผ่าน, ปลดล็อกบัญชีด้วยแอปพลิเคชัน ThaID.",
-  },
-  {
-    id: "ns3",
-    serviceName: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
-    serviceImg: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    description: "",
-  },
-  {
-    id: "ns4",
-    serviceName: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "https://software.kmutnb.ac.th/",
-    serviceImg:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
-  },
-  {
-    id: "ns5",
-    serviceName: "กองบริการการศึกษา",
-    serviceLink: "https://acdserv.kmutnb.ac.th/home",
-    serviceImg:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "",
-  },
-  {
-    id: "ns6",
-    serviceName: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
-    serviceImg: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    description: "",
-  },
-  {
-    id: "ns7",
-    serviceName: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "https://software.kmutnb.ac.th/",
-    serviceImg:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
-  },
-  {
-    id: "ns8",
-    serviceName: "กองบริการการศึกษา",
-    serviceLink: "https://acdserv.kmutnb.ac.th/home",
-    serviceImg:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "",
-  },
-];
 
 export const AllServicesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -230,6 +165,24 @@ export const AllServicesPage = () => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
   }, []);
 
+  const handleAddService = async (serviceId: Service["_id"]) => {
+    await fetch("/api/portal/allServices/addToPersonal", {
+      method: "POST",
+      body: JSON.stringify({
+        username: username,
+        serviceId: serviceId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error adding service:", error);
+      });
+    setIsLoading(true);
+  };
+
   if (!hydrated) {
     return null;
   }
@@ -299,13 +252,16 @@ export const AllServicesPage = () => {
                             </Link>
                           </div>
                         </div>
-                        <Button
-                          isIconOnly
-                          variant="flat"
-                          className="bg-transparent text-[#afafaf]"
-                        >
-                          <AddIcon />
-                        </Button>
+                        {!service.toggle && (
+                          <Button
+                            isIconOnly
+                            variant="flat"
+                            className="bg-transparent text-[#afafaf]"
+                            onPress={() => handleAddService(service._id)}
+                          >
+                            <AddIcon />
+                          </Button>
+                        )}
                       </div>
                     </CardBody>
                   </Card>
@@ -419,13 +375,16 @@ export const AllServicesPage = () => {
                         </Link>
                       </div>
                     </div>
-                    <Button
-                      isIconOnly
-                      variant="flat"
-                      className="bg-transparent text-[#afafaf]"
-                    >
-                      <AddIcon />
-                    </Button>
+                    {!service.toggle && (
+                      <Button
+                        isIconOnly
+                        variant="flat"
+                        className="bg-transparent text-[#afafaf]"
+                        onPress={() => handleAddService(service._id)}
+                      >
+                        <AddIcon />
+                      </Button>
+                    )}
                   </div>
                 </CardBody>
               </Card>
