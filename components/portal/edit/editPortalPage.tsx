@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useState, useCallback, Key } from "react";
+import React, { FC, useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Button,
@@ -35,6 +35,9 @@ import Grid from "./Grid";
 import SortableItem from "./SortableItem";
 import Item from "./Item";
 import { AddIcon, CloseIcon, DeleteIcon } from "@/components/icons";
+import { useSession } from "next-auth/react";
+
+import { LoadingCustom } from "@/components/Loading/loadingCustom";
 
 export interface ServiceShortcut {
   id: string;
@@ -151,15 +154,21 @@ const testServiceDnd = [
 export const EditPortalPage: FC = () => {
   const router = useRouter();
 
-  const [items, setItems] = useState<TItem[]>(testServiceDnd);
+  const [items, setItems] = useState<TItem[]>([]);
   const [activeItem, setActiveItem] = useState<TItem>();
   const [isEditMode, setIsEditMode] = useState(false);
+  const { data: session } = useSession();
+  const [username, setUsername] = useState(session?.user?.name);
 
   const [currentFolder, setCurrentFolder] = useState<TItem | null>(null);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const columns = Math.min(items.length, 7);
   const editFolderModal = useDisclosure();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionLoading, setSessionLoading] = useState(true);
+  const [itemsLoading, setItemsLoading] = useState(true);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -276,6 +285,39 @@ export const EditPortalPage: FC = () => {
     };
     setItems((prevItems) => [...prevItems, newFolder]);
   };
+
+  useEffect(() => {
+    if (isLoading) {
+      setUsername(session?.user?.name);
+      setSessionLoading(false);
+    }
+    if (isLoading && !sessionLoading) {
+      fetch("/api/portal/personal/getPortal?username=" + username, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setItems(data);
+          setItemsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching services:", error);
+          setItemsLoading(false);
+        });
+    }
+    if (!itemsLoading && !sessionLoading) {
+      setIsLoading(false);
+    }
+  }, [
+    isLoading,
+    itemsLoading,
+    session?.user.account_type,
+    session?.user?.name,
+    sessionLoading,
+    username,
+  ]);
+
+  if (isLoading) return <LoadingCustom />;
 
   return (
     <>
