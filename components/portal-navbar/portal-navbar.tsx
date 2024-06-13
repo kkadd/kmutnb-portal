@@ -123,7 +123,7 @@ export const PortalNav = () => {
                 {session?.user.displayname}
               </p>
               <p className="font-medium text-[#afafaf]">
-                {session?.user.name + "@kmutnb.ac.th"}
+                {session?.user.email}
               </p>
             </DropdownItem>
             <DropdownItem key="logout" color="danger" onClick={handleLogout}>

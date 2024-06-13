@@ -54,7 +54,7 @@ export const SidebarWrapper = () => {
                   {session?.user.displayname}
                 </p>
                 <p className="text-[10px] text-[#afafaf]">
-                  {session?.user.name + "@kmutnb.ac.th"}
+                  {session?.user.email}
                 </p>
               </div>
             </div>
@@ -87,7 +87,8 @@ export const SidebarWrapper = () => {
               height={300}
             />
           ) : null}
-          {pathname === "/management/staff" ? (
+          {session?.user.management_role === "admin" &&
+          pathname === "/management/staff" ? (
             <Image
               src="/profiling.svg"
               alt="staff management"
