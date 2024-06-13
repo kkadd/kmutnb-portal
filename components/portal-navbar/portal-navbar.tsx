@@ -81,14 +81,17 @@ export const PortalNav = () => {
           </span>
         </NavbarItem>
         {/* only staff and admin can see this tab */}
-        <NavbarItem isActive={pathname === "/management"}>
-          <span
-            className="cursor-pointer"
-            onClick={() => router.push("/management/services")}
-          >
-            Management
-          </span>
-        </NavbarItem>
+        {session?.user.management_role == "staff" ||
+        session?.user.management_role === "admin" ? (
+          <NavbarItem isActive={pathname === "/management"}>
+            <span
+              className="cursor-pointer"
+              onClick={() => router.push("/management/services")}
+            >
+              Management
+            </span>
+          </NavbarItem>
+        ) : null}
       </NavbarContent>
 
       <NavbarContent as="div" justify="end">
