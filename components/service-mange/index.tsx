@@ -25,6 +25,7 @@ import {
 } from "../icons";
 import RoleChips from "./roleChips";
 import ConfirmModal from "../confirm-modal/confirmModal";
+import { LoadingCustom } from "../Loading/loadingCustom";
 
 type Service = {
   _id: string;
@@ -113,16 +114,7 @@ export const ServiceManage = () => {
   }, [filteredServices, sortOrder, isLoading]);
 
   if (isLoading) {
-    return (
-      <div className="grid justify-center items-center h-full w-full">
-        <Spinner
-          classNames={{
-            circle1: "border-b-[#FF644B]",
-            circle2: "border-b-[#FF644B]",
-          }}
-        />
-      </div>
-    );
+    return <LoadingCustom />;
   }
 
   return (
