@@ -12,165 +12,66 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TItem } from "../edit/editPortalPage";
+import { useSession } from "next-auth/react";
 
-const serviceMock: TItem[] = [
-  {
-    id: "s1",
-    name: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
-    serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
-    imageUrl: "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
-    description:
-      "ใช้สำหรับลงทะเบียนเรียน, ดูผลการเรียน, แจ้งจบ และบริการงานทะเบียนต่าง ๆ",
-    type: "service",
-  },
-  {
-    id: "s2",
-    name: "ICIT Account",
-    serviceLink: "https://account.kmutnb.ac.th/web/",
-    imageUrl: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
-    description:
-      "เปิดใช้งานบัญชีนักศึกษา, ระบบกู้รหัสผ่าน, ปลดล็อกบัญชีด้วยแอปพลิเคชัน ThaID.",
-    type: "service",
-  },
-  {
-    id: "s3",
-    name: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
-    imageUrl: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    description: "",
-    type: "service",
-  },
-  {
-    id: "s4",
-    name: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "https://software.kmutnb.ac.th/",
-    imageUrl:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
-    type: "service",
-  },
-  {
-    id: "s5",
-    name: "กองบริการการศึกษา",
-    serviceLink: "https://acdserv.kmutnb.ac.th/home",
-    imageUrl:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "",
-    type: "service",
-  },
-  {
-    id: "s6",
-    name: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
-    serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
-    imageUrl: "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
-    description:
-      "ใช้สำหรับลงทะเบียนเรียน, ดูผลการเรียน, แจ้งจบ และบริการงานทะเบียนต่าง ๆ",
-    type: "service",
-  },
-  {
-    id: "s7",
-    name: "ICIT Account",
-    serviceLink: "https://account.kmutnb.ac.th/web/",
-    imageUrl: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
-    description:
-      "เปิดใช้งานบัญชีนักศึกษา, ระบบกู้รหัสผ่าน, ปลดล็อกบัญชีด้วยแอปพลิเคชัน ThaID.",
-    type: "service",
-  },
-  {
-    id: "s8",
-    name: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
-    imageUrl: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    description: "",
-    type: "service",
-  },
-  {
-    id: "s9",
-    name: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "https://software.kmutnb.ac.th/",
-    imageUrl:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
-    type: "service",
-  },
-  {
-    id: "s10",
-    name: "กองบริการการศึกษา",
-    serviceLink: "https://acdserv.kmutnb.ac.th/home",
-    imageUrl:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "",
-    type: "service",
-  },
-  {
-    id: "s11",
-    name: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
-    serviceLink: "https://reg.kmutnb.ac.th/registrar/home",
-    imageUrl: "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
-    description:
-      "ใช้สำหรับลงทะเบียนเรียน, ดูผลการเรียน, แจ้งจบ และบริการงานทะเบียนต่าง ๆ",
-    type: "service",
-  },
-  {
-    id: "s12",
-    name: "ICIT Account",
-    serviceLink: "https://account.kmutnb.ac.th/web/",
-    imageUrl: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
-    description:
-      "เปิดใช้งานบัญชีนักศึกษา, ระบบกู้รหัสผ่าน, ปลดล็อกบัญชีด้วยแอปพลิเคชัน ThaID.",
-    type: "service",
-  },
-  {
-    id: "s13",
-    name: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "http://authen.eduroam.kmutnb.ac.th/",
-    imageUrl: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    description: "",
-    type: "service",
-  },
-  {
-    id: "s14",
-    name: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "https://software.kmutnb.ac.th/",
-    imageUrl:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
-    type: "service",
-  },
-  {
-    id: "10",
-    name: "Folder test2",
-    serviceLink: "",
-    type: "folder",
-    contain: [
-      {
-        id: "s14",
-        name: "บริการซอฟต์แวร์ลิขสิทธ์",
-        serviceLink: "https://software.kmutnb.ac.th/",
-        imageUrl:
-          "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-        description: "บริการซอฟต์แวร์ลิขสิทธิ์เพื่อนักศึกษา และบุคลากร",
-        type: "service",
-      },
-    ],
-  },
-];
+import { LoadingCustom } from "@/components/Loading/loadingCustom";
 
 export const PersonalPortalPage = () => {
   const router = useRouter();
   const [currentFolder, setCurrentFolder] = useState<TItem | null>(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const [service, setService] = useState<TItem[]>([]);
+  const { data: session } = useSession();
+  const [username, setUsername] = useState(session?.user?.name);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionLoading, setSessionLoading] = useState(true);
+  const [portalLoading, setPortalLoading] = useState(true);
+
   const handleFolderClick = (folder: TItem) => {
     setCurrentFolder(folder);
     onOpen();
   };
 
+  useEffect(() => {
+    if (isLoading) {
+      setUsername(session?.user?.name);
+      setSessionLoading(false);
+    }
+    if (isLoading && !sessionLoading) {
+      fetch("/api/portal/personal/getPortal?username=" + username, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setService(data);
+          setPortalLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching services:", error);
+          setPortalLoading(false);
+        });
+    }
+    if (!portalLoading && !sessionLoading) {
+      setIsLoading(false);
+    }
+  }, [
+    isLoading,
+    portalLoading,
+    session?.user.account_type,
+    session?.user?.name,
+    sessionLoading,
+    username,
+  ]);
+
+  if (isLoading) return <LoadingCustom />;
+
   return (
     <div className="grid p-10 gap-4">
-      {serviceMock.length > 0 ? (
+      {service.length > 0 ? (
         <div className="grid justify-center items-center h-[370px]">
           <div
             className="grid-container grid justify-center items-center gap-8"
@@ -179,7 +80,7 @@ export const PersonalPortalPage = () => {
               gridAutoRows: "auto",
             }}
           >
-            {serviceMock.map((service) =>
+            {service.map((service) =>
               service.type === "service" ? (
                 <Tooltip
                   key={service.id}

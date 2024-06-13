@@ -75,7 +75,10 @@ export const authOptions: NextAuthOptions = {
           ...token,
           name: user.userInfo.username,
           email: user.userInfo.email,
-          account_type: user.userInfo.account_type,
+          account_type:
+            user.userInfo.account_type == "students"
+              ? "student"
+              : user.userInfo.account_type,
           management_role: user.management_role,
           displayname: user.userInfo.displayname,
         };

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useState, useCallback, Key } from "react";
+import React, { FC, useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Button,
@@ -34,7 +34,16 @@ import {
 import Grid from "./Grid";
 import SortableItem from "./SortableItem";
 import Item from "./Item";
-import { AddIcon, CloseIcon, DeleteIcon } from "@/components/icons";
+import {
+  AddIcon,
+  CloseIcon,
+  DeleteIcon,
+  WarningIcon,
+} from "@/components/icons";
+import { useSession } from "next-auth/react";
+
+import { LoadingCustom } from "@/components/Loading/loadingCustom";
+import ConfirmModal from "@/components/confirm-modal/confirmModal";
 
 export interface ServiceShortcut {
   id: string;
@@ -151,19 +160,26 @@ const testServiceDnd = [
 export const EditPortalPage: FC = () => {
   const router = useRouter();
 
-  const [items, setItems] = useState<TItem[]>(testServiceDnd);
+  const [portal, setPortal] = useState<TItem[]>([]);
   const [activeItem, setActiveItem] = useState<TItem>();
   const [isEditMode, setIsEditMode] = useState(false);
+  const { data: session } = useSession();
+  const [username, setUsername] = useState(session?.user?.name);
 
   const [currentFolder, setCurrentFolder] = useState<TItem | null>(null);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
-  const columns = Math.min(items.length, 7);
+  const columns = Math.min(portal.length, 7);
   const editFolderModal = useDisclosure();
+  const editConfirmModal = useDisclosure();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionLoading, setSessionLoading] = useState(true);
+  const [portalLoading, setPortalLoading] = useState(true);
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
-    setActiveItem(items.find((item) => item.id === active.id));
+    setActiveItem(portal.find((item) => item.id === active.id));
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -171,18 +187,18 @@ export const EditPortalPage: FC = () => {
 
     if (!over) return;
 
-    const activeItem = items.find((item) => item.id === active.id);
-    const overItem = items.find((item) => item.id === over.id);
+    const activeItem = portal.find((item) => item.id === active.id);
+    const overItem = portal.find((item) => item.id === over.id);
 
     if (!activeItem || !overItem) {
       return;
     }
 
-    const activeIndex = items.findIndex((item) => item.id === active.id);
-    const overIndex = items.findIndex((item) => item.id === over.id);
+    const activeIndex = portal.findIndex((item) => item.id === active.id);
+    const overIndex = portal.findIndex((item) => item.id === over.id);
 
     if (activeIndex !== overIndex) {
-      setItems((prev) => arrayMove<TItem>(prev, activeIndex, overIndex));
+      setPortal((prev) => arrayMove<TItem>(prev, activeIndex, overIndex));
     }
     setActiveItem(undefined);
   };
@@ -197,18 +213,18 @@ export const EditPortalPage: FC = () => {
 
   const handleEditClick = useCallback(
     (id: string) => {
-      const folder = items.find((item) => item.id === id);
+      const folder = portal.find((item) => item.id === id);
       if (folder) {
         setCurrentFolder(folder);
         editFolderModal.onOpen();
       }
     },
-    [editFolderModal, items]
+    [editFolderModal, portal]
   );
 
   function handleEditModalClose() {
     if (currentFolder) {
-      setItems((prevItems) =>
+      setPortal((prevItems) =>
         prevItems.map((item) =>
           item.id === currentFolder.id ? currentFolder : item
         )
@@ -220,7 +236,7 @@ export const EditPortalPage: FC = () => {
   }
 
   const handleDeleteItemClick = (id: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    setPortal((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const handleDeleteFolderItemClick = (id: string) => {
@@ -231,7 +247,7 @@ export const EditPortalPage: FC = () => {
 
         const deletedItem = prev.contain?.find((item) => item.id === id);
         if (deletedItem) {
-          setItems((prevItems) => {
+          setPortal((prevItems) => {
             const itemExists = prevItems.some(
               (item) => item.id === deletedItem.id
             );
@@ -251,9 +267,9 @@ export const EditPortalPage: FC = () => {
   const handleAddItemClick = (id: string) => {
     setCurrentFolder((prev) => {
       if (prev) {
-        const addedItem = items.find((item) => item.id === id);
+        const addedItem = portal.find((item) => item.id === id);
         if (addedItem) {
-          setItems((prevItems) =>
+          setPortal((prevItems) =>
             prevItems.filter((item) => item.id !== addedItem.id)
           );
           return {
@@ -274,8 +290,66 @@ export const EditPortalPage: FC = () => {
       type: "folder",
       contain: [],
     };
-    setItems((prevItems) => [...prevItems, newFolder]);
+    setPortal((prevItems) => [...prevItems, newFolder]);
   };
+
+  const handleEditPortal = async () => {
+    fetch("/api/portal/personal/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        data: portal,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Your Portal update successfully");
+          editConfirmModal.onClose();
+          router.push("/kmutnb-portal");
+        } else {
+          console.log("Your Portal update failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  useEffect(() => {
+    if (isLoading) {
+      setUsername(session?.user?.name);
+      setSessionLoading(false);
+    }
+    if (isLoading && !sessionLoading) {
+      fetch("/api/portal/personal/getPortal?username=" + username, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPortal(data);
+          setPortalLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching services:", error);
+          setPortalLoading(false);
+        });
+    }
+    if (!portalLoading && !sessionLoading) {
+      setIsLoading(false);
+    }
+  }, [
+    isLoading,
+    portalLoading,
+    session?.user.account_type,
+    session?.user?.name,
+    sessionLoading,
+    username,
+  ]);
+
+  if (isLoading) return <LoadingCustom />;
 
   return (
     <>
@@ -312,9 +386,9 @@ export const EditPortalPage: FC = () => {
           onDragEnd={handleDragEnd}
           onDragCancel={handleDragCancel}
         >
-          <SortableContext items={items} strategy={rectSortingStrategy}>
+          <SortableContext items={portal} strategy={rectSortingStrategy}>
             <Grid columns={columns}>
-              {items.map((item) => (
+              {portal.map((item) => (
                 <>
                   <SortableItem
                     key={item.id}
@@ -337,8 +411,8 @@ export const EditPortalPage: FC = () => {
               </Button>
               <Button
                 className="w-[120px] bg-[#FF644B] text-white font-medium"
-                // type="submit"
-                // onPress={onOpen}
+                type="submit"
+                onPress={editConfirmModal.onOpen}
               >
                 Save Edit
               </Button>
@@ -411,7 +485,7 @@ export const EditPortalPage: FC = () => {
                 <Divider />
                 <div className="font-medium">All services in your portal</div>
                 <div className="flex overflow-x-auto h-[170px]">
-                  {items
+                  {portal
                     .filter(
                       (item) =>
                         item.id !== currentFolder?.id && item.type !== "folder"
@@ -450,6 +524,16 @@ export const EditPortalPage: FC = () => {
           )}
         </ModalContent>
       </Modal>
+      <ConfirmModal
+        icon={<WarningIcon />}
+        title="Save Your Edit"
+        description="You're going to save this data to your portal?"
+        textClose="Cancel"
+        textConfirm="Save"
+        isOpen={editConfirmModal.isOpen}
+        onOpenChange={editConfirmModal.onOpenChange}
+        onConfirm={handleEditPortal}
+      />
     </>
   );
 };

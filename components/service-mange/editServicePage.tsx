@@ -66,10 +66,10 @@ export const EditServicePage = () => {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Service added successfully");
+          console.log("Service edit successfully");
           router.push("/management/services");
         } else {
-          console.log("Service add failed");
+          console.log("Service edit failed");
         }
       })
       .catch((error) => {

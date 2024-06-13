@@ -34,16 +34,16 @@ export async function POST(req: NextRequest) {
       ])
       .toArray();
 
-    let formattedServices = services.map((service) => ({
+    /* let formattedServices = services.map((service) => ({
       id: service._id.toString(),
       name: service.serviceName,
       serviceLink: service.serviceLink,
       imageUrl: service.serviceImg,
       description: service.serviceDescription,
       type: "service",
-    }));
+    })); */
 
-    return NextResponse.json(formattedServices, { status: 200 });
+    return NextResponse.json(services, { status: 200 });
   } catch (e: any) {
     return NextResponse.json(e.toString(), { status: 500 });
   }
