@@ -146,6 +146,7 @@ export const AllServicesPage = () => {
         })
         .catch((error) => {
           console.error("Error fetching services:", error);
+          setServiceLoading(false);
         });
       fetch("/api/portal/allServices/getNewServices", {
         method: "POST",
