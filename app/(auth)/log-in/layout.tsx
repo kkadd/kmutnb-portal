@@ -6,17 +6,21 @@ import { fontSans, fontSansThai } from "@/config/fonts";
 import "@/styles/globals.css";
 import { Providers } from "./providers";
 
+import { getServerSession } from "next-auth";
+import SessionProvider from "@/components/SessionProvider/SessionProvider";
+
 export const metadata: Metadata = {
   title: "kmutnb portal",
   description:
     "kmutnb information service personalized portal management system",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
   return (
     <html
       lang="en"
@@ -30,9 +34,11 @@ export default function RootLayout({
           fontSans.className
         )}
       >
-        <Providers>
-          <div className="content-wrapper">{children}</div>
-        </Providers>
+        <SessionProvider session={session}>
+          <Providers>
+            <div className="content-wrapper">{children}</div>
+          </Providers>
+        </SessionProvider>
       </body>
     </html>
   );
