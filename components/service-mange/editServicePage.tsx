@@ -122,7 +122,10 @@ export const EditServicePage = () => {
 
   if (isLoading) {
     return <LoadingCustom />;
-  } else if (session?.user?.name != username) {
+  } else if (
+    session?.user?.name != username &&
+    session?.user?.management_role != "admin"
+  ) {
     return redirect("/kmutnb-portal/access-denied");
   }
 
