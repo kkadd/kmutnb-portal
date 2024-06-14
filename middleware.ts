@@ -5,7 +5,6 @@ const systemPathInclude = (pathname: string) => {
   return (pathname.startsWith("/kmutnb-portal") ||
     pathname.startsWith("/management")) as boolean;
 };
-const systemPathMatcher = ["/kmutnb-portal/:path*", "/management/:path*"];
 
 const management_roleInclude = (role: any) => {
   return role == "staff" || role == "admin";
@@ -53,7 +52,7 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*", systemPathMatcher], // กำหนด path ที่ต้องการใช้ middleware
+  matcher: ["/api/:path*", "/kmutnb-portal/:path*", "/management/:path*"], // กำหนด path ที่ต้องการใช้ middleware
 };
 
 function apiAuth(req: NextRequest) {
