@@ -16,6 +16,7 @@ import {
   useDisclosure,
   Spinner,
 } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
 import {
   AddIcon,
   CloseIcon,
@@ -34,6 +35,7 @@ type Service = {
   serviceImg: string;
   role: string[];
   enable: boolean;
+  username: string;
 };
 
 export const ServiceManage = () => {
@@ -43,6 +45,9 @@ export const ServiceManage = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortedServices, setSortedServices] = useState<Service[]>([]);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const { data: session } = useSession();
+  const [username, setUsername] = useState(session?.user?.name);
 
   const [service, setService] = useState<Service[]>([]);
 
@@ -196,23 +201,29 @@ export const ServiceManage = () => {
                   <RoleChips roles={service.role} />
                 </CardBody>
                 <Divider />
-                <CardFooter className="flex justify-between items-center">
-                  <Button
-                    className="mx-auto bg-transparent text-[#afafaf] w-full"
-                    onClick={() =>
-                      router.push("/management/services/edit/" + service._id)
-                    }
-                  >
-                    Edit
-                  </Button>
-                  <Divider orientation="vertical" />
-                  <Button
-                    className="mx-auto bg-transparent text-[#afafaf] w-full"
-                    onPress={(e) => delClick(service._id)}
-                  >
-                    Delete
-                  </Button>
-                </CardFooter>
+                {service.username == username ? (
+                  <>
+                    <CardFooter className="flex justify-between items-center">
+                      <Button
+                        className="mx-auto bg-transparent text-[#afafaf] w-full"
+                        onClick={() =>
+                          router.push(
+                            "/management/services/edit/" + service._id
+                          )
+                        }
+                      >
+                        Edit
+                      </Button>
+                      <Divider orientation="vertical" />
+                      <Button
+                        className="mx-auto bg-transparent text-[#afafaf] w-full"
+                        onPress={(e) => delClick(service._id)}
+                      >
+                        Delete
+                      </Button>{" "}
+                    </CardFooter>
+                  </>
+                ) : null}
               </Card>
             ))}
         </div>
