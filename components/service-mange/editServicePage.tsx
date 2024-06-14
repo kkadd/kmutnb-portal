@@ -12,6 +12,8 @@ import {
   cn,
   useDisclosure,
 } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import ImageUpload from "./imgUpload";
 import ConfirmModal from "../confirm-modal/confirmModal";
 import { CloseIcon, WarningIcon } from "../icons";
@@ -31,6 +33,8 @@ export const EditServicePage = () => {
   const [image, setImage] = useState<File | null>(null);
 
   const params = useParams<{ id: string }>();
+
+  const { data: session } = useSession();
 
   const [isLoading, setIsLoading] = useState(true);
   interface UploadResponse {
@@ -118,6 +122,8 @@ export const EditServicePage = () => {
 
   if (isLoading) {
     return <LoadingCustom />;
+  } else if (session?.user?.name != username) {
+    return redirect("/kmutnb-portal/access-denied");
   }
 
   return (
