@@ -10,9 +10,12 @@ export const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   async function handleLogin(e: React.FormEvent) {
+    setIsLoading(true);
     e.preventDefault();
     signIn("credentials", {
       username,
@@ -93,6 +96,7 @@ export const LoginPage = () => {
                 radius="full"
                 type="submit"
                 onClick={handleLogin}
+                isLoading={isLoading}
               >
                 Login
               </Button>
