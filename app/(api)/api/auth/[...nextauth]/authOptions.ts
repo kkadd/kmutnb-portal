@@ -70,31 +70,29 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, session }) {
       console.log("jwt callback", { token, user, session });
       if (user && "userInfo" in user) {
-        return {
-          ...token,
-          name: user.userInfo.username,
-          email: user.userInfo.email,
-          account_type:
-            user.userInfo.account_type == "students"
-              ? "student"
-              : user.userInfo.account_type,
-          management_role: user.management_role,
-          displayname: user.userInfo.displayname,
-        };
+        const userInfo =
+          typeof user.userInfo === "string"
+            ? JSON.parse(user.userInfo)
+            : user.userInfo;
+        token.name = userInfo.username;
+        token.email = userInfo.email;
+        token.account_type =
+          userInfo.account_type == "students"
+            ? "student"
+            : userInfo.account_type;
+        token.management_role = user.management_role;
+        token.displayname = userInfo.displayname;
+        return token;
       }
       return token;
     },
     async session({ session, token, user }) {
       console.log("session callback", { session, token, user });
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          account_type: token?.account_type,
-          management_role: token?.management_role,
-          displayname: token?.displayname,
-        },
-      };
+      session.user.account_type = token?.account_type;
+      session.user.management_role = token?.management_role;
+      session.user.displayname = token?.displayname;
+
+      return session;
     },
   },
 };
