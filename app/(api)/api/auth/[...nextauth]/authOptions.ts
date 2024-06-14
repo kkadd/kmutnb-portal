@@ -39,15 +39,14 @@ export const authOptions: NextAuthOptions = {
         );
         let user = await res.json();
 
-        if ((user.api_message = "Authentication success")) {
+        if (user.api_status_code == 202) {
           console.log(user.userInfo.username);
           let permisssion: any = await fetch(
             "http://localhost:3000/api/management/getUser?username=" +
               user.userInfo.username
           );
           permisssion = await permisssion.json();
-          console.log(permisssion.username);
-          if (permisssion.username == user.userInfo.username) {
+          if (permisssion.username) {
             user = {
               ...user,
               management_role: permisssion.role,
@@ -61,7 +60,7 @@ export const authOptions: NextAuthOptions = {
             return user;
           }
         } else {
-          throw new Error("Invalid username or password");
+          throw new Error("Invalid username or password", user.api_status_code);
         }
       },
     }),
