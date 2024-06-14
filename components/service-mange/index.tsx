@@ -48,6 +48,9 @@ export const ServiceManage = () => {
 
   const { data: session } = useSession();
   const [username, setUsername] = useState(session?.user?.name);
+  const [managementRole, setManagementRole] = useState(
+    session?.user?.management_role
+  );
 
   const [service, setService] = useState<Service[]>([]);
 
@@ -201,7 +204,7 @@ export const ServiceManage = () => {
                   <RoleChips roles={service.role} />
                 </CardBody>
                 <Divider />
-                {service.username == username ? (
+                {service.username == username || managementRole == "admin" ? (
                   <>
                     <CardFooter className="flex justify-between items-center">
                       <Button
