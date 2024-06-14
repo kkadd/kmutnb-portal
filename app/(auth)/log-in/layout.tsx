@@ -8,6 +8,7 @@ import { Providers } from "./providers";
 
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider/SessionProvider";
+import { authOptions } from "@/app/(api)/api/auth/[...nextauth]/authOptions";
 
 export const metadata: Metadata = {
   title: "kmutnb portal",
@@ -20,7 +21,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   return (
     <html
       lang="en"

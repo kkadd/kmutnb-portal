@@ -12,19 +12,21 @@ import {
   cn,
   useDisclosure,
 } from "@nextui-org/react";
+import { useSession } from "next-auth/react";
 import ImageUpload from "./imgUpload";
 import ConfirmModal from "../confirm-modal/confirmModal";
 import { CloseIcon, WarningIcon } from "../icons";
 
 export const AddServicePage = () => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [isSelected, setIsSelected] = React.useState(true); //enable service
   const [serviceName, setServiceName] = useState("");
   const [serviceLink, setServiceLink] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(session?.user?.name);
   const [description, setDescription] = useState("");
   const [roles, setRoles] = useState([""]);
   const [image, setImage] = useState<File | null>(null);
@@ -134,7 +136,7 @@ export const AddServicePage = () => {
                 placeholder="Show who add this service"
                 labelPlacement="outside"
                 disabled
-                value={username}
+                value={username as string}
               />
 
               <ImageUpload

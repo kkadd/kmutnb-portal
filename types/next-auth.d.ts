@@ -6,19 +6,19 @@ declare module "next-auth" {
     user: User;
   }
   interface User extends DefaultSession["user"] {
-    userInfo?: any;
-    management_role?: any;
-    account_type?: any;
-    displayname?: any;
+    userInfo?: string;
+    management_role?: string;
+    account_type?: string;
+    displayname?: string;
   }
 }
 
 declare module "next-auth/jwt" {
   // Returned by the `jwt` callback and `getToken`, when using JWT sessions
   interface JWT {
-    userInfo?: any;
-    management_role?: any;
-    account_type?: any;
-    displayname?: any;
+    userInfo?: string;
+    management_role?: string;
+    account_type?: string;
+    displayname?: string;
   }
 }
