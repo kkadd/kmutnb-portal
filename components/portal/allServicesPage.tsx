@@ -23,6 +23,7 @@ import {
 } from "../icons";
 import { LoadingCustom } from "../Loading/loadingCustom";
 import { useSession } from "next-auth/react";
+import { HistoryAddFunction } from "@/components/historyAddFunc/historyAddFunc";
 
 export type Service = {
   _id: string;
@@ -226,7 +227,16 @@ export const AllServicesPage = () => {
                     <CardBody className="justify-center p-4">
                       <div className="flex justify-between items-center gap-4">
                         <div className="flex items-center gap-4">
-                          <Link href={service.serviceLink} isExternal>
+                          <Link
+                            href={service.serviceLink}
+                            isExternal
+                            onPress={() =>
+                              HistoryAddFunction(
+                                service._id,
+                                username ? username : ""
+                              )
+                            }
+                          >
                             <Image
                               src={service.serviceImg}
                               alt="service image"
@@ -240,6 +250,12 @@ export const AllServicesPage = () => {
                               className="text-md text-black font-sansThai font-medium"
                               href={service.serviceLink}
                               isExternal
+                              onPress={() =>
+                                HistoryAddFunction(
+                                  service._id,
+                                  username ? username : ""
+                                )
+                              }
                             >
                               {service.serviceName.substring(0, 11)}
                             </Link>
@@ -247,6 +263,12 @@ export const AllServicesPage = () => {
                               className="text-sm text-default-500 font-sansThai"
                               href={service.serviceLink}
                               isExternal
+                              onPress={() =>
+                                HistoryAddFunction(
+                                  service._id,
+                                  username ? username : ""
+                                )
+                              }
                             >
                               {service.serviceDescription.substring(0, 11)}
                             </Link>
@@ -349,7 +371,16 @@ export const AllServicesPage = () => {
                 <CardBody className="justify-center p-4">
                   <div className="flex justify-between items-center gap-4">
                     <div className="flex items-center gap-4">
-                      <Link href={service.serviceLink} isExternal>
+                      <Link
+                        href={service.serviceLink}
+                        isExternal
+                        onPress={() =>
+                          HistoryAddFunction(
+                            service._id,
+                            username ? username : ""
+                          )
+                        }
+                      >
                         <Image
                           src={service.serviceImg}
                           alt="service image"
@@ -363,6 +394,12 @@ export const AllServicesPage = () => {
                           className="text-md text-black font-sansThai font-medium"
                           href={service.serviceLink}
                           isExternal
+                          onPress={() =>
+                            HistoryAddFunction(
+                              service._id,
+                              username ? username : ""
+                            )
+                          }
                         >
                           {service.serviceName.substring(0, 35)}
                         </Link>
@@ -370,6 +407,12 @@ export const AllServicesPage = () => {
                           className="text-sm text-default-500 font-sansThai"
                           href={service.serviceLink}
                           isExternal
+                          onPress={() =>
+                            HistoryAddFunction(
+                              service._id,
+                              username ? username : ""
+                            )
+                          }
                         >
                           {service.serviceDescription.substring(0, 43)}
                         </Link>

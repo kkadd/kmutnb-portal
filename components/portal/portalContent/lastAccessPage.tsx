@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 import { LoadingCustom } from "@/components/Loading/loadingCustom";
+import { HistoryAddFunction } from "@/components/historyAddFunc/historyAddFunc";
 
 import { Service } from "@/components/portal/allServicesPage";
 
@@ -76,7 +77,13 @@ export const LastAccessPage = () => {
                 </div>
               }
             >
-              <Link href={service.serviceLink} isExternal>
+              <Link
+                href={service.serviceLink}
+                isExternal
+                onPress={() =>
+                  HistoryAddFunction(service._id, username ? username : "")
+                }
+              >
                 <div className="grid justify-center items-center gap-2 h-[132px]">
                   <Card
                     className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"

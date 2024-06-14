@@ -17,6 +17,7 @@ import { TItem } from "../edit/editPortalPage";
 import { useSession } from "next-auth/react";
 
 import { LoadingCustom } from "@/components/Loading/loadingCustom";
+import { HistoryAddFunction } from "@/components/historyAddFunc/historyAddFunc";
 
 export const PersonalPortalPage = () => {
   const router = useRouter();
@@ -96,7 +97,13 @@ export const PersonalPortalPage = () => {
                     </div>
                   }
                 >
-                  <Link href={service.serviceLink} isExternal>
+                  <Link
+                    href={service.serviceLink}
+                    isExternal
+                    onPress={() =>
+                      HistoryAddFunction(service.id, username ? username : "")
+                    }
+                  >
                     <div className="grid justify-center items-center gap-2 h-[132px]">
                       <Card
                         className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
@@ -194,7 +201,16 @@ export const PersonalPortalPage = () => {
                           </div>
                         }
                       >
-                        <Link href={containedItem.serviceLink} isExternal>
+                        <Link
+                          href={containedItem.serviceLink}
+                          isExternal
+                          onPress={() =>
+                            HistoryAddFunction(
+                              containedItem.id,
+                              username ? username : ""
+                            )
+                          }
+                        >
                           <div className="grid justify-center items-center gap-2 h-[132px]">
                             <Card
                               className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
