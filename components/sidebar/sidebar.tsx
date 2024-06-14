@@ -69,12 +69,14 @@ export const SidebarWrapper = () => {
                 title="Service Management"
                 icon={<ServiceIcon />}
               />
-              <SidebarItem
-                isActive={pathname === "/management/staff"}
-                href="/management/staff"
-                title="Staff Management"
-                icon={<StaffIcon />}
-              />
+              {session?.user.management_role == "admin" && (
+                <SidebarItem
+                  isActive={pathname === "/management/staff"}
+                  href="/management/staff"
+                  title="Staff Management"
+                  icon={<StaffIcon />}
+                />
+              )}
             </SidebarMenu>
           </div>
           {pathname === "/management/services" ||
@@ -87,7 +89,7 @@ export const SidebarWrapper = () => {
               height={300}
             />
           ) : null}
-          {session?.user.management_role === "admin" &&
+          {session?.user.management_role == "admin" &&
           pathname === "/management/staff" ? (
             <Image
               src="/profiling.svg"
