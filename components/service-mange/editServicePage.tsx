@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, redirect } from "next/navigation";
 import {
   Button,
   Checkbox,
@@ -13,7 +13,6 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import ImageUpload from "./imgUpload";
 import ConfirmModal from "../confirm-modal/confirmModal";
 import { CloseIcon, WarningIcon } from "../icons";
