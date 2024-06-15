@@ -1,14 +1,18 @@
 import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { DeleteIcon, UploadIcon } from "../icons";
 import { Image } from "@nextui-org/react";
-import { LoadingCustom } from "../Loading/loadingCustom";
 
 type ImageUploadProps = {
   onValueChange?: (file: File | null) => void;
   defaultValue?: File | null;
+  required?: boolean;
 };
 
-const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
+const ImageUpload = ({
+  onValueChange,
+  defaultValue,
+  required,
+}: ImageUploadProps) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(
     defaultValue ? defaultValue : null
   );
@@ -16,6 +20,7 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [defaultFileEnter, setDefaultFileEnter] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
@@ -23,10 +28,12 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
       if (file !== selectedImage) {
         setSelectedImage(file);
         setFileEnter(true);
+        setShowError(false);
       }
     } else {
       setSelectedImage(null);
       setFileEnter(false);
+      setShowError(required ? true : false);
     }
   };
 
@@ -39,12 +46,14 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
       setSelectedImage(defaultValue);
       setFileEnter(true);
       setDefaultFileEnter(true);
+      setShowError(false);
     }
   }, [selectedImage, onValueChange, defaultValue, fileEnter, defaultFileEnter]);
 
   const handleDeleteImage = () => {
     setSelectedImage(null);
     setFileEnter(false);
+    setShowError(required ? true : false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -56,6 +65,7 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
     if (file) {
       setSelectedImage(file);
       setFileEnter(true);
+      setShowError(false);
     }
   };
 
@@ -94,7 +104,10 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
         </div>
       ) : (
         <div className="h-[162px]">
-          <div className="text-sm pr-2 pb-[6px]">Service Image</div>
+          <div className="flex">
+            <div className="text-sm pb-[6px]">Service Image</div>
+            <div className="text-sm text-danger pb-[6px]">*</div>
+          </div>
           <div
             className="grid justify-center items-center bg-[#F4F4F5] h-[136px] rounded-xl"
             onClick={handleTextareaClick}
@@ -109,6 +122,9 @@ const ImageUpload = ({ onValueChange, defaultValue }: ImageUploadProps) => {
             </div>
           </div>
         </div>
+      )}
+      {required && showError && (
+        <div className="text-red-500 text-sm mt-2">An image is required.</div>
       )}
       <input
         ref={fileInputRef}

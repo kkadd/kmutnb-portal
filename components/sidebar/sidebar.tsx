@@ -6,7 +6,13 @@ import { Avatar } from "@nextui-org/react";
 import { useSidebarContext } from "../layout/layoutContext";
 import { Sidebar } from "./sidebar.styles";
 import { SidebarItem } from "./sidebarItem";
-import { LogoutIcon, ServiceIcon, StaffIcon } from "../icons";
+import {
+  LogoutIcon,
+  MenuIcon,
+  PortalIcon,
+  ServiceIcon,
+  StaffIcon,
+} from "../icons";
 import { SidebarMenu } from "./sidebarMenu";
 
 import { signOut } from "next-auth/react";
@@ -20,7 +26,7 @@ export const SidebarWrapper = () => {
   const { data: session } = useSession();
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/log-in" }); // Add the signOut method with a callback URL
+    await signOut({ callbackUrl: "/log-in" });
   };
 
   return (
@@ -59,6 +65,12 @@ export const SidebarWrapper = () => {
               </div>
             </div>
             <SidebarMenu title="Main Menu">
+              <SidebarItem
+                isActive={pathname === "/kmutnb-portal"}
+                href="/kmutnb-portal"
+                title="Personalized Portal"
+                icon={<PortalIcon />}
+              />
               <SidebarItem
                 isActive={
                   pathname === "/management/services" ||
