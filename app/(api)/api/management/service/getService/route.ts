@@ -21,9 +21,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     return NextResponse.json(post, { status: 200 });
-  } catch (e) {
+  } catch (e: any) {
     return NextResponse.json(
-      { error: "Internal Server Error" + e },
+      { error: "Internal Server Error" + e.message },
       { status: 500 }
     );
   }
