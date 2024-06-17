@@ -64,99 +64,6 @@ export type TItem = {
   contain?: ServiceShortcut[];
 };
 
-const testServiceDnd = [
-  {
-    id: "1",
-    name: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
-    serviceLink: "",
-    imageUrl: "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
-    type: "service",
-  },
-  {
-    id: "2",
-    name: "ICIT Account",
-    serviceLink: "",
-    imageUrl: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
-    type: "service",
-  },
-  {
-    id: "3",
-    name: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "",
-    imageUrl: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    type: "service",
-  },
-  {
-    id: "4",
-    name: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "",
-    imageUrl:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    type: "service",
-  },
-  {
-    id: "5",
-    name: "ระบบสารสนเทศเพื่องานทะเบียนนักศึกษา",
-    serviceLink: "",
-    imageUrl: "https://reg.kmutnb.ac.th/registrar/assets/images/logo/logo.png",
-    type: "service",
-  },
-  {
-    id: "6",
-    name: "ICIT Account",
-    serviceLink: "",
-    imageUrl: "https://account.kmutnb.ac.th/web/images/icit_account_logo.png",
-    type: "service",
-  },
-  {
-    id: "7",
-    name: "บริการเครือข่ายโรมมิ่งเพื่อการศึกษาและการวิจัย(eduroam)",
-    serviceLink: "",
-    imageUrl: "http://authen.eduroam.kmutnb.ac.th/images/logo.jpg",
-    type: "service",
-  },
-  {
-    id: "8",
-    name: "บริการซอฟต์แวร์ลิขสิทธ์",
-    serviceLink: "",
-    imageUrl:
-      "https://acdserv.kmutnb.ac.th/wp-content/themes/acdserv/images/kmutnb-logo.png",
-    type: "service",
-  },
-  {
-    id: "9",
-    name: "Folder test",
-    serviceLink: "",
-    type: "folder",
-    contain: [
-      {
-        id: "91",
-        name: "test contain",
-        serviceLink: "",
-        imageUrl:
-          "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/1675/1715415371675-i",
-        type: "service",
-      },
-    ],
-  },
-  {
-    id: "10",
-    name: "Folder test2",
-    serviceLink: "",
-    type: "folder",
-    contain: [
-      {
-        id: "101",
-        name: "test contain2",
-        serviceLink: "",
-        imageUrl:
-          "https://miro.medium.com/v2/resize:fit:720/0*I32LiwMMYY16sPAB.jpg",
-        type: "service",
-      },
-    ],
-  },
-];
-
 export const EditPortalPage: FC = () => {
   const router = useRouter();
 
@@ -440,7 +347,7 @@ export const EditPortalPage: FC = () => {
                   placeholder="Enter Folder Name"
                   isClearable
                   endContent={<CloseIcon />}
-                  value={currentFolder?.name || ""}
+                  defaultValue={currentFolder?.name || ""}
                   onChange={(e) =>
                     setCurrentFolder((prev) =>
                       prev ? { ...prev, name: e.target.value } : prev
