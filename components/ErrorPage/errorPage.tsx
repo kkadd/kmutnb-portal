@@ -1,12 +1,15 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 import { Image } from "@nextui-org/react";
 import "@/styles/globals.css";
+type Props = {
+  error: string | null;
+};
 
-const ErrorPage = () => {
-  const searchParams = useSearchParams();
-  const error = searchParams.get("error");
+const ErrorPage = ({ error }: Props) => {
+  /* const searchParams = useSearchParams();
+  const error = searchParams.get("error"); */
 
   const errorMessage = () => {
     switch (error) {

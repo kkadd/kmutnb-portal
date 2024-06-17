@@ -1,15 +1,31 @@
 import clientPromise from "@/lib/mongodb";
-export async function GET(request: Request) {
-    try {
-        let client = await clientPromise;
-        let db = client.db("project");
+import { NextRequest, NextResponse } from "next/server";
 
-        let posts = await db.collection("service").find({}).toArray();
-        return Response.json(posts);
-    }
-    catch (e) {
-        return Response.json(e);
-    }
+export const dynamic = "force-dynamic";
+export const fetchCache = "default-no-store";
+
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  try {
+    const client = await clientPromise;
+    const db = client.db("project");
+
+    const posts = await db.collection("service").find({}).toArray();
+    const response = NextResponse.json(posts, { status: 200 });
+
+    /* response.headers.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+    response.headers.set("Pragma", "no-cache");
+    response.headers.set("Expires", "0"); */
+
+    return response;
+  } catch (e: any) {
+    return NextResponse.json(
+      { error: "Internal Server Error" + e.message },
+      { status: 500 }
+    );
+  }
 }
 
 /**
