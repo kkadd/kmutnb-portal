@@ -21,46 +21,54 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         // Add logic here to look up the user from the credentials supplied
-        const res = await fetch(
-          "https://api.account.kmutnb.ac.th/api/account-api/user-authen",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-            },
-            body: JSON.stringify({
-              username: credentials?.username,
-              password: credentials?.password,
-              scopes:
-                "personel,student,templecturer,retirement,exchange_student,alumni",
-            }),
-          }
-        );
-        let user = await res.json();
-
-        if (user.api_status_code == 202) {
-          console.log(user.userInfo.username);
-          let permisssion: any = await fetch(
-            "http://localhost:3000/api/management/getUser?username=" +
-              user.userInfo.username
+        if (!credentials || !credentials.username || !credentials.password) {
+          return null;
+        }
+        try {
+          const res = await fetch(
+            "https://api.account.kmutnb.ac.th/api/account-api/user-authen",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+              },
+              body: JSON.stringify({
+                username: credentials?.username,
+                password: credentials?.password,
+                scopes:
+                  "personel,student,templecturer,retirement,exchange_student,alumni",
+              }),
+            }
           );
-          permisssion = await permisssion.json();
-          if (permisssion.username) {
-            user = {
-              ...user,
-              management_role: permisssion.role,
-            };
-            return user;
+          let user = await res.json();
+
+          if (user.api_status_code == 202) {
+            console.log(user.userInfo.username);
+            let permisssion: any = await fetch(
+              "http://localhost:3000/api/management/getUser?username=" +
+                user.userInfo.username
+            );
+            permisssion = await permisssion.json();
+            if (permisssion.username) {
+              user = {
+                ...user,
+                management_role: permisssion.role,
+              };
+              return user;
+            } else {
+              user = {
+                ...user,
+                management_role: "none",
+              };
+              return user;
+            }
           } else {
-            user = {
-              ...user,
-              management_role: "none",
-            };
-            return user;
+            throw new Error("CredentialsSignin", user.api_status_code);
           }
-        } else {
-          throw new Error("Invalid username or password", user.api_status_code);
+        } catch (error) {
+          // Catch errors in try but also f.e. connection fails
+          throw error;
         }
       },
     }),
@@ -96,6 +104,6 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    error: "/auth/error"
-  }
+    error: "/auth/error",
+  },
 };
