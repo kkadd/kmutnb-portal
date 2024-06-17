@@ -23,13 +23,14 @@ export const AddServicePage = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [isSelected, setIsSelected] = React.useState(true); //enable service
+  const [isSelected, setIsSelected] = React.useState(true);
   const [serviceName, setServiceName] = useState("");
   const [serviceLink, setServiceLink] = useState("");
   const [username, setUsername] = useState(session?.user?.name);
   const [description, setDescription] = useState("");
   const [roles, setRoles] = useState([""]);
   const [image, setImage] = useState<File | null>(null);
+  const [showError, setShowError] = useState(false);
 
   interface UploadResponse {
     message?: string;
@@ -38,6 +39,11 @@ export const AddServicePage = () => {
   }
 
   async function handleAddService() {
+    if (image == null) {
+      setShowError(true);
+      return;
+    }
+
     let formData = new FormData();
     formData.append("file", image as Blob);
     let imgUpload = await fetch("/api/management/service/imgUpload", {
@@ -111,6 +117,7 @@ export const AddServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                isRequired
                 endContent={<CloseIcon />}
                 maxLength={100}
                 onValueChange={(value) => {
@@ -124,6 +131,7 @@ export const AddServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                isRequired
                 endContent={<CloseIcon />}
                 onValueChange={(value) => {
                   setServiceLink(value);
@@ -142,8 +150,16 @@ export const AddServicePage = () => {
               <ImageUpload
                 onValueChange={(value) => {
                   setImage(value);
+                  setShowError(false);
                 }}
+                required={true}
               />
+
+              {showError && (
+                <div className="col-span-3 text-red-500 text-sm">
+                  An image is required.
+                </div>
+              )}
 
               <Textarea
                 type="text"
@@ -168,6 +184,7 @@ export const AddServicePage = () => {
                     setRoles(values);
                     console.log(values);
                   }}
+                  isRequired
                 >
                   <div className="grid grid-cols-2 gap-3 w-[357px] h-[76px]">
                     <Checkbox value="student" className="p-0 m-0">

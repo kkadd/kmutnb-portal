@@ -467,6 +467,7 @@ export const StaffManage = () => {
                         placeholder="Enter your Username"
                         variant="bordered"
                         isClearable
+                        isRequired
                         endContent={<CloseIcon />}
                         onValueChange={(value) => {
                           setAddUsername(value);
@@ -479,6 +480,7 @@ export const StaffManage = () => {
                         variant="bordered"
                         value={addRole}
                         onChange={handleAddRoleChange}
+                        isRequired
                       >
                         <SelectItem key={"admin"}>Admin</SelectItem>
                         <SelectItem key={"staff"}>Staff</SelectItem>
@@ -583,6 +585,7 @@ export const StaffManage = () => {
                     defaultValue={editUsername}
                     variant="bordered"
                     disabled
+                    isRequired
                   />
 
                   <Select
@@ -592,6 +595,7 @@ export const StaffManage = () => {
                     variant="bordered"
                     onChange={handleEditRoleChange}
                     defaultSelectedKeys={defaultRole(editUserRole)}
+                    isRequired
                   >
                     <SelectItem key={"admin"}>Admin</SelectItem>
                     <SelectItem key={"staff"}>Staff</SelectItem>

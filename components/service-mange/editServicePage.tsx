@@ -30,6 +30,7 @@ export const EditServicePage = () => {
   const [description, setDescription] = useState("");
   const [roles, setRoles] = useState([""]);
   const [image, setImage] = useState<File | null>(null);
+  const [showError, setShowError] = useState(false);
 
   const params = useParams<{ id: string }>();
 
@@ -43,6 +44,11 @@ export const EditServicePage = () => {
   }
 
   async function handleEditService() {
+    if (image == null) {
+      setShowError(true);
+      return;
+    }
+
     let formData = new FormData();
     formData.append("file", image as Blob);
     let imgUpload = await fetch("/api/management/service/imgUpload", {
@@ -164,6 +170,7 @@ export const EditServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                isRequired
                 endContent={<CloseIcon />}
                 maxLength={100}
                 onValueChange={(value) => {
@@ -178,6 +185,7 @@ export const EditServicePage = () => {
                 placeholder="Please enter..."
                 labelPlacement="outside"
                 isClearable
+                isRequired
                 endContent={<CloseIcon />}
                 onValueChange={(value) => {
                   setServiceLink(value);
@@ -197,9 +205,17 @@ export const EditServicePage = () => {
               <ImageUpload
                 onValueChange={(value) => {
                   setImage(value);
+                  setShowError(false);
                 }}
                 defaultValue={image}
+                required={true}
               />
+
+              {showError && (
+                <div className="col-span-3 text-red-500 text-sm">
+                  An image is required.
+                </div>
+              )}
 
               <Textarea
                 type="text"
@@ -226,6 +242,7 @@ export const EditServicePage = () => {
                     console.log(values);
                   }}
                   value={roles}
+                  isRequired
                 >
                   <div className="grid grid-cols-2 gap-3 w-[357px] h-[76px]">
                     <Checkbox value="student" className="p-0 m-0">
