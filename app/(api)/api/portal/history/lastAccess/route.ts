@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         },
         { $unwind: "$history" },
         { $match: { "history.username": username } },
-        { $sort: { "history.timestamp": -1 } },
+        { $sort: { "history.timestamp": -1 } }, // Sort before grouping
         {
           $group: {
             _id: "$_id",
@@ -29,19 +29,12 @@ export async function POST(req: NextRequest) {
             serviceLink: { $first: "$serviceLink" },
             serviceImg: { $first: "$serviceImg" },
             serviceDescription: { $first: "$serviceDescription" },
+            lastAccess: { $first: "$history.timestamp" }, // Capture the last access time if needed
           },
         },
+        { $sort: { lastAccess: -1 } }, // Optional: sort groups by last access time
       ])
       .toArray();
-
-    /* let formattedServices = services.map((service) => ({
-      id: service._id.toString(),
-      name: service.serviceName,
-      serviceLink: service.serviceLink,
-      imageUrl: service.serviceImg,
-      description: service.serviceDescription,
-      type: "service",
-    })); */
 
     return NextResponse.json(services, { status: 200 });
   } catch (e: any) {
