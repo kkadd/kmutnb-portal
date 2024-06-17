@@ -2,12 +2,8 @@ import { NextResponse } from "next/server";
 import path from "path";
 import { writeFile, mkdir } from "fs/promises";
 
-/**
- * Handles the POST request for uploading an image file.
- * @param req - The request object.
- * @param res - The response object.
- * @returns A NextResponse object with the result of the upload.
- */
+export const dynamic = "force-dynamic";
+export const fetchCache = "default-no-store";
 
 export const POST = async (req: any, res: any) => {
   const formData = await req.formData();
@@ -18,23 +14,23 @@ export const POST = async (req: any, res: any) => {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  const filename = Date.now() + file.name.replaceAll(" ", "_");
-  const uploadPath = path.join(process.cwd(), "public/uploads");
+  const filename = Date.now() + "_" + file.name.replaceAll(" ", "_");
+  const uploadPath = path.join(process.cwd(), "uploads");
 
   try {
     // Ensure the uploads directory exists
     await mkdir(uploadPath, { recursive: true });
 
-    await writeFile(
-      path.join(process.cwd(), "public/uploads/" + filename),
-      buffer
-    );
+    // Correctly join the directory and filename
+    const filePath = path.join(uploadPath, filename);
+
+    await writeFile(filePath, buffer);
 
     return NextResponse.json(
       {
         message: "Success",
         status: 201,
-        filePath: "/uploads/" + filename,
+        filePath: "/api/uploads/" + filename,
       },
       { status: 201 }
     );
@@ -69,7 +65,7 @@ export const POST = async (req: any, res: any) => {
  *             schema:
  *               type: object
  *               properties:
- *                 Message:
+ *                 message:
  *                   type: string
  *                 status:
  *                   type: number
@@ -91,6 +87,6 @@ export const POST = async (req: any, res: any) => {
  *             schema:
  *               type: object
  *               properties:
- *                 Message:
+ *                 message:
  *                   type: string
  */
