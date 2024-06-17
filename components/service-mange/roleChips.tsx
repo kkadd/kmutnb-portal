@@ -16,7 +16,7 @@ enum displayRole {
   alumni = "alumni",
   templecturer = "templecturer",
   personel = "personel",
-  retirement = "retirement"
+  retirement = "retirement",
 }
 
 const renderRole = (renderRole: displayRole) => {
@@ -26,10 +26,10 @@ const renderRole = (renderRole: displayRole) => {
     [displayRole.alumni]: "Alumni",
     [displayRole.templecturer]: "Templecturer",
     [displayRole.personel]: "Personel",
-    [displayRole.retirement]: "Retirement"
-  }
-  return name[renderRole]
-}
+    [displayRole.retirement]: "Retirement",
+  };
+  return name[renderRole];
+};
 
 export const roleColor: Role[] = [
   { name: "Student", color: "bg-orange-300" },
@@ -62,7 +62,7 @@ const RoleChips: React.FC<RoleChipsProps> = ({ roles }) => {
             content: "text-white font-medium drop-shadow shadow-black",
           }}
         >
-          {role}
+          {renderRole(role as displayRole)}
         </Chip>
       ))}
     </div>
@@ -70,7 +70,9 @@ const RoleChips: React.FC<RoleChipsProps> = ({ roles }) => {
 };
 
 function findColor(roleName: any) {
-  const foundRole = roleColor.find((role) => role.name === renderRole(roleName));
+  const foundRole = roleColor.find(
+    (role) => role.name === renderRole(roleName)
+  );
   return foundRole ? foundRole.color : "bg-gray-300";
 }
 
