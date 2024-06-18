@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+
 const systemPathInclude = (pathname: string) => {
   return (pathname.startsWith("/kmutnb-portal") ||
     pathname.startsWith("/management")) as boolean;
@@ -16,7 +17,18 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // ตรวจสอบว่า request มาจาก /api และไม่ใช่ /api/doc , /api/auth
-  apiAuth(req);
+  if (
+    pathname.startsWith("/api") &&
+    !pathname.startsWith("/api/doc") &&
+    !pathname.startsWith("/api/auth")
+  ) {
+    const authHeader = req.headers.get("authorization");
+    const bearerToken = authHeader?.split(" ")[1];
+
+    if (!bearerToken || bearerToken !== process.env.NEXT_PUBLIC_BEARER_TOKEN) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
 
   // ตรวจสอบการเข้าสู่ระบบสำหรับหน้า protected
   if (!token && systemPathInclude(pathname)) {
@@ -59,21 +71,3 @@ export const config = {
     "/log-in",
   ], // กำหนด path ที่ต้องการใช้ middleware
 };
-
-function apiAuth(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-
-  // ตรวจสอบว่า request มาจาก /api และไม่ใช่ /api/doc
-  if (
-    pathname.startsWith("/api") &&
-    !pathname.startsWith("/api/doc") &&
-    !pathname.startsWith("/api/auth")
-  ) {
-    const authHeader = req.headers.get("authorization");
-    const bearerToken = authHeader?.split(" ")[1];
-
-    if (!bearerToken || bearerToken !== process.env.NEXT_PUBLIC_BEARER_TOKEN) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-  }
-}
