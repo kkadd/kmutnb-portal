@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // ตรวจสอบว่า request มาจาก /api และไม่ใช่ /api/doc , /api/auth
-  //apiAuth(req);
+  apiAuth(req);
 
   // ตรวจสอบการเข้าสู่ระบบสำหรับหน้า protected
   if (!token && systemPathInclude(pathname)) {
@@ -72,7 +72,7 @@ function apiAuth(req: NextRequest) {
     const authHeader = req.headers.get("authorization");
     const bearerToken = authHeader?.split(" ")[1];
 
-    if (!bearerToken || bearerToken !== process.env.BEARER_TOKEN) {
+    if (!bearerToken || bearerToken !== process.env.NEXT_PUBLIC_BEARER_TOKEN) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
