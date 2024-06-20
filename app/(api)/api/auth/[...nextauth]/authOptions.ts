@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV == "development",
   callbacks: {
     async jwt({ token, user, session }) {
-      console.log("jwt callback", { token, user, session });
+      // console.log("jwt callback", { token, user, session });
       if (user && "userInfo" in user) {
         const userInfo =
           typeof user.userInfo === "string"
@@ -95,7 +95,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token, user }) {
-      console.log("session callback", { session, token, user });
+      // console.log("session callback", { session, token, user });
       session.user.account_type = token?.account_type;
       session.user.management_role = token?.management_role;
       session.user.displayname = token?.displayname;
