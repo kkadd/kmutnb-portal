@@ -45,8 +45,14 @@ export const authOptions: NextAuthOptions = {
 
           if (user.api_status_code == 202) {
             console.log(user.userInfo.username);
+
+            if (!process.env.NEXTAUTH_URL) {
+              console.log("Please add NEXTAUTH_URL env");
+              throw new Error("Configuration");
+            }
             let permisssion: any = await fetch(
-              "http://localhost:3000/api/management/getUser?username=" +
+              process.env.NEXTAUTH_URL +
+                "/api/management/getUser?username=" +
                 user.userInfo.username
             );
             permisssion = await permisssion.json();
