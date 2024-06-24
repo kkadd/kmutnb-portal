@@ -72,7 +72,14 @@ export const LastAccessPage = () => {
                   </div>
                   <Divider />
                   <div className="text-default-500 font-sansThai">
-                    {service.serviceDescription}
+                    {service.serviceDescription
+                      .split(/(?:\r\n|\r|\n)/g)
+                      .map((line, index, array) => (
+                        <span key={index}>
+                          {line}
+                          {index < array.length - 1 && <br />}
+                        </span>
+                      ))}
                   </div>
                 </div>
               }
