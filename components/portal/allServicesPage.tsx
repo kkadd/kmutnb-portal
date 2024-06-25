@@ -264,7 +264,7 @@ export const AllServicesPage = () => {
                                 )
                               }
                             >
-                              {service.serviceName.substring(0, 11)}
+                              {service.serviceName.substring(0, 12)}
                             </Link>
                             <Link
                               className="text-sm text-default-500 font-sansThai"
@@ -277,7 +277,7 @@ export const AllServicesPage = () => {
                                 )
                               }
                             >
-                              {service.serviceDescription.substring(0, 11)}
+                              {service.serviceDescription.substring(0, 12)}
                             </Link>
                           </div>
                         </div>
@@ -415,7 +415,7 @@ export const AllServicesPage = () => {
                             )
                           }
                         >
-                          {service.serviceName.substring(0, 35)}
+                          {service.serviceName.substring(0, 37)}
                         </Link>
                         <Link
                           className="text-sm text-default-500 font-sansThai"
@@ -428,7 +428,7 @@ export const AllServicesPage = () => {
                             )
                           }
                         >
-                          {service.serviceDescription.substring(0, 43)}
+                          {service.serviceDescription.substring(0, 37)}
                         </Link>
                       </div>
                     </div>

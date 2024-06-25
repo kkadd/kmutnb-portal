@@ -185,7 +185,7 @@ export const ServiceManage = () => {
                     />
                     <div className="flex flex-col">
                       <span className="text-md font-sansThai">
-                        {service.serviceName}
+                        {service.serviceName.substring(0, 45)}
                       </span>
                       <Link
                         isExternal
@@ -197,7 +197,7 @@ export const ServiceManage = () => {
                             : `https://${service.serviceLink}`
                         }
                       >
-                        {service.serviceLink}
+                        {service.serviceLink.substring(0, 45)}
                       </Link>
                     </div>
                   </CardHeader>
