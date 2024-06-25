@@ -1,18 +1,20 @@
 import clientPromise from "@lib/mongodb";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+export const fetchCache = "default-no-store";
+
 export async function GET(request: Request) {
-    try {
-        let client = await clientPromise;
-        let db = client.db("project");
+  try {
+    let client = await clientPromise;
+    let db = client.db("project");
 
-        let staff = await db.collection("user").find().toArray();
+    let staff = await db.collection("user").find().toArray();
 
-        return NextResponse.json(staff, { status: 200 });
-    }
-    catch (e: any) {
-        return NextResponse.json(e, { status: e.status });
-    }
+    return NextResponse.json(staff, { status: 200 });
+  } catch (e: any) {
+    return NextResponse.json(e, { status: e.status });
+  }
 }
 
 /**
