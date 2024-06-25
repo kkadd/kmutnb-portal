@@ -172,63 +172,62 @@ export const ServiceManage = () => {
         <div className="grid grid-cols-3 grid-flow-row gap-4">
           {sortedServices
             .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-            .map((service) => (
-              <Card key={service._id} className="max-w-[400px]" shadow="sm">
-                <CardHeader className="flex gap-3">
-                  <Image
-                    alt="service img"
-                    height={40}
-                    width={40}
-                    radius="sm"
-                    src={service.serviceImg}
-                  />
-                  <div className="flex flex-col">
-                    <span className="text-md font-sansThai">
-                      {service.serviceName}
-                    </span>
-                    <Link
-                      isExternal
-                      className="text-sm text-default-500"
-                      href={
-                        service.serviceLink.startsWith("http://") ||
-                        service.serviceLink.startsWith("https://")
-                          ? service.serviceLink
-                          : `https://${service.serviceLink}`
-                      }
-                    >
-                      {service.serviceLink}
-                    </Link>
-                  </div>
-                </CardHeader>
-                <CardBody>
-                  <RoleChips roles={service.role} />
-                </CardBody>
-                <Divider />
-                {service.username == username || managementRole == "admin" ? (
-                  <>
-                    <CardFooter className="flex justify-between items-center">
-                      <Button
-                        className="mx-auto bg-transparent text-[#afafaf] w-full"
-                        onClick={() =>
-                          router.push(
-                            "/management/services/edit/" + service._id
-                          )
+            .map((service) =>
+              service.username == username || managementRole == "admin" ? (
+                <Card key={service._id} className="max-w-[400px]" shadow="sm">
+                  <CardHeader className="flex gap-3">
+                    <Image
+                      alt="service img"
+                      height={40}
+                      width={40}
+                      radius="sm"
+                      src={service.serviceImg}
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-md font-sansThai">
+                        {service.serviceName}
+                      </span>
+                      <Link
+                        isExternal
+                        className="text-sm text-default-500"
+                        href={
+                          service.serviceLink.startsWith("http://") ||
+                          service.serviceLink.startsWith("https://")
+                            ? service.serviceLink
+                            : `https://${service.serviceLink}`
                         }
                       >
-                        Edit
-                      </Button>
-                      <Divider orientation="vertical" />
-                      <Button
-                        className="mx-auto bg-transparent text-[#afafaf] w-full"
-                        onPress={(e) => delClick(service._id)}
-                      >
-                        Delete
-                      </Button>{" "}
-                    </CardFooter>
-                  </>
-                ) : null}
-              </Card>
-            ))}
+                        {service.serviceLink}
+                      </Link>
+                    </div>
+                  </CardHeader>
+                  <CardBody>
+                    <RoleChips roles={service.role} />
+                  </CardBody>
+                  <Divider />
+
+                  <CardFooter className="flex justify-between items-center">
+                    <Button
+                      className="mx-auto bg-transparent text-[#afafaf] w-full"
+                      onClick={() =>
+                        router.push("/management/services/edit/" + service._id)
+                      }
+                    >
+                      Edit
+                    </Button>
+                    <Divider orientation="vertical" />
+                    <Button
+                      className="mx-auto bg-transparent text-[#afafaf] w-full"
+                      onPress={(e) => delClick(service._id)}
+                    >
+                      Delete
+                    </Button>{" "}
+                  </CardFooter>
+                </Card>
+              ) : (
+                <></>
+              )
+            )}
         </div>
         <div className="flex justify-center items-center mt-10 w-full">
           <Pagination
