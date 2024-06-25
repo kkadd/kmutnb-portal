@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 const systemPathInclude = (pathname: string) => {
   return (pathname.startsWith("/kmutnb-portal") ||
@@ -17,6 +17,10 @@ export async function middleware(req: NextRequest) {
 
   // ตรวจสอบว่า request มาจาก /api และไม่ใช่ /api/doc , /api/auth
   //apiAuth(req);
+
+  if (pathname == "/") {
+    return NextResponse.redirect(new URL("/kmutnb-portal", req.url));
+  }
 
   // ตรวจสอบการเข้าสู่ระบบสำหรับหน้า protected
   if (!token && systemPathInclude(pathname)) {
@@ -53,6 +57,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    "/:path*",
     "/api/:path*",
     "/kmutnb-portal/:path*",
     "/management/:path*",
