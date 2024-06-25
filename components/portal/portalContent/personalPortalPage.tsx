@@ -92,7 +92,14 @@ export const PersonalPortalPage = () => {
                       </div>
                       <Divider />
                       <div className="text-default-500 font-sansThai">
-                        {service.description}
+                        {service.description
+                          ?.split(/(?:\r\n|\r|\n)/g)
+                          .map((line, index, array) => (
+                            <span key={index}>
+                              {line}
+                              {index < array.length - 1 && <br />}
+                            </span>
+                          ))}
                       </div>
                     </div>
                   }
@@ -196,7 +203,14 @@ export const PersonalPortalPage = () => {
                             </div>
                             <Divider />
                             <div className="text-default-500 font-sansThai">
-                              {containedItem.description}
+                              {containedItem.description
+                                ?.split(/(?:\r\n|\r|\n)/g)
+                                .map((line, index, array) => (
+                                  <span key={index}>
+                                    {line}
+                                    {index < array.length - 1 && <br />}
+                                  </span>
+                                ))}
                             </div>
                           </div>
                         }

@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
           },
         },
         { $sort: { lastAccess: -1 } }, // Optional: sort groups by last access time
+        { $limit: 5 }, // Limit to top 5 services
       ])
       .toArray();
 
