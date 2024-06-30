@@ -179,17 +179,17 @@ export const PersonalPortalPage = () => {
 
       <Modal isOpen={isOpen} onClose={onOpenChange}>
         <ModalContent>
-          {currentFolder &&
-            currentFolder?.contain?.map((containedItem) => (
-              <div className="p-4 gap-3" key={currentFolder.id}>
-                <ModalHeader>
-                  <div className="text-base font-sansThai">
-                    {currentFolder.name}
-                  </div>
-                </ModalHeader>
-                <Divider />
-                <ModalBody>
-                  <div className="flex overflow-x-auto h-[170px]">
+          {currentFolder && (
+            <>
+              <ModalHeader>
+                <div className="text-base font-sansThai">
+                  {currentFolder.name}
+                </div>
+              </ModalHeader>
+              <Divider />
+              <ModalBody>
+                <div className="flex overflow-x-auto h-[170px]">
+                  {currentFolder?.contain?.map((containedItem) => (
                     <div
                       key={containedItem.id}
                       className="flex-none flex flex-col items-center gap-2 p-2"
@@ -247,10 +247,11 @@ export const PersonalPortalPage = () => {
                         </Link>
                       </Tooltip>
                     </div>
-                  </div>
-                </ModalBody>
-              </div>
-            ))}
+                  ))}
+                </div>
+              </ModalBody>
+            </>
+          )}
         </ModalContent>
       </Modal>
     </div>
