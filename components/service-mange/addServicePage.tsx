@@ -7,6 +7,11 @@ import {
   Checkbox,
   CheckboxGroup,
   Input,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Switch,
   Textarea,
   cn,
@@ -32,6 +37,8 @@ export const AddServicePage = () => {
   const [image, setImage] = useState<File | null>(null);
   const [showError, setShowError] = useState(false);
 
+  const duplicateModal = useDisclosure();
+
   interface UploadResponse {
     message?: string;
     status: number;
@@ -44,13 +51,25 @@ export const AddServicePage = () => {
       return;
     }
 
+    const dupLink = await fetch("/api/management/service/validateLink", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ link: serviceLink }),
+    });
+    if (dupLink.status === 409) {
+      duplicateModal.onOpen();
+      return;
+    }
+
     let formData = new FormData();
     formData.append("file", image as Blob);
-    let imgUpload = await fetch("/api/management/service/imgUpload", {
+    let imgUploadFetch = await fetch("/api/management/service/imgUpload", {
       method: "POST",
       body: formData,
     });
-    imgUpload = await imgUpload.json();
+    const imgUpload = await imgUploadFetch.json();
 
     fetch("/api/management/service/add", {
       method: "POST",
@@ -243,6 +262,36 @@ export const AddServicePage = () => {
         onOpenChange={onOpenChange}
         onConfirm={handleAddService}
       />
+      <Modal
+        className="w-[360px]"
+        isOpen={duplicateModal.isOpen}
+        onOpenChange={duplicateModal.onOpenChange}
+        hideCloseButton
+      >
+        <ModalContent>
+          <ModalHeader className="flex flex-col justify-center items-center gap-3">
+            <div className="text-[#FF644B]">
+              <WarningIcon />
+            </div>
+            <div>Service Link Already Exists</div>
+          </ModalHeader>
+          <ModalBody className="justify-center items-center pt-0">
+            <span className="font-sansThai">
+              Service link already exists. Please try another link.
+            </span>
+          </ModalBody>
+          <ModalFooter className="flex justify-center">
+            <Button
+              className="text-[#FF644B] font-medium"
+              color="default"
+              variant="light"
+              onPress={duplicateModal.onClose}
+            >
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
