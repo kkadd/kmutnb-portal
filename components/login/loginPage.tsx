@@ -24,19 +24,20 @@ export const LoginPage = () => {
     });
   }
   return (
-    <div className="flex p-10 gap-4 h-screen">
-      <div className="bg-[#FF644B] bg-opacity-10 w-1/2 rounded-3xl">
+    <div className="flex flex-col md:flex-row p-10 gap-4 h-screen">
+      <div className="bg-[#FF644B] bg-opacity-10 md:w-1/2 w-full rounded-3xl items-center justify-center">
         <Image
           src="/user-interface.svg"
           alt="login image"
           width={800}
           height={800}
           priority
+          className="max-w-full h-auto"
         />
       </div>
-      <div className="grid justify-center items-center w-1/2">
+      <div className="grid justify-center items-center md:w-1/2 w-full">
         <div className="grid gap-10">
-          <div className="grid gap-2">
+          <div className="grid gap-2 text-center">
             <span className="grid justify-center text-[24px] font-bold">
               <Image
                 src="/logo.png"
