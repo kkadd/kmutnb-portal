@@ -31,7 +31,7 @@ export const PortalNav = () => {
   const { data: session } = useSession();
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/log-in" }); // Add the signOut method with a callback URL
+    await signOut({ callbackUrl: "/log-in" });
   };
 
   if (!pathname) {
@@ -59,11 +59,14 @@ export const PortalNav = () => {
       }}
       isBlurred={false}
     >
-      <NavbarBrand>
+      <NavbarBrand className="flex items-center">
         <Image src="/logo.png" alt="logo" width={100} height={30} />
       </NavbarBrand>
 
-      <NavbarContent className="hidden sm:flex gap-6" justify="center">
+      <NavbarContent
+        className="hidden sm:flex flex-wrap gap-6 justify-center"
+        justify="center"
+      >
         <NavbarItem isActive={pathname === "/kmutnb-portal"}>
           <span
             className="cursor-pointer"
@@ -94,7 +97,7 @@ export const PortalNav = () => {
         ) : null}
       </NavbarContent>
 
-      <NavbarContent as="div" justify="end">
+      <NavbarContent as="div" justify="end" className="flex gap-4 justify-end">
         {(pathname === "/kmutnb-portal" ||
           pathname === "/kmutnb-portal/edit") && (
           <Button

@@ -260,9 +260,9 @@ export const EditPortalPage: FC = () => {
 
   return (
     <>
-      <div className="flex justify-end items-center h-[600px] mr-4">
+      <div className="flex justify-end items-center h-96 sm:h-[600px] mr-4">
         <div className="flex-none flex flex-col items-center gap-2 p-2">
-          <div className="relative z-10 p-2 flex justify-center items-center h-[90px] w-[90px]">
+          <div className="relative z-10 p-2 flex justify-center items-center h-24 sm:h-[90px] w-24 sm:w-[90px]">
             <Card className="justify-center items-center w-full h-full">
               <Image
                 src="/serviceFolder.svg"
@@ -273,19 +273,19 @@ export const EditPortalPage: FC = () => {
             </Card>
             <Button
               isIconOnly
-              className="absolute z-50 bg-[#9edd56] top-0 right-0 rounded-full text-white h-[40px] w-[40px]"
+              className="absolute z-50 bg-[#9edd56] top-0 right-0 rounded-full text-white h-10 sm:h-[40px] w-10 sm:w-[40px]"
               onClick={handleAddFolderClick}
             >
               <AddIcon />
             </Button>
           </div>
-          <div className="flex justify-center items-center text-default-700 font-sansThai">
+          <div className="flex justify-center items-center text-default-700 font-sansThai text-xs sm:text-sm">
             Add Folder
           </div>
         </div>
       </div>
 
-      <div className="mt-[-600px]">
+      <div className="mt-[-600px] sm:mt-[-400px] lg:mt-0">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -309,7 +309,7 @@ export const EditPortalPage: FC = () => {
               ))}
             </Grid>
 
-            <div className="flex justify-center gap-4 mt-11">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mt-11">
               <Button
                 className="w-[120px] bg-[#f4f4f5] font-medium"
                 onClick={() => router.back()}

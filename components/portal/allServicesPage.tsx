@@ -193,8 +193,8 @@ export const AllServicesPage = () => {
   }
 
   return (
-    <div className="flex justify-center p-9 gap-6">
-      <div className="h-[600px] w-2/5">
+    <div className="flex flex-col lg:flex-row justify-center p-4 lg:p-9 gap-6">
+      <div className="lg:h-[600px] lg:w-2/5 w-full">
         <Card className="h-full w-full">
           <CardBody className="p-4">
             <div className="grid justify-start mb-[21px]">
@@ -207,7 +207,7 @@ export const AllServicesPage = () => {
                 </div>
               </Chip>
             </div>
-            <div className="grid grid-cols-2 gap-4 z-50 relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 z-50 relative">
               {currentNewItems.map((service) => (
                 <Tooltip
                   key={service._id}
@@ -305,7 +305,7 @@ export const AllServicesPage = () => {
                 height={300}
               />
             </div>
-            <div className="z-50 flex justify-center items-center h-[300px] w-2/5">
+            <div className="z-50 flex justify-center items-center h-[300px] w-full lg:w-2/5">
               <Pagination
                 classNames={{
                   cursor: "bg-[#FF644B]",
@@ -325,7 +325,7 @@ export const AllServicesPage = () => {
         </Card>
       </div>
 
-      <div className="h-[600px] w-3/5">
+      <div className="h-[600px] w-full lg:w-3/5">
         <div className="flex justify-between items-stretch mb-6">
           <div className="flex justify-start">
             <div className="text-[24px] font-medium">All Services</div>
@@ -333,7 +333,7 @@ export const AllServicesPage = () => {
 
           <div className="flex justify-end gap-2">
             <Input
-              className="w-[210px]"
+              className="w-full lg:w-[210px]"
               classNames={{
                 inputWrapper: "bg-white",
                 input: "font-sansThai",
@@ -358,7 +358,7 @@ export const AllServicesPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {currentItems.map((service) => (
             <Tooltip
               key={service._id}

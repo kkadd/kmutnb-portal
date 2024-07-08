@@ -71,7 +71,7 @@ export const PersonalPortalPage = () => {
   if (isLoading) return <LoadingCustom />;
 
   return (
-    <div className="grid p-10 gap-4">
+    <div className="p-4 md:p-6 lg:p-10 gap-4">
       {service.length > 0 ? (
         <div className="grid justify-center items-center h-[370px]">
           <div
@@ -113,7 +113,7 @@ export const PersonalPortalPage = () => {
                   >
                     <div className="grid justify-center items-center gap-2 h-[132px]">
                       <Card
-                        className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
+                        className="justify-center items-center bg-white p-2 h-[100px] w-[100px] md:h-[120px] md:w-[120px]"
                         key={service.id}
                       >
                         <Image
@@ -124,7 +124,7 @@ export const PersonalPortalPage = () => {
                         />
                       </Card>
 
-                      <div className="grid justify-center items-center text-default-700 font-sansThai">
+                      <div className="grid justify-center items-center text-default-700 font-sansThai md:text-base">
                         {service.name ? service.name.substring(0, 12) : ""}
                       </div>
                     </div>
@@ -136,7 +136,7 @@ export const PersonalPortalPage = () => {
                   key={service.id}
                 >
                   <Card
-                    className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
+                    className="justify-center items-center bg-white p-2 h-[100px] w-[100px] md:h-[120px] md:w-[120px]"
                     key={service.id}
                     isPressable
                     onPress={() => handleFolderClick(service)}
@@ -149,7 +149,7 @@ export const PersonalPortalPage = () => {
                     />
                   </Card>
 
-                  <div className="grid justify-center items-center text-default-700 font-sansThai">
+                  <div className="grid justify-center items-center text-default-700 font-sansThai md:text-base">
                     {service.name ? service.name.substring(0, 12) : ""}
                   </div>
                 </div>
@@ -158,7 +158,7 @@ export const PersonalPortalPage = () => {
           </div>
         </div>
       ) : (
-        <div className="grid justify-center items-center gap-4 w-full">
+        <div className="grid justify-center items-center gap-4 w-full text-center">
           <Image src="/chill.svg" alt="empty image" height={300} width={500} />
           <div className="grid justify-center items-center text-2xl font-sansThai">
             ยังไม่มีบริการในพอร์ทัลของคุณ
@@ -227,7 +227,7 @@ export const PersonalPortalPage = () => {
                         >
                           <div className="grid justify-center items-center gap-2 h-[132px]">
                             <Card
-                              className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
+                              className="justify-center items-center bg-white p-2 h-[100px] w-[100px] md:h-[120px] md:w-[120px]"
                               key={containedItem.id}
                             >
                               <Image
@@ -238,7 +238,7 @@ export const PersonalPortalPage = () => {
                               />
                             </Card>
 
-                            <div className="grid justify-center items-center text-default-700 font-sansThai">
+                            <div className="grid justify-center items-center text-default-700 font-sansThai md:text-base">
                               {containedItem.name
                                 ? containedItem.name.substring(0, 12)
                                 : ""}
