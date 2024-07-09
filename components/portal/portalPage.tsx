@@ -27,7 +27,7 @@ export const PortalPage = () => {
   }, []);
 
   return (
-    <div className="p-4 lg:p-10 gap-4">
+    <div className="grid p-10 gap-4 max-sm:p-2">
       <div className="flex w-full flex-col">
         <Tabs
           aria-label="Options"
@@ -36,6 +36,8 @@ export const PortalPage = () => {
             tab: "justify-start",
             tabContent: "group-data-[selected=true]:text-[#FF644B] font-medium",
             panel: "justify-center w-full",
+            wrapper: "max-sm:block",
+            base: "max-sm:place-content-center max-sm:w-screen",
           }}
         >
           <Tab
@@ -69,7 +71,9 @@ export const PortalPage = () => {
               </div>
             }
           >
-            <UserGuidePage />
+            <div className="block">
+              <UserGuidePage />
+            </div>
           </Tab>
         </Tabs>
       </div>
