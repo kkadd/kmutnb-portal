@@ -9,7 +9,7 @@ body {
   background-color: #fafafa;
   @apply min-h-screen antialiased;
 }
-@media (min-width: 640px) {
+/* @media (min-width: 640px) {
   body {
     padding: 1rem;
   }
@@ -31,7 +31,7 @@ body {
   body {
     padding: 2.5rem;
   }
-}
+} */
 
 * {
   box-sizing: border-box;

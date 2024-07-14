@@ -207,7 +207,7 @@ export const AllServicesPage = () => {
                 </div>
               </Chip>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 z-50 relative">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 relative">
               {currentNewItems.map((service) => (
                 <Tooltip
                   key={service._id}
@@ -230,7 +230,7 @@ export const AllServicesPage = () => {
                     </div>
                   }
                 >
-                  <Card className="h-[90px] w-[250px]" key={service._id}>
+                  <Card className="h-[90px] w-full" key={service._id}>
                     <CardBody className="justify-center p-4">
                       <div className="flex justify-between items-center gap-4">
                         <div className="flex items-center gap-4">
