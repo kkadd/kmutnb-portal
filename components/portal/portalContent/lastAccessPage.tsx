@@ -9,6 +9,26 @@ import { Service } from "@/components/portal/allServicesPage";
 
 export const LastAccessPage = () => {
   const [service, setService] = useState<Service[]>([]);
+  const colServiveLength = (length: number) => {
+    switch (length) {
+      case 1:
+        return "grid-cols-1";
+      case 2:
+        return "grid-cols-2";
+      case 3:
+        return "grid-cols-3";
+      case 4:
+        return "grid-cols-4";
+      case 5:
+        return "grid-cols-5";
+      case 6:
+        return "grid-cols-6";
+      case 7:
+        return "grid-cols-7";
+      default:
+        return "grid-cols-7";
+    }
+  };
   const { data: session } = useSession();
   const [username, setUsername] = useState(session?.user?.name);
 
@@ -56,11 +76,9 @@ export const LastAccessPage = () => {
     <div className="grid p-10 gap-4">
       <div className="grid justify-center items-center h-[370px]">
         <div
-          className="grid-container grid justify-center items-center gap-8"
-          style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))",
-            gridAutoRows: "auto",
-          }}
+          className={`grid-container grid justify-center items-center gap-8 ${colServiveLength(
+            service.length
+          )} max-sm:grid-cols-2`}
         >
           {service.map((service) => (
             <Tooltip

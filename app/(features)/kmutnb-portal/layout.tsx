@@ -32,14 +32,14 @@ export default async function RootLayout({
       <head />
       <body
         className={clsx(
-          "min-h-screen font-sans antialiased no-scrollbar",
+          "min-h-screen font-sans antialiased no-scrollbar bg-[#fafafa]",
           fontSans.className
         )}
       >
         <SessionProvider session={session}>
           <Providers>
             <PortalNav />
-            <div className="content-wrapper">{children}</div>
+            <div className="content-wrapper p-4">{children}</div>
           </Providers>
         </SessionProvider>
       </body>

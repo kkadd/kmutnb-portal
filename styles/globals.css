@@ -7,7 +7,31 @@ body {
   padding: 0;
   margin: 0;
   background-color: #fafafa;
+  @apply min-h-screen antialiased;
 }
+/* @media (min-width: 640px) {
+  body {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  body {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  body {
+    padding: 2.5rem;
+  }
+} */
 
 * {
   box-sizing: border-box;

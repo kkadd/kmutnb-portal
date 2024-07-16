@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Tab, Tabs } from "@nextui-org/react";
 import { BookIcon, ClockIcon, MenuIcon } from "../icons";
@@ -12,8 +12,22 @@ import { UserGuidePage } from "./portalContent/userGuidePage";
 export const PortalPage = () => {
   const [isVertical, setIsVertical] = useState(true);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsVertical(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <div className="grid p-10 gap-4">
+    <div className="grid p-10 gap-4 max-sm:p-2">
       <div className="flex w-full flex-col">
         <Tabs
           aria-label="Options"
@@ -22,6 +36,8 @@ export const PortalPage = () => {
             tab: "justify-start",
             tabContent: "group-data-[selected=true]:text-[#FF644B] font-medium",
             panel: "justify-center w-full",
+            wrapper: "max-sm:block",
+            base: "max-sm:place-content-center max-sm:w-screen",
           }}
         >
           <Tab
@@ -55,7 +71,9 @@ export const PortalPage = () => {
               </div>
             }
           >
-            <UserGuidePage />
+            <div className="block">
+              <UserGuidePage />
+            </div>
           </Tab>
         </Tabs>
       </div>

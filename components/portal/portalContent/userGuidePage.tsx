@@ -2,7 +2,7 @@ import { Image } from "@nextui-org/react";
 
 export const UserGuidePage = () => {
   return (
-    <div className="grid p-4 gap-4">
+    <div className="grid p-4 gap-4 max-sm:p-0 max-sm:pt-4">
       <div className="grid justify-center items-center">
         <Image
           src="/userManual.png"
