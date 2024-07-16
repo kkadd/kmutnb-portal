@@ -2,7 +2,6 @@
 import {
   Avatar,
   Button,
-  Divider,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -12,23 +11,21 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
 } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 import { EditIcon } from "../icons";
-
 import { signOut } from "next-auth/react";
-
 import { useSession } from "next-auth/react";
-
-interface Props {
-  children: React.ReactNode;
-}
+import { useState } from "react";
 
 export const PortalNav = () => {
   const router = useRouter();
   const pathname = usePathname();
-
   const { data: session } = useSession();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/log-in" });
@@ -40,6 +37,7 @@ export const PortalNav = () => {
 
   return (
     <Navbar
+      onMenuOpenChange={setIsMenuOpen}
       classNames={{
         item: [
           "flex",
@@ -59,9 +57,15 @@ export const PortalNav = () => {
       }}
       isBlurred={false}
     >
-      <NavbarBrand className="flex items-center">
-        <Image src="/logo.png" alt="logo" width={100} height={30} />
-      </NavbarBrand>
+      <NavbarContent>
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="sm:hidden"
+        />
+        <NavbarBrand className="flex items-center">
+          <Image src="/logo.png" alt="logo" width={100} height={30} />
+        </NavbarBrand>{" "}
+      </NavbarContent>
 
       <NavbarContent
         className="hidden sm:flex flex-wrap gap-6 justify-center"
@@ -83,7 +87,6 @@ export const PortalNav = () => {
             All Services
           </span>
         </NavbarItem>
-        {/* only staff and admin can see this tab */}
         {session?.user.management_role == "staff" ||
         session?.user.management_role === "admin" ? (
           <NavbarItem isActive={pathname === "/management"}>
@@ -97,7 +100,7 @@ export const PortalNav = () => {
         ) : null}
       </NavbarContent>
 
-      <NavbarContent as="div" justify="end" className="flex gap-4 justify-end">
+      <NavbarContent justify="end" className="flex gap-4 justify-end">
         {(pathname === "/kmutnb-portal" ||
           pathname === "/kmutnb-portal/edit") && (
           <Button
@@ -135,6 +138,36 @@ export const PortalNav = () => {
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
+
+      <NavbarMenu>
+        <NavbarMenuItem isActive={pathname === "/kmutnb-portal"}>
+          <span
+            className="cursor-pointer w-full"
+            onClick={() => router.push("/kmutnb-portal")}
+          >
+            Personalized Portal
+          </span>
+        </NavbarMenuItem>
+        <NavbarMenuItem isActive={pathname === "/kmutnb-portal/all-services"}>
+          <span
+            className="cursor-pointer w-full"
+            onClick={() => router.push("/kmutnb-portal/all-services")}
+          >
+            All Services
+          </span>
+        </NavbarMenuItem>
+        {session?.user.management_role == "staff" ||
+        session?.user.management_role === "admin" ? (
+          <NavbarMenuItem isActive={pathname === "/management"}>
+            <span
+              className="cursor-pointer w-full"
+              onClick={() => router.push("/management/services")}
+            >
+              Management
+            </span>
+          </NavbarMenuItem>
+        ) : null}
+      </NavbarMenu>
     </Navbar>
   );
 };
