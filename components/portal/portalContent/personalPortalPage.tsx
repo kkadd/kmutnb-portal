@@ -155,7 +155,7 @@ export const PersonalPortalPage = () => {
                   key={service.id}
                 >
                   <Card
-                    className="justify-center items-center bg-white p-2 h-[100px] w-[100px] md:h-[120px] md:w-[120px]"
+                    className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
                     key={service.id}
                     isPressable
                     onPress={() => handleFolderClick(service)}
