@@ -207,7 +207,7 @@ export const AllServicesPage = () => {
                 </div>
               </Chip>
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 relative">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
               {currentNewItems.map((service) => (
                 <Tooltip
                   key={service._id}
@@ -230,7 +230,10 @@ export const AllServicesPage = () => {
                     </div>
                   }
                 >
-                  <Card className="h-[90px] w-full" key={service._id}>
+                  <Card
+                    className="h-[90px] w-full relative z-20"
+                    key={service._id}
+                  >
                     <CardBody className="justify-center p-4">
                       <div className="flex justify-between items-center gap-4">
                         <div className="flex items-center gap-4">
@@ -297,15 +300,8 @@ export const AllServicesPage = () => {
                 </Tooltip>
               ))}
             </div>
-            <div className="absolute inset-0 z-10 flex justify-end items-end p-3">
-              <Image
-                src="/campaign.svg"
-                alt="new service image"
-                width={300}
-                height={300}
-              />
-            </div>
-            <div className="z-50 flex justify-center items-center h-[300px] w-full lg:w-2/5">
+
+            <div className="flex justify-center items-center h-[300px] w-full lg:w-2/5 z-20">
               <Pagination
                 classNames={{
                   cursor: "bg-[#FF644B]",
@@ -319,6 +315,14 @@ export const AllServicesPage = () => {
                 total={Math.ceil(newService.length / newItemsPerpage)}
                 initialPage={currentNewPage}
                 onChange={(page) => setCurrentNewPage(page)}
+              />
+            </div>
+            <div className="flex justify-end items-end p-3">
+              <Image
+                src="/campaign.svg"
+                alt="new service image"
+                width={300}
+                height={300}
               />
             </div>
           </CardBody>
