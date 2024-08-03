@@ -20,6 +20,7 @@ import { EditIcon } from "../icons";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import Link from "next/link";
 
 export const PortalNav = () => {
   const router = useRouter();
@@ -38,6 +39,7 @@ export const PortalNav = () => {
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
+      isMenuOpen={isMenuOpen}
       classNames={{
         item: [
           "flex",
@@ -141,20 +143,25 @@ export const PortalNav = () => {
 
       <NavbarMenu>
         <NavbarMenuItem isActive={pathname === "/kmutnb-portal"}>
-          <span
-            className="cursor-pointer w-full"
-            onClick={() => router.push("/kmutnb-portal")}
-          >
-            Personalized Portal
-          </span>
+          <Link href="/kmutnb-portal">
+            <span
+              className="cursor-pointer w-full"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Personalized Portal
+            </span>
+          </Link>
         </NavbarMenuItem>
+
         <NavbarMenuItem isActive={pathname === "/kmutnb-portal/all-services"}>
-          <span
-            className="cursor-pointer w-full"
-            onClick={() => router.push("/kmutnb-portal/all-services")}
-          >
-            All Services
-          </span>
+          <Link href="/kmutnb-portal/all-services">
+            <span
+              className="cursor-pointer w-full"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              All Services
+            </span>
+          </Link>
         </NavbarMenuItem>
         {session?.user.management_role == "staff" ||
         session?.user.management_role === "admin" ? (
