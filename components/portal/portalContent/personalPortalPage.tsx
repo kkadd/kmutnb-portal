@@ -10,6 +10,9 @@ import {
   ModalBody,
   ModalContent,
   Button,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,6 +21,7 @@ import { useSession } from "next-auth/react";
 
 import { LoadingCustom } from "@/components/Loading/loadingCustom";
 import { HistoryAddFunction } from "@/components/historyAddFunc/historyAddFunc";
+import { InfoIcon } from "@/components/icons";
 
 export const PersonalPortalPage = () => {
   const router = useRouter();
@@ -123,31 +127,60 @@ export const PersonalPortalPage = () => {
                     </div>
                   }
                 >
-                  <Link
-                    href={service.serviceLink}
-                    isExternal
-                    onPress={() =>
-                      HistoryAddFunction(service.id, username ? username : "")
-                    }
-                  >
-                    <div className="grid justify-center items-center gap-2 h-[132px]">
-                      <Card
-                        className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
-                        key={service.id}
-                      >
-                        <Image
-                          src={service.imageUrl}
-                          alt="service image"
-                          width={90}
-                          height={90}
-                        />
-                      </Card>
-
-                      <div className="grid justify-center items-center text-default-700 font-sansThai md:text-base">
-                        {service.name ? service.name.substring(0, 12) : ""}
+                  <div className="relative flex-none flex flex-col items-center gap-2 p-2">
+                    <Popover placement="top" showArrow={true}>
+                      <PopoverTrigger>
+                        <Button
+                          isIconOnly
+                          className="absolute z-50 bg-[#e3e3e3] -top-2 right-0 rounded-full text-white h-[40px] w-[40px] sm:hidden"
+                        >
+                          <InfoIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <div className="grid gap-4 p-4">
+                          <div className="font-sansThai font-medium">
+                            {service.name}
+                          </div>
+                          <Divider />
+                          <div className="text-default-500 font-sansThai">
+                            {service.description
+                              ?.split(/(?:\r\n|\r|\n)/g)
+                              .map((line, index, array) => (
+                                <span key={index}>
+                                  {line}
+                                  {index < array.length - 1 && <br />}
+                                </span>
+                              ))}
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                    <Link
+                      href={service.serviceLink}
+                      isExternal
+                      onPress={() =>
+                        HistoryAddFunction(service.id, username ? username : "")
+                      }
+                    >
+                      <div className="grid justify-center items-center gap-2 h-[132px]">
+                        <Card
+                          className="justify-center items-center bg-white p-2 h-[100px] w-[100px]"
+                          key={service.id}
+                        >
+                          <Image
+                            src={service.imageUrl}
+                            alt="service image"
+                            width={90}
+                            height={90}
+                          />
+                        </Card>
+                        <div className="grid justify-center items-center text-default-700 font-sansThai md:text-base">
+                          {service.name ? service.name.substring(0, 12) : ""}
+                        </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                 </Tooltip>
               ) : (
                 <div
