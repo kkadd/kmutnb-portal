@@ -132,7 +132,7 @@ export const PersonalPortalPage = () => {
                       <PopoverTrigger>
                         <Button
                           isIconOnly
-                          className="absolute z-50 bg-[#e3e3e3] -top-2 right-0 rounded-full text-white h-[40px] w-[40px] sm:hidden"
+                          className="absolute z-20 bg-[#e3e3e3] -top-2 right-0 rounded-full text-white h-[40px] w-[40px] sm:hidden"
                         >
                           <InfoIcon />
                         </Button>
