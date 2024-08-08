@@ -127,7 +127,7 @@ export const PersonalPortalPage = () => {
                     </div>
                   }
                 >
-                  <div className="relative flex-none flex flex-col items-center gap-2 p-2">
+                  <div className="relative flex-none flex flex-col items-center">
                     <Popover placement="top" showArrow={true}>
                       <PopoverTrigger>
                         <Button
