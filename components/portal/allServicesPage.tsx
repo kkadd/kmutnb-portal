@@ -11,6 +11,9 @@ import {
   Input,
   Link,
   Pagination,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Tooltip,
   User,
 } from "@nextui-org/react";
@@ -18,6 +21,7 @@ import {
   AddIcon,
   CampaignIcon,
   CloseIcon,
+  MoreIcon,
   SearchIcon,
   SortIcon,
 } from "../icons";
@@ -284,16 +288,47 @@ export const AllServicesPage = () => {
                             </Link>
                           </div>
                         </div>
-                        {!service.toggle && (
-                          <Button
-                            isIconOnly
-                            variant="flat"
-                            className="bg-transparent text-[#afafaf]"
-                            onPress={() => handleAddService(service._id)}
-                          >
-                            <AddIcon />
-                          </Button>
-                        )}
+                        <div className="flex justify-end">
+                          {!service.toggle && (
+                            <Button
+                              isIconOnly
+                              variant="flat"
+                              className="bg-transparent text-[#afafaf]"
+                              onPress={() => handleAddService(service._id)}
+                            >
+                              <AddIcon />
+                            </Button>
+                          )}
+                          <Popover placement="top-end" showArrow={true}>
+                            <PopoverTrigger>
+                              <Button
+                                isIconOnly
+                                variant="flat"
+                                className="bg-transparent text-[#afafaf]"
+                              >
+                                <MoreIcon />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <div className="grid gap-4 p-4 w-[277px]">
+                                <div className="font-sansThai font-medium">
+                                  {service.serviceName}
+                                </div>
+                                <Divider />
+                                <div className="text-default-500 font-sansThai">
+                                  {service.serviceDescription
+                                    ?.split(/(?:\r\n|\r|\n)/g)
+                                    .map((line, index, array) => (
+                                      <span key={index}>
+                                        {line}
+                                        {index < array.length - 1 && <br />}
+                                      </span>
+                                    ))}
+                                </div>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+                        </div>
                       </div>
                     </CardBody>
                   </Card>
@@ -436,16 +471,47 @@ export const AllServicesPage = () => {
                         </Link>
                       </div>
                     </div>
-                    {!service.toggle && (
-                      <Button
-                        isIconOnly
-                        variant="flat"
-                        className="bg-transparent text-[#afafaf]"
-                        onPress={() => handleAddService(service._id)}
-                      >
-                        <AddIcon />
-                      </Button>
-                    )}
+                    <div className="flex justify-end">
+                      {!service.toggle && (
+                        <Button
+                          isIconOnly
+                          variant="flat"
+                          className="bg-transparent text-[#afafaf]"
+                          onPress={() => handleAddService(service._id)}
+                        >
+                          <AddIcon />
+                        </Button>
+                      )}
+                      <Popover placement="top-end" showArrow={true}>
+                        <PopoverTrigger>
+                          <Button
+                            isIconOnly
+                            variant="flat"
+                            className="bg-transparent text-[#afafaf]"
+                          >
+                            <MoreIcon />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <div className="grid gap-4 p-4 w-[277px]">
+                            <div className="font-sansThai font-medium">
+                              {service.serviceName}
+                            </div>
+                            <Divider />
+                            <div className="text-default-500 font-sansThai">
+                              {service.serviceDescription
+                                ?.split(/(?:\r\n|\r|\n)/g)
+                                .map((line, index, array) => (
+                                  <span key={index}>
+                                    {line}
+                                    {index < array.length - 1 && <br />}
+                                  </span>
+                                ))}
+                            </div>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
                   </div>
                 </CardBody>
               </Card>
